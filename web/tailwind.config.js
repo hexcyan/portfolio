@@ -6,7 +6,11 @@ module.exports = {
         './src/index.js'
     ],
     theme: {
-      extend: {},
+      extend: {
+        colors: {
+            'cyan': '#00FFFF'
+        }
+      },
     },
     plugins: [],
   }
