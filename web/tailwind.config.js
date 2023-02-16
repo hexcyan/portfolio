@@ -6,12 +6,14 @@ module.exports = {
         './src/index.js'
     ],
     theme: {
-      extend: {
         colors: {
-            'cyan': '#00FFFF',
-            'dark': '#121233',
+          'cyan': '#00FFFF',
+          'rose': '#FF546E',
+          'orang': '#FF9F38',
+          'dark': '#121233',
+          'white': "#FFFFFF",
+          'black': "#000000"
         }
-      },
     },
     plugins: [],
-  }
+}
