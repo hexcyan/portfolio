@@ -3,7 +3,8 @@ import { Github, Youtube } from '@icons-pack/react-simple-icons';
 
 function Navbar() {
   return (
-    <div class="h-fit rounded-xl border-white border-2 drop-shadow-[0_0_16px_#00FFFF66]">
+
+    <div class="h-fit rounded-xl border-white border-2 drop-shadow-[0_0_16px_cyan]">
         <div class="rounded-t-xl bg-cyan w-full aspect-square"></div>
         <div class="rounded-b-xl text-cyan bg-dark p-8 ">
             <div class="flex flex-row justify-between items-center">
@@ -18,8 +19,8 @@ function Navbar() {
                 <h2>&gt;blog</h2>
             </div>
         </div>
-
     </div>
+
   )
 }
 
