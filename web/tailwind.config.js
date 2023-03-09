@@ -9,6 +9,7 @@ module.exports = {
     'drop-shadow-[0_0_24px_cyan]',
     'drop-shadow-[0_0_24px_magenta]',
     'drop-shadow-[0_0_24px_yellow]',
+    'drop-shadow-[0_0_24px_white]',
   ],
   theme: {
     extend: {
