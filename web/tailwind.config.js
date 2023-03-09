@@ -5,6 +5,11 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx}',
     './src/index.js'
   ],
+  safelist: [
+    'drop-shadow-[0_0_24px_cyan]',
+    'drop-shadow-[0_0_24px_magenta]',
+    'drop-shadow-[0_0_24px_yellow]',
+  ],
   theme: {
     extend: {
       colors: {
