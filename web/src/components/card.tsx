@@ -4,7 +4,7 @@ import Typewriter from 'typewriter-effect';
 
 export default function Card() {
   const [hover, setHover] = useState<string>("cyan");
-  // itemColor: Str
+  
   const mouseEnterHandler = (itemColor: string) => {
     setHover(itemColor);
   }
