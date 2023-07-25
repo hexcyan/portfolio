@@ -15,8 +15,8 @@ export default function Card() {
     };
   
     return (
-        <div className={`transition duration-1000 flex flex-auto flex-col min-w-md max-w-lg m-20 h-fit drop-shadow-[0_0_24px_${hover}]`}>
-            <div className="rounded-t-3xl bg-cyan w-full aspect-square "></div>
+        <div className={`transition duration-1000 flex flex-auto flex-col min-w-md max-w-lg m-20 drop-shadow-[0_0_24px_${hover}]`}>
+            <div className="rounded-t-3xl bg-cyan w-full aspect-square"></div>
             <div className="rounded-b-3xl text-cyan bg-dark p-8 ">
                 <div className="flex flex-row justify-between items-center">
                     <h1 className="text-4xl">
@@ -24,7 +24,7 @@ export default function Card() {
                             options={{
                                 strings: "hexcyan",
                                 autoStart: true,
-                                cursor: "█"
+                                cursor: "█",
                             }}
                         />
                     </h1>

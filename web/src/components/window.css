@@ -5,17 +5,24 @@
 }
 
 .sideWindow {
-    min-height: 800px;
+  /* background-color: pink; */
+  width: 100%;
+  max-width: 754px;
+  min-width: 354px;
+  margin: 24px;
 }
 
 .titleBar {
-    background-color: var(--cyant);
-    color: white;
-    border:1px solid var(--cyan);
+  /* max-width: 36rem; */
+  /* min-width: 32rem; */
+  background-color: var(--cyant);
+  color: white;
+  border:1px solid var(--cyan);
+  width: 100%;
+  max-width: 754px;
 }
 
 .titleThing {
-    /* float: left; */
     display: inline;
     color: white;
     text-align: center;
@@ -29,6 +36,15 @@
 
 .button {
   display: inline;
+  margin-left: 4px;
+}
+
+.button:hover {
+  filter: brightness(120%);
+}
+
+.button:active {
+  filter: brightness(90%);
 }
 
 footer.titleBar {
@@ -37,28 +53,30 @@ footer.titleBar {
 }
 
 .navBar {
-  display:block;
-  flex: auto;
-  flex-direction: row;
+  /* display:block; */
+  /* flex: auto; */
+  /* flex-direction: row; */
+  max-width: inherit;
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
   border:1px solid var(--cyan);
   background-color: var(--bluet);
+  width: 100%;
+  max-width: 754px;
 }
 
-.navButton:last-child {
+/* .navButton:last-child {
   border-right: none;
-}
+} */
 
 .navButton {
   border-right:1px solid var(--cyan);
   color: white;
   text-align: center;
-  padding: 24px;
-  text-decoration: none;
-  display: inline;
+  padding: 4px 20px;
+  display: inline-block;
 }
 
 .navButton::first-letter {
@@ -67,12 +85,15 @@ footer.titleBar {
 
 .contentBox {
   padding: 24px;
-  min-height: 360px;
-  inline-size: 18em;
+  /* min-height: 360px; */
+  /* inline-size: 18em; */
   overflow: hidden;
   overflow-wrap: break-word;
   hyphens: manual;
   color: white;
   border:1px solid var(--cyan);
   background-color: var(--bluet);
+  min-height: 754px;
+  width: 100%;
+  max-width: 754px;
 }
