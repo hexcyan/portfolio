@@ -1,0 +1,78 @@
+:root {
+    --cyan: #00FFFF;
+    --cyant: #00ffff66;
+    --bluet: #1d6188be;
+}
+
+.sideWindow {
+    min-height: 800px;
+}
+
+.titleBar {
+    background-color: var(--cyant);
+    color: white;
+    border:1px solid var(--cyan);
+}
+
+.titleThing {
+    /* float: left; */
+    display: inline;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    margin-right: 4px;
+}
+
+.buttons {
+  float: right;
+}
+
+.button {
+  display: inline;
+}
+
+footer.titleBar {
+  padding: 4px;
+  text-align: right;
+}
+
+.navBar {
+  display:block;
+  flex: auto;
+  flex-direction: row;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border:1px solid var(--cyan);
+  background-color: var(--bluet);
+}
+
+.navButton:last-child {
+  border-right: none;
+}
+
+.navButton {
+  border-right:1px solid var(--cyan);
+  color: white;
+  text-align: center;
+  padding: 24px;
+  text-decoration: none;
+  display: inline;
+}
+
+.navButton::first-letter {
+  text-decoration: solid underline cyan;
+}
+
+.contentBox {
+  padding: 24px;
+  min-height: 360px;
+  inline-size: 18em;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  hyphens: manual;
+  color: white;
+  border:1px solid var(--cyan);
+  background-color: var(--bluet);
+}

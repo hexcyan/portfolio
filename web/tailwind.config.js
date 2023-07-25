@@ -14,7 +14,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'cyan': '#00FFFF',
+        'cyan': {
+          DEFAULT: '#00FFFF',
+          aero: '#00FFFF66',
+        },
+        'blue': {
+          DEFAULT: '#1d6188',
+          aero: '#1d6188be',
+        },
         'yellow': '#FFFF00',
         'magenta': '#FF00FF',
         'rose': "#FF3053",
