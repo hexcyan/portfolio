@@ -5,8 +5,11 @@ import Typewriter from "typewriter-effect";
 export default function SideWindow() {
     return (
         <>
-            <div className="group">
-                <div className="titleBar">
+            <div className="profileGroup">
+                <a href="/">
+                    <div className="profileThing bg-cyan h-full aspect-square"></div>
+                </a>
+                <div className="profileThing">
                     <h1 className="text-4xl">
                         <Typewriter
                             options={{
@@ -17,12 +20,12 @@ export default function SideWindow() {
                         />
                     </h1>
                 </div>
+            </div>
             
 
-                <article className="">
-                    <h2>Recent</h2>
-                </article>
-            </div>
+            <article className="">
+                <h2>Recent</h2>
+            </article>
         </>
     );
 }

@@ -9,7 +9,22 @@
   width: 100%;
   max-width: 754px;
   min-width: 354px;
-  margin: 24px;
+  margin: 48px;
+}
+
+.profile {
+  background-color: var(--cyant);
+  color: white;
+  border:1px solid var(--cyan);
+  width: 100%;
+  max-width: 754px;
+  min-width: 314px;
+  max-height: 80px;
+  padding: 8px;
+}
+
+.profileThing {
+  display: inline;
 }
 
 .titleBar {
