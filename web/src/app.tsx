@@ -1,17 +1,27 @@
 import React from "react";
-// import bg from "./assets/bg.png";
+import bg from "./assets/bg.png";
 import Card from "./components/card";
 import SideCard from "./components/sideCard";
 import SideWindow from "./components/window";
+
 function App() {
     return (
-        <div className="bg-[url('./assets/bg.png')] bg-no-repeat bg-cover flex shrink-0 h-screen justify-center place-items-center bg-dark">
+        <div style={{  
+            backgroundImage: "url(" + bg + ")",
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            height: '100vh',
+            width: '100vw',
+            display: "flex",
+            justifyContent: "center",
+            placeItems: "center",
+        }}>
             {/* <Card /> */}
-            <SideCard />
+            {/* <SideCard /> */}
             <SideWindow />
         </div>
     );
 }
-
 
 export default App;

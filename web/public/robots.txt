@@ -1,3 +1,9 @@
-# https://www.robotstxt.org/robotstxt.html
+#       ____[]__
+#      /   \     \
+#    /       \_____\
+#    |       |     |
+#    |       |     |
+#    |_______|_____|
+
 User-agent: *
 Disallow:

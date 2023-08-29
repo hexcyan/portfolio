@@ -9,23 +9,10 @@
   width: 100%;
   max-width: 754px;
   min-width: 354px;
-  margin: 48px;
-}
-
-.profile {
-  background-color: var(--cyant);
-  color: white;
+  /* margin: 0 48px 0 48px; */
   border:1px solid var(--cyan);
-  width: 100%;
-  max-width: 754px;
-  min-width: 314px;
-  max-height: 80px;
-  padding: 8px;
 }
 
-.profileThing {
-  display: inline;
-}
 
 .titleBar {
   /* max-width: 36rem; */
@@ -34,7 +21,8 @@
   color: white;
   border:1px solid var(--cyan);
   width: 100%;
-  max-width: 754px;
+  max-width: inherit;
+  box-sizing: border-box;
 }
 
 .titleThing {
@@ -42,7 +30,7 @@
     color: white;
     text-align: center;
     text-decoration: none;
-    margin-right: 4px;
+    margin: 0 0 0 0px;
 }
 
 .buttons {
@@ -79,7 +67,8 @@ footer.titleBar {
   border:1px solid var(--cyan);
   background-color: var(--bluet);
   width: 100%;
-  max-width: 754px;
+  max-width: inherit;
+  box-sizing: border-box;
 }
 
 /* .navButton:last-child {
@@ -99,16 +88,16 @@ footer.titleBar {
 }
 
 .contentBox {
-  padding: 24px;
   /* min-height: 360px; */
   /* inline-size: 18em; */
   overflow: hidden;
   overflow-wrap: break-word;
   hyphens: manual;
   color: white;
-  border:1px solid var(--cyan);
+  border: 1px solid var(--cyan);
   background-color: var(--bluet);
-  min-height: 754px;
   width: 100%;
-  max-width: 754px;
+  max-width: inherit;
+  padding: 10px;
+  box-sizing: border-box;
 }

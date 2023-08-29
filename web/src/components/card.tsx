@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Sigithub, Siyoutube } from "@icons-pack/react-simple-icons";
+import { SiGithub, SiYoutube } from "@icons-pack/react-simple-icons";
 import Typewriter from "typewriter-effect";
 
 export default function Card() {
@@ -29,8 +29,8 @@ export default function Card() {
                         />
                     </h1>
                     <div onMouseEnter={() => mouseEnterHandler("white")} onMouseLeave={mouseLeaveHandler} className="flex flex-row space-x-2">
-                        <Sigithub className="transition-colors hover:text-white"/>
-                        <Siyoutube className="transition-colors hover:text-white"/> 
+                        <SiGithub className="transition-colors hover:text-white"/>
+                        <SiYoutube className="transition-colors hover:text-white"/> 
                     </div>
                 </div>
                 <div className="ml-2 space-y-1 mt-2">

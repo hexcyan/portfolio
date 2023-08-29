@@ -10,7 +10,7 @@ export default function SideWindow() {
         <>
             <div className="sideWindow">
                 <div className="titleBar">
-                    <img src={daniel_happy} alt="daniel_happy" className="titleThing"/>
+                    <img src={daniel_happy} alt="daniel_happy"/>
                     <p className="titleThing">lets go gamers</p>
                     <div className="buttons titleThing">
                         <img className="button" src={min} alt="min" />
