@@ -2,6 +2,7 @@
     --cyan: #00FFFF;
     --cyant: #00ffff66;
     --bluet: #1d6188be;
+    --bluetd: #1f5283be;
 }
 
 .sideWindow {
@@ -9,10 +10,12 @@
   width: 100%;
   max-width: 754px;
   min-width: 354px;
+  height: 70vh;
   /* margin: 0 48px 0 48px; */
   border:1px solid var(--cyan);
+  display: flex;
+  flex-flow: column;
 }
-
 
 .titleBar {
   /* max-width: 36rem; */
@@ -23,14 +26,30 @@
   width: 100%;
   max-width: inherit;
   box-sizing: border-box;
+  /* flex: 10px;  */
+  
 }
 
 .titleThing {
-    display: inline;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    margin: 0 0 0 0px;
+  vertical-align: middle;
+  display: inline-block;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  margin: 0 0 0 0px;
+  flex: 1 1 auto;
+  -webkit-user-select: none; 
+  -ms-user-select: none;
+  user-select: none; 
+}
+
+.titleThing:first-child {
+  margin-right: 8px;
+}
+
+footer.titleBar {
+  padding: 2px 12px;
+  text-align: right;
 }
 
 .buttons {
@@ -39,7 +58,8 @@
 
 .button {
   display: inline;
-  margin-left: 4px;
+  vertical-align: middle;
+  margin-right: 4px;
 }
 
 .button:hover {
@@ -50,10 +70,7 @@
   filter: brightness(90%);
 }
 
-footer.titleBar {
-  padding: 4px;
-  text-align: right;
-}
+
 
 .navBar {
   /* display:block; */
@@ -71,9 +88,9 @@ footer.titleBar {
   box-sizing: border-box;
 }
 
-/* .navButton:last-child {
-  border-right: none;
-} */
+.navButton:hover {
+  background-color: var(--bluetd);
+}
 
 .navButton {
   border-right:1px solid var(--cyan);
@@ -100,4 +117,8 @@ footer.titleBar {
   max-width: inherit;
   padding: 10px;
   box-sizing: border-box;
+  flex: 1 1 auto;
+  overflow-y: scroll;
+  padding: 24px 48px;
+  /* height: 80% */
 }

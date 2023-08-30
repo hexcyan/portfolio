@@ -16,6 +16,7 @@ function App() {
             display: "flex",
             justifyContent: "center",
             placeItems: "center",
+            backgroundColor: '#2B84F9'
         }}>
             {/* <Card /> */}
             {/* <SideCard /> */}
