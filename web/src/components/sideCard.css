@@ -1,14 +1,45 @@
-.profile {
-    background-color: var(--cyant);
-    color: white;
-    border:1px solid var(--cyan);
-    width: 100%;
-    max-width: 754px;
-    min-width: 314px;
-    max-height: 80px;
-    padding: 8px;
+:root {
+    --cyan: #00FFFF;
+    --cyant: #00ffff66;
+    --bluet: #1d6188be;
+    --bluetd: #1f5283be;
 }
 
-.profileThing {
-display: inline;
+.profileGroup {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--cyan);
+    color: white;
+    min-width: 254px;
+    height: 40vh;
+    padding: 0;
+    margin-bottom: 12px;
+}
+
+.profileSquare {
+    display: inline;
+    background-color: var(--cyan);
+    height: 100%;
+    /* width: 40px; */
+    aspect-ratio: 1 / 1;
+}
+
+.profileName {
+    margin: 16px;
+}
+
+.profileHeader {
+    background-color: var(--cyant);
+    border: 1px solid var(--cyan);
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    height: fit-content;
+}
+
+.profileNews {
+    background-color: var(--bluet);
+    border: 1px solid var(--cyan);
+    padding: 14px;
+    flex: 1 1 auto;
 }

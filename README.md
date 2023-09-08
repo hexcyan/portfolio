@@ -4,4 +4,6 @@ centralised place to display my work
 
 * React
 * Node
-* TailwindCSS
+* Parcel
+
+`npm start` in `/web`

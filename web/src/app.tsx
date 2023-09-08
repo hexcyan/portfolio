@@ -16,11 +16,18 @@ function App() {
             display: "flex",
             justifyContent: "center",
             placeItems: "center",
-            backgroundColor: '#2B84F9'
+            backgroundColor: '#2B84F9',
         }}>
             {/* <Card /> */}
-            {/* <SideCard /> */}
-            <SideWindow />
+            <div style={{
+                display: "flex",
+                placeItems: "start",
+                margin: "48px",
+                gap: "24px"
+            }}>
+                <SideCard />
+                <SideWindow />
+            </div>
         </div>
     );
 }

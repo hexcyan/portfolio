@@ -6,12 +6,10 @@
 }
 
 .sideWindow {
-  /* background-color: pink; */
   width: 100%;
   max-width: 754px;
   min-width: 354px;
   height: 70vh;
-  /* margin: 0 48px 0 48px; */
   border:1px solid var(--cyan);
   display: flex;
   flex-flow: column;
@@ -109,7 +107,7 @@ footer.titleBar {
   /* inline-size: 18em; */
   overflow: hidden;
   overflow-wrap: break-word;
-  hyphens: manual;
+  hyphens: auto;
   color: white;
   border: 1px solid var(--cyan);
   background-color: var(--bluet);
