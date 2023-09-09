@@ -3,32 +3,19 @@ import bg from "./assets/bg.png";
 import Card from "./components/card";
 import SideCard from "./components/sideCard";
 import SideWindow from "./components/window";
+import './app.css'
 
 function App() {
     return (
-        <div style={{  
-            backgroundImage: "url(" + bg + ")",
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            height: '100vh',
-            width: '100vw',
-            display: "flex",
-            justifyContent: "center",
-            placeItems: "center",
-            backgroundColor: '#2B84F9',
-        }}>
-            {/* <Card /> */}
-            <div style={{
-                display: "flex",
-                placeItems: "start",
-                margin: "48px",
-                gap: "24px"
-            }}>
-                <SideCard />
-                <SideWindow />
-            </div>
+        <div className="cardBackground">
+            <Card />
         </div>
+        // <div className="appBackground">
+        //     <div className="appContainer">
+        //         <SideCard />
+        //         <SideWindow />
+        //     </div>
+        // </div>
     );
 }
 

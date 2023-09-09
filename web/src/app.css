@@ -1,0 +1,31 @@
+.appBackground {
+    background-image: url(./assets/bg.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    background-color: #2B84F9;
+}
+
+.cardBackground {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    background-color: #13142C;
+}
+
+.appContainer {
+    display: flex;
+    place-items: start;
+    margin: 48px;
+    gap: 24px;
+}

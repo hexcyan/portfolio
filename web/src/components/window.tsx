@@ -24,12 +24,13 @@ export default function SideWindow() {
                         <a className="navButton" href="/projects"><li>projects</li></a>
                         <a className="navButton" href="/blog" ><li>blog</li></a>
                         <a className="navButton" href="/about" ><li>about</li></a>
+                        <a className="navButton" href="/card" ><li>card</li></a>
                         <a className="navButton" href="/now" ><li>now</li></a>
                     </ul>
                 </nav>
 
                 <article className="contentBox">
-                    <h1>Building a Lily65</h1>
+                    <h1>Building a Lily45</h1>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eleifend tellus ante. Pellentesque id varius libero. Vivamus tempus lectus ut nisi tincidunt mollis. Integer tristique accumsan iaculis. Etiam hendrerit, elit sit amet tristique commodo, lorem massa congue nisi, ac dapibus ligula nisl vulputate orci. Donec non sapien sit amet nisi luctus blandit ac vel nibh. Proin lacinia imperdiet tempus. Cras sit amet lectus vitae dolor scelerisque laoreet a ut ipsum.
                     </p>

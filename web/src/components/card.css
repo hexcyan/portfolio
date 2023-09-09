@@ -1,0 +1,50 @@
+
+:root {
+    --cyan: #00FFFF;
+    --cyant: #00ffff66;
+    --bluet: #1d6188be;
+    --bluetd: #1f5283be;
+}
+
+.cardContainer {
+    display: flex;
+    flex-direction: column;
+    min-width: 40vw;
+    margin: 24px;
+    filter: drop-shadow(0 0 24px var(--cyan));
+    transition: all;
+    transition-duration: 1000;
+}
+
+.cardSquare {
+    background-color: var(--cyan);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.cardBody {
+    border-radius: 0 0 24px 24px;
+    color: var(--cyan);
+    background-color: #13142C;
+    padding: 24px;
+}
+
+.cardHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardHeader > h1 {
+    font-size:xx-large
+}
+
+.cardLinks {
+    margin-left: 8px;
+}
+
+.cardLinks:hover {
+    color: white;
+}

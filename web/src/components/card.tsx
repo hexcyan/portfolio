@@ -2,10 +2,11 @@ import React from "react";
 import { useState } from "react";
 import { SiGithub, SiYoutube } from "@icons-pack/react-simple-icons";
 import Typewriter from "typewriter-effect";
+import './card.css'
 
 export default function Card() {
     const [hover, setHover] = useState<string>("cyan");
-  
+
     const mouseEnterHandler = (itemColor: string) => {
         setHover(itemColor);
     };
@@ -13,13 +14,13 @@ export default function Card() {
     const mouseLeaveHandler = () => {
         setHover("cyan");
     };
-  
+
     return (
-        <div className={`transition duration-1000 flex flex-auto flex-col min-w-md max-w-lg m-20 drop-shadow-[0_0_24px_${hover}]`}>
-            <div className="rounded-t-3xl bg-cyan w-full aspect-square"></div>
-            <div className="rounded-b-3xl text-cyan bg-dark p-8 ">
-                <div className="flex flex-row justify-between items-center">
-                    <h1 className="text-4xl">
+        <div className="cardContainer">
+            <div className="cardSquare"></div>
+            <div className="cardBody">
+                <div className="cardHeader">
+                    <h1>
                         <Typewriter
                             options={{
                                 strings: "hexcyan",
@@ -29,8 +30,8 @@ export default function Card() {
                         />
                     </h1>
                     <div onMouseEnter={() => mouseEnterHandler("white")} onMouseLeave={mouseLeaveHandler} className="flex flex-row space-x-2">
-                        <SiGithub className="transition-colors hover:text-white"/>
-                        <SiYoutube className="transition-colors hover:text-white"/> 
+                        <SiGithub className="cardLinks"/>
+                        <SiYoutube className="cardLinks"/> 
                     </div>
                 </div>
                 <div className="ml-2 space-y-1 mt-2">
