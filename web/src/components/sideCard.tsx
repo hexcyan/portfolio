@@ -19,11 +19,12 @@ export default function SideWindow() {
                             />
                     </h1>
                 </div>
-            
+
                 <article className="profileNews ">
                     <h2>Recent</h2>
                 </article>
             </div>
+
             <Buttons />
         </div>
     );

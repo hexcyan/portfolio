@@ -7,7 +7,7 @@ export default function Buttons() {
         <div className="buttonGrid">
         {
             Object.entries(buttons).map(([filename, url]: any) => (
-                <img key={filename} src={url} alt={filename} />
+                <img key={filename} src={url} alt={filename} className="buttonSingle"/>
             ))
         }
         </div>
