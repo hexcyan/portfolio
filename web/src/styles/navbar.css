@@ -1,0 +1,38 @@
+.navBar {
+  max-width: inherit;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border:1px solid var(--cyan);
+  background-color: var(--bluet);
+  width: 100%;
+  max-width: inherit;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.navButton:last-child {
+  margin-left: auto;
+  border-left: 1px solid var(--cyan);
+  border-right: 0;
+
+}
+
+.navButton:hover {
+  background-color: var(--bluetd);
+  color: white;
+}
+
+.navButton {
+  border-right:1px solid var(--cyan);
+  color: white;
+  text-align: center;
+  padding: 4px 20px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.navButton::first-letter {
+  text-decoration: solid underline cyan;
+}

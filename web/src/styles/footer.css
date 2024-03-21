@@ -1,0 +1,13 @@
+.titleBar {
+    background-color: var(--cyant);
+    color: white;
+    border:1px solid var(--cyan);
+    width: 100%;
+    max-width: inherit;
+    box-sizing: border-box;
+}
+
+footer.titleBar {
+  padding: 2px 12px;
+  text-align: right;
+}

@@ -1,0 +1,19 @@
+---
+import "../styles/titlebar.css";
+
+import daniel_happy from "../assets/daniel_happy.png";
+import min from "../assets/min.png";
+import max from "../assets/max.png";
+import close from "../assets/close.png";
+
+---
+
+<div class="titleBar">
+    <img src={daniel_happy.src} alt="daniel_happy" class="titleThing" draggable="false"/>
+    <p class="titleThing">lets go gamers</p>
+    <div class="buttons titleThing">
+        <img draggable="false" class="button" src={min.src} alt="min" />
+        <img draggable="false" class="button" src={max.src} alt="max" />
+        <img draggable="false" class="button" src={close.src} alt="close" />
+    </div>
+</div>

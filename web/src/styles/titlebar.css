@@ -1,0 +1,52 @@
+.titleBar {
+  /* max-width: 36rem; */
+  /* min-width: 32rem; */
+  background-color: var(--cyant);
+  color: white;
+  border:1px solid var(--cyan);
+  width: 100%;
+  max-width: inherit;
+  box-sizing: border-box;
+  /* flex: 10px;  */
+  
+}
+
+.titleThing {
+  vertical-align: middle;
+  display: inline-block;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  margin: 0 0 0 0px;
+  flex: 1 1 auto;
+  -webkit-user-select: none; 
+  -ms-user-select: none;
+  user-select: none; 
+}
+
+.titleThing:first-child {
+  margin-right: 8px;
+}
+
+footer.titleBar {
+  padding: 2px 12px;
+  text-align: right;
+}
+
+.buttons {
+  float: right;
+}
+
+.button {
+  display: inline;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.button:hover {
+  filter: brightness(120%);
+}
+
+.button:active {
+  filter: brightness(90%);
+}

@@ -1,0 +1,7 @@
+.buttonGrid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 6px;
+    width: 100%;
+    justify-content: space-between;
+}

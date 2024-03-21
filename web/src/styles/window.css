@@ -1,0 +1,32 @@
+.sideWindow {
+  width: 100%;
+  max-width: 754px;
+  min-width: 354px;
+  height: 70vh;
+  border:1px solid var(--cyan);
+  display: flex;
+  flex-flow: column;
+}
+
+.contentBox {
+  /* min-height: 360px; */
+  /* inline-size: 18em; */
+  overflow: hidden;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  color: white;
+  border: 1px solid var(--cyan);
+  background-color: var(--bluet);
+  width: 100%;
+  max-width: inherit;
+  padding: 10px;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 24px 48px;
+  /* height: 80% */
+}
+
+.contentBox img {
+    width: 100%;
+}
