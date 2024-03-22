@@ -1,13 +1,12 @@
 .titleBar {
-  /* max-width: 36rem; */
-  /* min-width: 32rem; */
   background-color: var(--cyant);
   color: white;
   border:1px solid var(--cyan);
   width: 100%;
   max-width: inherit;
   box-sizing: border-box;
-  /* flex: 10px;  */
+  font-family: 'RedHatMono', monospace;
+  font-size: 0.75em;
   
 }
 

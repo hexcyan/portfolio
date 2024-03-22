@@ -1,16 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
 import DefaultPage from '../layouts/DefaultPage.astro';
-
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'blog'>;
-
 ---
 
 <DefaultPage >

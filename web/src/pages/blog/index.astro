@@ -14,20 +14,40 @@ const posts = (await getCollection('blog')).sort(
 
 <DefaultPage >
     <section>
-        <h1>Blog Posts</h1>
-        <ul>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Tags</th>
+            </tr>
             {
                 posts.map((post) => (
-                    <li>
-                        <a href={`/blog/${post.slug}/`}>
+                    <a href={`/blog/${post.slug}/`}>
+                    <tr>
+                        <td>
                             <h4 class="title">{post.data.title}</h4>
                             <p class="date">
                                 <FormattedDate date={post.data.pubDate} />
                             </p>
-                        </a>
-                    </li>
+                        </td>
+                        <td>
+                            <p>{post.data.description}</p>
+                        </td>
+                        <td>
+                            {
+                                post.data.tags.map((tag: string) => (
+                                    <p>
+                                        {tag}
+                                    </p>
+                                ))
+                            }
+                            <p>
+                            </p>
+                        </td>
+                    </tr>
+                    </a>
                 ))
-            }
-        </ul>
+        }
+    </table>
     </section>
 </DefaultPage>
