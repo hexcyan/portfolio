@@ -5,6 +5,13 @@ main {
     justify-content: center;
     align-content: center;
 }
+
+.mainArea {
+    width:100%;
+    max-width: 42em;
+}
+
 aside {
-    width: 320px;
+    width: 15vw;
+    min-width: 256px;
 }
