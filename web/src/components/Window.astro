@@ -1,11 +1,18 @@
 ---
-import Titlebar from './Titlebar.astro';
-import NavBar from './NavBar.astro';
+import Header from './Header.astro';
 import Footer from './Footer.astro';
+
+import "../styles/window.css"
 ---
 
-<header>
-    <Titlebar />
-    <NavBar />
-</header>
-<Footer />
+<div class="sideWindow">
+    <Header />
+
+    <article class="contentBox">
+        <div class="prose">
+            <slot />
+        </div>
+    </article>
+
+    <Footer />
+</div>

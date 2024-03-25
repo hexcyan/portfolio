@@ -1,0 +1,10 @@
+main {
+	padding: 3em 1em;
+    display:flex;
+    gap: var(--gap);
+    justify-content: center;
+    align-content: center;
+}
+aside {
+    width: 320px;
+}

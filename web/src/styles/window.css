@@ -1,16 +1,12 @@
 .sideWindow {
-  width: 100%;
-  max-width: 754px;
-  min-width: 354px;
-  height: 70vh;
+    width:100%;
+  height: 80vh;
   border:1px solid var(--cyan);
   display: flex;
   flex-flow: column;
 }
 
 .contentBox {
-  /* min-height: 360px; */
-  /* inline-size: 18em; */
   overflow: hidden;
   overflow-wrap: break-word;
   hyphens: auto;
@@ -24,7 +20,6 @@
   flex: 1 1 auto;
   overflow-y: auto;
   padding: 24px 48px;
-  /* height: 80% */
 }
 
 .contentBox img {

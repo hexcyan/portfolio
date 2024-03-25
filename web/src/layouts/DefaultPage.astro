@@ -1,15 +1,13 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Buttons from '../components/Buttons.astro';
-import "../styles/window.css"
 
 import NameCard from '../components/NameCard.astro';
+import Buttons from '../components/Buttons.astro';
+import Window from '../components/Window.astro';
 
 const { title, description } = Astro.props;
 
+import '../styles/default.css'
 ---
 
 <html lang="en">
@@ -19,21 +17,14 @@ const { title, description } = Astro.props;
 
 	<body>
         <main>
-            <!-- <aside class="sideGroup">
+            <aside class="sideGroup">
                 <NameCard />
                 <Buttons/>
-            </aside> -->
-            <div class="sideWindow">
-                <Header />
+            </aside>
 
-                <article class="contentBox">
-                    <div class="prose">
-                        <slot />
-                    </div>
-                </article>
-
-                <Footer />
-            </div>
+            <Window>
+                <slot />
+            </Window>
 		</main>
 	</body>
 </html>

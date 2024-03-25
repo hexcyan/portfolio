@@ -3,8 +3,6 @@
     flex-direction: column;
     border: 1px solid var(--cyan);
     color: white;
-    width: 10vw;
-    min-width: 280px;
     height: 40vh;
     padding: 0;
     margin-bottom: 12px;
