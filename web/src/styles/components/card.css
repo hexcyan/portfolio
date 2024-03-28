@@ -1,21 +1,24 @@
+:root {
+    --cardRadius: 24px;
+}
 .cardContainer {
-    display: flex;
-    flex-direction: column;
-    min-width: 25vw;
-    max-width: 25vw;
-    margin: 24px;
-    filter: drop-shadow(0 0 24px var(--cyan));
+    width: calc(100vw * exp(-1));
+    min-width: 260px;;
+    margin: var(--cardRadius);
+    filter: drop-shadow(0 0 var(--cardRadius) var(--cyan));
     transition: all;
     transition-duration: 1000;
+    border: solid var(--cyan) 2px;
+    border-radius: calc(var(--cardRadius) + 4px);
 }
 .cardSquare {
     background-color: var(--cyan);
-    border-radius: 24px 24px 0 0;
+    border-radius: var(--cardRadius) var(--cardRadius) 0 0;
     width: 100%;
     aspect-ratio: 1 / 1;
 }
 .cardBody {
-    border-radius: 0 0 24px 24px;
+    border-radius: 0 0 var(--cardRadius) var(--cardRadius);
     color: white;
     font-family: 'RedHatMono', monospace;
     background-color: #13142C;
@@ -46,5 +49,8 @@
 
 .cardBody > ul {
     list-style-type: ">";
-    padding-left: 18px;;
+    padding-left: 18px;
+}
+a {
+    text-decoration: none;
 }

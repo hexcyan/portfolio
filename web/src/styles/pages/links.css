@@ -1,5 +1,11 @@
 body {
     /* Background */
     background: #13142c;
-    background-size: 100%;
+}
+
+main{
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }

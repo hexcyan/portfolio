@@ -50,16 +50,20 @@ body {
 	font-size: 20px;
 	line-height: 1.7;
 
+    width: 100vw;
+    height: 100vh;
     /* Background */
     background: url('/bg.png') var(--bg-fill);
     background-size: 100%;
+    margin: auto;
 }
 main {
-	margin: auto;
-	padding: 3em 1em;
     display:flex;
+    flex-direction: row;
     justify-content: center;
-
+    margin: auto;
+	padding: 0px;
+    /* height: 100%; */
 }
 
 /* Headings */
