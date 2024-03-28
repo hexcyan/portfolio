@@ -1,9 +1,7 @@
 main {
 	padding: 3em 1em;
-    display:flex;
     gap: var(--gap);
-    justify-content: center;
-    align-content: center;
+    flex-direction: row;
 }
 
 .mainArea {
@@ -15,3 +13,10 @@ aside {
     width: 15vw;
     min-width: 256px;
 }
+
+body {
+    /* Background */
+    background: url('/bg.png') var(--bg-fill);
+    background-size: 100%;
+}
+

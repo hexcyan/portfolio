@@ -1,49 +1,50 @@
-:root {
-    --cyan: #00FFFF;
-    --cyant: #00ffff66;
-    --bluet: #1d6188be;
-    --bluetd: #1f5283be;
-}
-
 .cardContainer {
     display: flex;
     flex-direction: column;
-    min-width: 40vw;
+    min-width: 25vw;
+    max-width: 25vw;
     margin: 24px;
     filter: drop-shadow(0 0 24px var(--cyan));
     transition: all;
     transition-duration: 1000;
 }
-
 .cardSquare {
     background-color: var(--cyan);
     border-radius: 24px 24px 0 0;
     width: 100%;
     aspect-ratio: 1 / 1;
 }
-
 .cardBody {
     border-radius: 0 0 24px 24px;
-    color: var(--cyan);
+    color: white;
+    font-family: 'RedHatMono', monospace;
     background-color: #13142C;
-    padding: 24px;
+    padding: 32px 48px;
+    line-height: 1;
 }
-
 .cardHeader {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
-
+.cardHeader > div {
+    display: flex;
+    flex-direction: row;
+}
 .cardHeader > h1 {
-    font-size:xx-large
+    font-family: 'RedHatMono', monospace;
+    line-height: 1;
 }
-
-.cardLinks {
-    margin-left: 8px;
-}
-
 .cardLinks:hover {
     color: white;
+}
+
+.socialIcons {
+    color: #00FFFF;
+}
+
+.cardBody > ul {
+    list-style-type: ">";
+    padding-left: 18px;;
 }

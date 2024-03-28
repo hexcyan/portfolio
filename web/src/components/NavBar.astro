@@ -2,11 +2,16 @@
 import "../styles/navbar.css"
 
 import Logo from "../../public/favicon.svg"
+import { pages } from "./config"
 ---
 
 <nav>
     <ul class="navBar">
-        <a class="navButton" href="/"><li>home</li></a><a class="navButton" href="/blog" ><li>blog</li></a></a>
+        {
+            pages.map( page => (
+                <a class="navButton" href={page.name == "home" ? "/" : "/"+page.name}><li>{page.name}</li></a>
+            ))
+        }
         <a class="navButton" href="/links"><li><img src={Logo.src}></li></a>
     </ul>
 </nav>

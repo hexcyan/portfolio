@@ -57,6 +57,9 @@ body {
 main {
 	margin: auto;
 	padding: 3em 1em;
+    display:flex;
+    justify-content: center;
+
 }
 
 /* Headings */
