@@ -1,5 +1,5 @@
 ---
-import "../styles/buttons.css"
+import "../styles/components/buttons.css"
 
 const buttons = await Astro.glob("../assets/buttons/*").then(files => {
   return files.map(file => file.default.src);
