@@ -5,7 +5,7 @@ const icons = await Astro.glob("../assets/icons/*").then(files => {
   return files.map(file => file.default.src);
 });
 
-import { pages } from "./config"
+import { SITE_PAGES } from "../consts";
 ---
 
 <div class="cardContainer">
@@ -27,7 +27,7 @@ import { pages } from "./config"
         
         <ul>
             {
-                pages.map( page => (
+                SITE_PAGES.map( page => (
                     <a href={page.name == "home" ? "/" : "/"+page.name}><li>{page.name}</li></a>
                 ))
             }

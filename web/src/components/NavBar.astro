@@ -2,13 +2,14 @@
 import "../styles/components/navbar.css"
 
 import Logo from "../../public/favicon.svg"
-import { pages } from "./config"
+import { SITE_PAGES } from "../consts";
 ---
+
 
 <nav>
     <ul class="navBar">
         {
-            pages.map( page => (
+            SITE_PAGES.map( page => (
                 <a class="navButton" href={page.name == "home" ? "/" : "/"+page.name}><li>{page.name}</li></a>
             ))
         }

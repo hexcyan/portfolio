@@ -1,0 +1,19 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_PAGES } from '../../consts';
+import Logo from "../../../public/favicon.svg"
+
+---
+<nav>
+    <div>
+        <img src={Logo.src}  color="#FFFF">
+        <h1>hexcyan</h1>
+    </div>
+
+    <ul>
+        {
+            SITE_PAGES.map( page => (
+                <a class="navButton" href={page.name == "home" ? "/" : "/"+page.name}><li>{page.name}</li></a>
+            ))
+        }
+    </ul>
+</nav>
