@@ -23,7 +23,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: Change to the web directory
+      run: cd web
     - name: Build with Astro
       run: npm ci
-    - run: npm run astro build --if-present
+    - name: Build with Astro
+      run: npm run astro build --if-present
     - run: npm test
