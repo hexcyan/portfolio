@@ -1,0 +1,83 @@
+.titlebar {
+    background-color: var(--titlebar-bg);
+    color: white;
+    border: 1px solid var(--cyan);
+    width: 100%;
+    max-width: inherit;
+    box-sizing: border-box;
+    font-family: "RedHatMono", monospace;
+    font-size: 1em;
+}
+
+.titleThing {
+    vertical-align: middle;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    margin: 0 0 0 0px;
+    flex: 1 1 auto;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.titleThing:first-child {
+    margin-right: 8px;
+}
+
+.titlebar__buttons {
+    float: right;
+}
+
+.titlebar__button {
+    display: inline;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.titlebar__button:hover {
+    filter: brightness(120%);
+}
+
+.titlebar__button:active {
+    filter: brightness(90%);
+}
+
+.titlebar.footer {
+    padding: 2px 12px;
+    text-align: right;
+}
+
+.sideWindow {
+    width: 100%;
+    height: 85vh;
+    border: 1px solid var(--cyan);
+    display: flex;
+    flex-flow: column;
+}
+
+.contentBox {
+    overflow: hidden;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    color: white;
+    border: 1px solid var(--cyan);
+    background-color: var(--box-bg);
+    width: 100%;
+    max-width: inherit;
+    padding: 10px;
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 24px 48px;
+}
+
+.contentBox img {
+    width: 100%;
+}
+
+footer.titlebar {
+    padding: 12px 12px;
+    text-align: right;
+}

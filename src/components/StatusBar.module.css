@@ -1,0 +1,31 @@
+.statusbar {
+    display: flex;
+    width: 100%;
+    height: 2.2rem;
+    font-size: small;
+    background-color: var(--statusbar-bg);
+    padding: 0.3rem 0.8rem;
+    color: white;
+    align-items: center;
+    gap: 1rem;
+    font-family: "RedHatMono", sans-serif;
+    font-size: 1rem;
+    /* justify-content: space-between; */
+}
+
+.statusbar__title {
+    padding-right: 1.5rem;
+    font-weight: 650;
+}
+.statusbar__right {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+    order: 2;
+    fill: aliceblue;
+}
+
+.statusbar__right > * {
+    display: inherit;
+    align-items: inherit;
+}

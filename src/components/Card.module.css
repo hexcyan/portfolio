@@ -1,0 +1,14 @@
+.Card {
+    overflow: hidden;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    color: white;
+    border: 1px solid var(--cyan);
+    background-color: var(--box-bg);
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    /* padding: 24px 48px; */
+}
