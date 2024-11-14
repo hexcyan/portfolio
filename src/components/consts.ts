@@ -32,4 +32,29 @@ export const files = [
         type: "file",
         route: "/blog/wireless-keyboard",
     },
+    {
+        title: "keyboards",
+        type: "folder",
+        route: "/keyboards",
+    },
+    {
+        title: "keyboards",
+        type: "folder",
+        route: "/keyboards",
+    },
+    {
+        title: "keyboards",
+        type: "folder",
+        route: "/keyboards",
+    },
+    {
+        title: "building a wireless keyboard",
+        type: "file",
+        route: "/blog/wireless-keyboard",
+    },
+    {
+        title: "building a wireless keyboard",
+        type: "file",
+        route: "/blog/wireless-keyboard",
+    },
 ]

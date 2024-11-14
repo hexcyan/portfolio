@@ -8,7 +8,7 @@ import styles from "./StatusBar.module.css";
 export default function StatusBar() {
     return (
         <header className={styles.statusbar}>
-            <Image src="/logo.svg" alt="logo" width={12} height={12} />
+            <Image src="/logo.svg" alt="logo" width={16} height={16} />
             <span className={styles.statusbar__title}>hexcyan</span>
             {links.map((link) => {
                 return (
@@ -25,8 +25,8 @@ export default function StatusBar() {
                             <Image
                                 src={`/icons/${social.site}.svg`}
                                 alt={social.site}
-                                width={12}
-                                height={12}
+                                width={16}
+                                height={16}
                             />
                         </a>
                     );

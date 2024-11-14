@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { files } from "./consts";
 import Image from "next/image";
+import styles from "./FileLinks.module.css";
+
 export default function FileLinks() {
     return (
-        <>
+        <div className={styles.filelinks}>
             {files.map((file) => {
                 return (
-                    <div key={file.title}>
+                    <div key={file.title} className={styles.filelink}>
                         {/* render icon based on file type */}
                         <Link href={file.route}>
                             <Image
@@ -15,11 +17,11 @@ export default function FileLinks() {
                                 width={48}
                                 height={48}
                             />
-                            <h3>{file.title}</h3>
+                            <p>{file.title}</p>
                         </Link>
                     </div>
                 );
             })}
-        </>
+        </div>
     );
 }

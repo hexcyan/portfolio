@@ -20,7 +20,7 @@ export default function RootLayout({
             <body>
                 <StatusBar />
                 <div className="desktop">
-                    <div>
+                    <div className="desktop__sidebar">
                         <FileLinks />
                         <ButtonsBox />
                     </div>
