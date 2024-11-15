@@ -1,0 +1,19 @@
+.desktop {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(auto, 4fr);
+    gap: 64px;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 40px 64px;
+    box-sizing: border-box;
+}
+
+.desktop__sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.desktop__files {
+    flex-grow: 1;
+}

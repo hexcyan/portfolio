@@ -6,9 +6,12 @@ import styles from "./FileLinks.module.css";
 export default function FileLinks() {
     return (
         <div className={styles.filelinks}>
-            {files.map((file) => {
+            {files.map((file, index) => {
                 return (
-                    <div key={file.title} className={styles.filelink}>
+                    <div
+                        key={`${file.title}-${index}`}
+                        className={styles.filelink}
+                    >
                         {/* render icon based on file type */}
                         <Link href={file.route}>
                             <Image
