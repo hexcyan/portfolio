@@ -3,6 +3,7 @@
     grid-template-columns: minmax(240px, 1fr) minmax(auto, 4fr);
     gap: 64px;
     width: 100%;
+    min-height: calc(100vh - 2.2rem);
     max-width: 1920px;
     margin: 0 auto;
     padding: 40px 64px;

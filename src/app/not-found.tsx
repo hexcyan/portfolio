@@ -1,6 +1,6 @@
 import PopupWindow from "@/components/PopupWindow";
 import MyButton from "@/components/MyButton";
-import styles from "./page.module.css";
+
 export default function Home() {
     return (
         <PopupWindow>
