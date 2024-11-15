@@ -13,10 +13,6 @@
     /* justify-content: space-between; */
 }
 
-.statusbar__title {
-    padding-right: 1.5rem;
-    font-weight: 650;
-}
 .statusbar__right {
     display: flex;
     gap: 0.5rem;
@@ -24,7 +20,13 @@
     order: 2;
     fill: aliceblue;
 }
-
+.statusbar__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-right: 2rem;
+    font-weight: 650;
+}
 .statusbar__right > * {
     display: inherit;
     align-items: inherit;

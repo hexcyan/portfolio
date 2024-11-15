@@ -1,9 +1,8 @@
 export const links = [
-    "home",
+
     "projects",
     "blog",
     "gallery",
-    "about"
 ]
 
 export const socials = [

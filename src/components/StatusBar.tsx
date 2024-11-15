@@ -8,8 +8,11 @@ import styles from "./StatusBar.module.css";
 export default function StatusBar() {
     return (
         <header className={styles.statusbar}>
-            <Image src="/logo.svg" alt="logo" width={16} height={16} />
-            <span className={styles.statusbar__title}>hexcyan</span>
+            <Link href="/" className={styles.statusbar__logo}>
+                <Image src="/logo.svg" alt="logo" width={16} height={16} />
+                <span>hexcyan</span>
+            </Link>
+
             {links.map((link) => {
                 return (
                     <Link key={link} href={`/${link}`}>
