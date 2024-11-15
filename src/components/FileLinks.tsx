@@ -17,7 +17,9 @@ export default function FileLinks() {
                                 width={48}
                                 height={48}
                             />
-                            <p>{file.title}</p>
+                            <p className={styles.filelink__filename}>
+                                {file.title}
+                            </p>
                         </Link>
                     </div>
                 );

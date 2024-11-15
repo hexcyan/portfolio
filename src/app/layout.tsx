@@ -21,8 +21,12 @@ export default function RootLayout({
                 <StatusBar />
                 <div className="desktop">
                     <div className="desktop__sidebar">
-                        <FileLinks />
-                        <ButtonsBox />
+                        <div className="desktop__files">
+                            <FileLinks />
+                        </div>
+                        <div>
+                            <ButtonsBox />
+                        </div>
                     </div>
                     <Window>{children}</Window>
                 </div>

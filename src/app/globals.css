@@ -68,6 +68,15 @@ body > div.desktop {
     box-sizing: border-box;
 }
 
+.desktop__sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.desktop__files {
+    flex-grow: 1;
+}
+
 * {
     box-sizing: border-box;
     padding: 0;

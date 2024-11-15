@@ -1,23 +1,24 @@
 .filelinks {
     width: 100%;
-    /* height: 100%; */ /** TODO: Fix parent height */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-    grid-template-rows: repeat(auto-fill, 96px);
+    grid-template-rows: repeat(auto-fill, 108px);
     gap: 2.2rem;
 }
 
 .filelink {
     color: white;
     font-family: "RedHatDisplay", sans-serif;
-    width: 68px;
-    height: 70px;
+    line-height: 1;
+    width: 100%;
+    min-width: 72px;
+
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: center;
 }
-/* text-overflow: ellipsis; */
-/* overflow: hidden; */
-/* } */
+.filelink__filename {
+    margin-top: 8px;
+    max-width: 68px;
+    /* display: block; */
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+}
