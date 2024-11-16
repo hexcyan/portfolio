@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { files } from "./consts";
+import { files } from "../lib/consts";
 import Image from "next/image";
 import styles from "./FileLinks.module.css";
 

@@ -1,5 +1,5 @@
 "use client";
-import { links, socials } from "./consts";
+import { links, socials } from "../lib/consts";
 import Link from "next/link";
 import Image from "next/image";
 

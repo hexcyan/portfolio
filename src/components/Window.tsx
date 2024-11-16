@@ -12,7 +12,7 @@ export default function Window({ children }: WindowProps) {
             <TitleBar />
 
             <article className={styles.contentBox}>
-                <div className="prose">{children}</div>
+                <div className={styles.prose}>{children}</div>
             </article>
 
             <footer className={styles.titlebar}>

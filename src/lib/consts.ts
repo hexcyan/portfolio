@@ -1,33 +1,33 @@
 export const links = [
-    "projects",
+    // "projects",
     "blog",
     "gallery",
-]
+];
 
 export const socials = [
     {
         site: "github",
-        link: "https://github.com/hexcyan"
-    }, 
+        link: "https://github.com/hexcyan",
+    },
     {
         site: "youtube",
-        link: "https://youtube.com/@hexcyan"
+        link: "https://youtube.com/@hexcyan",
     },
     {
         site: "twitter",
-        link: "https://x.com/hexcyan"
+        link: "https://x.com/hexcyan",
     },
-]
+];
 
 export const files = [
     {
-        title: "keyboards",
+        title: "gallery (coming soon)",
         type: "folder",
-        route: "/keyboards",
+        route: "/gallery",
     },
     {
         title: "building a wireless keyboard",
         type: "file",
         route: "/blog/wireless-keyboard",
-    }
-]
+    },
+];

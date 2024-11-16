@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import StatusBar from "@/components/StatusBar";
-import styles from "../page.module.css";
+import styles from "../desktop.module.css";
 import Window from "@/components/Window";
 import FileLinks from "@/components/FileLinks";
 import ButtonsBox from "@/components/ButtonsBox";

@@ -55,12 +55,19 @@
 .sideWindow {
     width: 100%;
     height: 100%;
+
     border: 1px solid var(--cyan);
     display: flex;
     flex-flow: column;
 }
 
+.prose {
+    height: fit-content;
+    margin: 46px;
+}
+
 .contentBox {
+    max-height: calc(100vh - 2.2rem - 156px);
     overflow: hidden;
     overflow-wrap: break-word;
     hyphens: auto;
