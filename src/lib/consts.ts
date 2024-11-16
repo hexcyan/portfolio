@@ -1,5 +1,5 @@
 export const links = [
-    // "projects",
+    "projects",
     "blog",
     // "gallery",
 ];
@@ -19,14 +19,34 @@ export const socials = [
     },
 ];
 
-export const files = [
+// filelink arrays
+export interface FileLink {
+    title: string;
+    type: string;
+    route: string;
+}
+
+export const files: FileLink[] = [
     {
         title: "gallery (coming soon)",
         type: "folder",
         route: "/gallery",
     },
     {
-        title: "building a wireless keyboard",
+        title: "this site",
+        type: "file",
+        route: "/blog/wireless-keyboard",
+    },
+];
+
+export const projects: FileLink[] = [
+    {
+        title: "gallery (coming soon)",
+        type: "folder",
+        route: "/gallery",
+    },
+    {
+        title: "this site",
         type: "file",
         route: "/blog/wireless-keyboard",
     },

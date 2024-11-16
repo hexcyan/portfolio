@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { files } from "../lib/consts";
+import { FileLink } from "../lib/consts";
 import Image from "next/image";
 import styles from "./FileLinks.module.css";
 
-export default function FileLinks() {
+export default function FileLinks({ arr }: { arr: FileLink[] }) {
     return (
         <div className={styles.filelinks}>
-            {files.map((file, index) => {
+            {arr.map((file, index) => {
                 return (
                     <div
                         key={`${file.title}-${index}`}
