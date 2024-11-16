@@ -1,5 +1,5 @@
 "use client";
-import { links, socials } from "../lib/consts";
+import { links, socials } from "@/lib/consts";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -24,7 +24,12 @@ export default function StatusBar() {
             <span className={styles.statusbar__right}>
                 {socials.map((social) => {
                     return (
-                        <a key={social.site} href={social.link}>
+                        <a
+                            target="_blank"
+                            key={social.site}
+                            href={social.link}
+                            rel="noopener noreferrer"
+                        >
                             <Image
                                 src={`/icons/${social.site}.svg`}
                                 alt={social.site}

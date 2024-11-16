@@ -39,8 +39,6 @@ function preprocessBlogPosts() {
 preprocessBlogPosts();
 
 export function getPostBySlug(slug: string) {
-    console.log(`Looking for slug: ${slug}`);
-
     const filePath = slugToFileMap[slug];
     if (!filePath) {
         throw new Error(`Post with slug "${slug}" not found`);

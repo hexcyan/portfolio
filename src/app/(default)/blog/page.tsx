@@ -5,7 +5,6 @@ import { getAllPosts } from "@/lib/blog";
 // Return all posts
 export default function Blog() {
     const posts = getAllPosts();
-    console.log(posts);
     return (
         <>
             <h1 className={styles.blogTitle}>Blog Posts</h1>
