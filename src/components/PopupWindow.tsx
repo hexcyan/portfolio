@@ -13,7 +13,7 @@ export default function PopupWindow({ children }: WindowProps) {
 
             <article className={styles.contentBox}>
                 <Image
-                    src="/assets/Alert.png"
+                    src="/assets/alert.png"
                     alt="Alert"
                     width={48}
                     height={48}
