@@ -1,7 +1,7 @@
 export const links = [
     // "projects",
     "blog",
-    "gallery",
+    // "gallery",
 ];
 
 export const socials = [
