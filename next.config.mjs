@@ -13,8 +13,13 @@ const nextConfig = {
                 hostname: "*.b-cdn.net", // This will allow all BunnyCDN subdomains
                 pathname: "/**",
             },
+            {
+                protocol: "https",
+                hostname: "pbs.twimg.com", // This will allow all BunnyCDN subdomains
+                pathname: "/**",
+            },
         ],
-        domains: ["x65535.b-cdn.net"],
+        domains: ["x65535.b-cdn.net", "pbs.twimg.com"],
     },
 };
 

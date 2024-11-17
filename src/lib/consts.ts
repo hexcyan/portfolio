@@ -39,6 +39,11 @@ export const files: FileLink[] = [
         type: "file",
         route: "/blog/0",
     },
+    {
+        title: "404",
+        type: "file",
+        route: "/somepagethatodoesntexist",
+    },
 ];
 
 export const projects: FileLink[] = [
