@@ -1,9 +1,9 @@
 export const storageZone = "x65535";
 
 export const links = [
-    "projects",
+    // "projects",
     "blog",
-    // "gallery",
+    "gallery",
 ];
 
 export const socials = [

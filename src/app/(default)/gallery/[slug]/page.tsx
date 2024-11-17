@@ -1,6 +1,6 @@
 import { getImagesFromFolder } from "@/lib/cdn";
 import GalleryGrid from "@/components/Gallery/GalleryGrid";
-import styles from "./page.module.css";
+import styles from "../../blog/page.module.css";
 
 interface GalleryPageProps {
     params: {
@@ -16,7 +16,9 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
 
         return (
             <div className={styles.galleryPage}>
-                <h1>{slug.charAt(0).toUpperCase() + slug.slice(1)} Gallery</h1>
+                <h1 className={styles.blogTitle}>
+                    Photos from {slug.charAt(0).toUpperCase() + slug.slice(1)}
+                </h1>
                 <GalleryGrid images={images} />
             </div>
         );

@@ -9,8 +9,6 @@ import { ComponentProps } from "react";
 const CustomImage = (props: ComponentProps<"img">) => {
     const { src, alt } = props;
     if (!src) return null;
-    console.log(src);
-
     return (
         <div className="my-6">
             <Image
