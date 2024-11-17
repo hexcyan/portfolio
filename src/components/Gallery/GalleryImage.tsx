@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import styles from "./GalleryImage.module.css";
+import styles from "./Gallery.module.css";
+import { getCDNConfig } from "@/lib/cdn";
 
 interface GalleryImageProps {
     imageId: string;
@@ -19,13 +20,15 @@ export default function GalleryImage({
     thumbnailWidth = 300,
     thumbnailHeight = 200,
     modalWidth = 1200,
-    modalHeight = 800,
-}: GalleryImageProps) {
+}: // modalHeight = 800,
+GalleryImageProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalImageLoading, setIsModalImageLoading] = useState(true);
 
-    const pullZone = "https://x65535.b-cdn.net";
+    const { pullZone } = getCDNConfig();
+    if (!pullZone) return null;
 
-    const thumbnailUrl = `${pullZone}/${imageId}?width=${thumbnailWidth}&quality=85`;
+    const thumbnailUrl = `${pullZone}/${imageId}?width=${thumbnailWidth}&quality=45`;
     const fullSizeUrl = `${pullZone}/${imageId}?width=${modalWidth}&quality=90`;
 
     function handleOpenModal() {
@@ -83,14 +86,35 @@ export default function GalleryImage({
                             </svg>
                         </button>
 
-                        <Image
-                            src={fullSizeUrl}
-                            alt={alt}
-                            width={modalWidth}
-                            height={modalHeight}
-                            className={styles.modalImage}
-                            priority={true}
-                        />
+                        <div className={styles.modalContent}>
+                            {isModalImageLoading && (
+                                <div className={styles.modalLoadingPlaceholder}>
+                                    <div className={styles.waveSpinner}>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <Image
+                                src={fullSizeUrl}
+                                alt={alt}
+                                width={modalWidth}
+                                height={modalWidth}
+                                className={`${styles.modalImage} ${
+                                    !isModalImageLoading
+                                        ? styles.modalImageLoaded
+                                        : ""
+                                }`}
+                                priority={true}
+                                onLoadingComplete={() =>
+                                    setIsModalImageLoading(false)
+                                }
+                            />
+                        </div>
                     </div>
                 </div>
             )}

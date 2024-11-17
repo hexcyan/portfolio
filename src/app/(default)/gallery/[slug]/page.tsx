@@ -1,24 +1,22 @@
 import { getImagesFromFolder } from "@/lib/cdn";
 import GalleryGrid from "@/components/Gallery/GalleryGrid";
+import styles from "./page.module.css";
 
 interface GalleryPageProps {
     params: {
-        location: string;
+        slug: string;
     };
 }
 
 export default async function GalleryPage({ params }: GalleryPageProps) {
-    const { location } = params;
+    const { slug } = params;
 
-    const images = await getImagesFromFolder(location);
-    console.log(images);
     try {
+        const images = await getImagesFromFolder(`gallery/${slug}`);
+
         return (
-            <div>
-                <h1>
-                    {location.charAt(0).toUpperCase() + location.slice(1)}{" "}
-                    Gallery
-                </h1>
+            <div className={styles.galleryPage}>
+                <h1>{slug.charAt(0).toUpperCase() + slug.slice(1)} Gallery</h1>
                 <GalleryGrid images={images} />
             </div>
         );

@@ -1,0 +1,134 @@
+.thumbnailWrapper {
+    position: relative;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    width: 100%;
+    height: fit-content;
+    display: block;
+    padding: 10px;
+}
+
+.thumbnailWrapper:hover {
+    opacity: 0.9;
+}
+
+.thumbnail {
+    width: 100%;
+    height: auto !important;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+}
+
+.modalContent {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: 1rem;
+}
+
+.modalImage {
+    width: auto;
+    height: auto !important;
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.closeButton {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: white;
+    transition: opacity 0.2s ease;
+}
+
+.closeButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.8;
+}
+
+.closeIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.galleryGrid {
+    /* display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem; */
+
+    /* TODO: make proper masonry grid so it doesn't break proper ordering */
+    column-count: auto;
+    column-width: 300px;
+    /* padding: 1rem; */
+    margin-top: 24px;
+    width: 100%;
+    /* background-color: white; */
+}
+
+.modalLoadingPlaceholder {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 55;
+}
+
+/* wave loader thing */
+.waveSpinner {
+    display: flex;
+    gap: 3px;
+}
+
+.waveSpinner div {
+    width: 3px;
+    height: 24px;
+    background-color: var(--cyan);
+    animation: wave 1s ease-in-out infinite;
+}
+
+.waveSpinner div:nth-child(2) {
+    animation-delay: 0.1s;
+}
+.waveSpinner div:nth-child(3) {
+    animation-delay: 0.2s;
+}
+.waveSpinner div:nth-child(4) {
+    animation-delay: 0.3s;
+}
+.waveSpinner div:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes wave {
+    0%,
+    100% {
+        transform: scaleY(0.3);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+}
