@@ -22,6 +22,8 @@
 @media only screen and (max-width: 960px) {
     .desktop {
         display: flex;
+        padding: 8px;
+        min-height: calc(100vh - 2.2rem);
     }
 
     .desktop__sidebar {
