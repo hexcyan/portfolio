@@ -37,7 +37,7 @@ export const files: FileLink[] = [
     {
         title: "this site",
         type: "file",
-        route: "/blog/wireless-keyboard",
+        route: "/blog/0",
     },
 ];
 
