@@ -30,7 +30,7 @@ export interface FileLink {
 
 export const files: FileLink[] = [
     {
-        title: "gallery (coming soon)",
+        title: "gallery (new!)",
         type: "folder",
         route: "/gallery",
     },

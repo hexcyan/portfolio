@@ -37,7 +37,6 @@ export default function RootLayout({
         <html lang="en">
             <body>
                 <StatusBar />
-                {/* {children} */}
                 <DefaultLayout>{children}</DefaultLayout>
             </body>
         </html>
