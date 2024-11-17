@@ -63,7 +63,7 @@
 
 .prose {
     height: fit-content;
-    margin: 46px;
+    /* margin: 46px; */
 }
 
 .contentBox {

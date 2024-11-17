@@ -5,6 +5,7 @@ import styles from "../desktop.module.css";
 import Window from "@/components/Window";
 import FileLinks from "@/components/FileLinks";
 import ButtonsBox from "@/components/ButtonsBox";
+import { files } from "@/lib/consts";
 
 export const metadata: Metadata = {
     title: "hexcyan",
@@ -16,7 +17,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         <div className={styles.desktop}>
             <div className={styles.desktop__sidebar}>
                 <div className={styles.desktop__files}>
-                    <FileLinks />
+                    <FileLinks arr={files} />
                 </div>
                 <div>
                     <ButtonsBox />
@@ -36,7 +37,6 @@ export default function RootLayout({
         <html lang="en">
             <body>
                 <StatusBar />
-                {/* {children} */}
                 <DefaultLayout>{children}</DefaultLayout>
             </body>
         </html>

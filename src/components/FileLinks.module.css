@@ -11,13 +11,13 @@
     font-family: "RedHatDisplay", sans-serif;
     line-height: 1;
     width: 100%;
-    min-width: 72px;
+    min-width: 96px;
 
     text-align: center;
 }
 .filelink__filename {
     margin-top: 8px;
-    max-width: 68px;
+    max-width: inherit;
     /* display: block; */
     /* overflow: hidden; */
     text-overflow: ellipsis;
