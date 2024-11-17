@@ -23,7 +23,9 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                     <ButtonsBox />
                 </div>
             </div>
-            <Window>{children}</Window>
+            <div className={styles.desktop__content}>
+                <Window>{children}</Window>
+            </div>
         </div>
     );
 }

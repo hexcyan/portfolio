@@ -118,3 +118,10 @@ footer.titlebar {
     padding: 4px 8px;
     margin-top: 24px;
 }
+
+@media only screen and (max-width: 960px) {
+    .sideWindow {
+        width: 100%;
+        height: 100%;
+    }
+}

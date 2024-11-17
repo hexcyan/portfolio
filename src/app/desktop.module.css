@@ -18,3 +18,21 @@
 .desktop__files {
     flex-grow: 1;
 }
+
+@media only screen and (max-width: 960px) {
+    .desktop {
+        display: flex;
+    }
+
+    .desktop__sidebar {
+        display: none;
+    }
+    .desktop__content {
+        width: 100%;
+        max-width: inherit;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        flex-grow: 1;
+    }
+}

@@ -10,12 +10,12 @@ const CustomImage = (props: ComponentProps<"img">) => {
     const { src, alt } = props;
     if (!src) return null;
     return (
-        <div className="my-6">
+        <div className={styles.imgContainer}>
             <Image
                 src={src}
                 alt={alt || ""}
-                width={800}
-                height={400}
+                width={500}
+                height={360}
                 className="w-full h-auto"
                 style={{ objectFit: "contain" }}
             />
