@@ -1,0 +1,54 @@
+.paint__card {
+    width: stretch;
+    /* max-width: 256px; */
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.paint__card > img {
+    max-width: 100%;
+    height: auto;
+}
+.paint__name {
+    text-transform: uppercase;
+}
+
+.paint__properties {
+    font-size: 14px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.paint__box {
+    border: 1px solid black;
+    padding: 4px;
+}
+
+.series {
+    margin-left: auto;
+}
+
+.seriesBox {
+    align-items: center;
+    border: 1px solid black;
+    padding: 2px 1px;
+    gap: 4px;
+    font-size: 18px;
+}
+
+.paints__gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.paints__filter {
+    display: flex;
+    gap: 8px;
+    border: 1px solid black;
+    width: stretch;
+    padding: 8px 12px;
+    margin-bottom: 18px;
+}

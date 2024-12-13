@@ -1,0 +1,21 @@
+.paints__subtitle {
+    display: flex;
+    gap: 24px;
+}
+
+h1,
+h3 {
+    margin: 0;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+body {
+    padding: 24px 36px;
+}
