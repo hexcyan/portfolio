@@ -1,0 +1,94 @@
+.Card {
+    overflow: hidden;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    color: white;
+    border: 1px solid var(--cyan);
+    width: fit-content;
+    border-radius: 4px;
+    /* width: 100%; */
+    box-sizing: border-box;
+    transform-style: preserve-3d;
+    will-change: transform;
+    background-color: var(--background);
+
+    /* Smooth shadow transition */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* transition: box-shadow 1s ease-out, transform 1s ease-out, 300ms linear all; */
+    transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -webkit-transition: all 2s ease;
+    -o-transition: all 2s ease;
+    -ms-transition: all 2s ease;
+    -khtml-transition: all 2s ease;
+}
+
+.Card:hover {
+    box-shadow: 0 0px 24px rgba(0, 255, 255, 0.4);
+}
+
+/* Optional: Add a subtle shine effect */
+.Card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.36) 20%,
+        rgba(255, 255, 255, 0) 60%
+    );
+    pointer-events: none;
+}
+
+/* Dynamic shine effect */
+.Card__shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out;
+    mix-blend-mode: soft-light;
+    z-index: 2;
+}
+
+/* Edge highlight effect */
+.Card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+
+    border: 1.5px solid white;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out;
+    opacity: 0;
+}
+
+.Card:hover::after {
+    opacity: 1;
+}
+
+.project__desc {
+    padding: 12px;
+}
+
+.project__img {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.ProjectGallery {
+    display: grid;
+    /* Grid template columns */
+    grid-template-columns: repeat(auto-fill, minmax(142px, 1fr));
+    gap: 24px;
+}

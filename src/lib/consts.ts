@@ -1,10 +1,6 @@
 export const storageZone = "x65535";
 
-export const links = [
-    // "projects",
-    "blog",
-    "gallery",
-];
+export const links = ["projects", "blog", "gallery"];
 
 export const socials = [
     {
@@ -46,15 +42,27 @@ export const files: FileLink[] = [
     },
 ];
 
-export const projects: FileLink[] = [
+export interface ProjectLink {
+    title: string;
+    href: string[];
+    desc: string;
+    img: string;
+}
+
+export const projects: ProjectLink[] = [
     {
-        title: "gallery (coming soon)",
-        type: "folder",
-        route: "/gallery",
+        title: "CandyColour",
+        href: [
+            "https://www.etsy.com/au/shop/CandyColourShop",
+            "https:/instagram.com/candycolour.shop",
+        ],
+        desc: "A short description here",
+        img: "/projects/candy.jpg",
     },
     {
-        title: "this site",
-        type: "file",
-        route: "/blog/wireless-keyboard",
+        title: "Placeholder",
+        href: ["#"],
+        desc: "A short description here",
+        img: "/logo.svg",
     },
 ];

@@ -1,5 +1,12 @@
-import FileLinks from "@/components/FileLinks";
-import { projects } from "@/lib/consts";
+"use client";
+import ProjectGallery from "@/components/Projects/ProjectGallery";
+import styles from "../blog/page.module.css";
+
 export default function Projects() {
-    return <FileLinks arr={projects} />;
+    return (
+        <>
+            <h1 className={styles.blogTitle}>Projects</h1>
+            <ProjectGallery />
+        </>
+    );
 }
