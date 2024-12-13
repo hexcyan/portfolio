@@ -1,0 +1,211 @@
+[
+    {
+        "code": 5,
+        "en_name": "Quinacridone Red",
+        "jp_name": "キナクリドンレッド",
+        "series": "C",
+        "perm": 4,
+        "opacity": 1,
+        "staining": 2,
+        "granulation": false,
+        "pigments": ["PV19"]
+    },
+    {
+        "code": 6,
+        "en_name": "Pyrrole Rubin",
+        "jp_name": "ピロールルビン",
+        "series": "A",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 2,
+        "granulation": false,
+        "pigments": ["PR264"]
+    },
+    {
+        "code": 7,
+        "en_name": "Pyrrole Red",
+        "jp_name": "ピロールレッド",
+        "series": "A",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 2,
+        "granulation": false,
+        "pigments": ["PR254"]
+    },
+    {
+        "code": 8,
+        "en_name": "Perylene Maroon",
+        "jp_name": "ペリレンマルーン",
+        "series": "B",
+        "perm": 4,
+        "opacity": 1,
+        "staining": 2,
+        "granulation": false,
+        "pigments": ["PR179"]
+    },
+    {
+        "code": 9,
+        "en_name": "Permanent Alizarin Crimson",
+        "jp_name": "パーマネント アリザリンクリムソン",
+        "series": "C",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 2,
+        "granulation": false,
+        "pigments": ["PV19", "PBr25"]
+    },
+    {
+        "code": 10,
+        "en_name": "Crimson Lake",
+        "jp_name": "クリムソンレーキ",
+        "series": "A",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PR177", "PR122", "PV19"]
+    },
+    {
+        "code": 11,
+        "en_name": "Carmine",
+        "jp_name": "カーマイン",
+        "series": "A",
+        "perm": 3,
+        "opacity": 1,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PR83"]
+    },
+    {
+        "code": 12,
+        "en_name": "Rose Madder",
+        "jp_name": "ローズマダー",
+        "series": "A",
+        "perm": 2,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PR83"]
+    },
+    {
+        "code": 13,
+        "en_name": "Opera (Quinacridone Opera)",
+        "jp_name": "オペラ(キナクリドン オペラ)",
+        "series": "B",
+        "perm": 1,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PR83", "BV10", "PR122"]
+    },
+    {
+        "code": 14,
+        "en_name": "Cadmium Red Light",
+        "jp_name": "カドミウムレッドライト",
+        "series": "E",
+        "perm": 4,
+        "opacity": 4,
+        "staining": 2,
+        "granulation": true,
+        "pigments": ["PO20", "PR108"]
+    },
+    {
+        "code": 15,
+        "en_name": "Cadmium Red Deep",
+        "jp_name": "カドミウムレッドディープ",
+        "series": "E",
+        "perm": 4,
+        "opacity": 4,
+        "staining": 2,
+        "granulation": true,
+        "pigments": ["PR108"]
+    },
+    {
+        "code": 16,
+        "en_name": "Cadmium Red Orange",
+        "jp_name": "カドミウムレッドオレンジ",
+        "series": "E",
+        "perm": 4,
+        "opacity": 4,
+        "staining": 2,
+        "granulation": false,
+        "pigments": ["PO20"]
+    },
+    {
+        "code": 17,
+        "en_name": "Cadmium Red Purple",
+        "jp_name": "カドミウムレッドパープル",
+        "series": "E",
+        "perm": 4,
+        "opacity": 4,
+        "staining": 2,
+        "granulation": true,
+        "pigments": ["PR108"]
+    },
+    {
+        "code": 18,
+        "en_name": "Vermilion Hue",
+        "jp_name": "バーミリオンヒュー",
+        "series": "A",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": true,
+        "pigments": ["PO20", "PR108"]
+    },
+    {
+        "code": 19,
+        "en_name": "Vermilion Hue",
+        "jp_name": "バーミリオンヒュー",
+        "series": "A",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PO73", "PR254", "PY110"]
+    },
+    {
+        "code": 22,
+        "en_name": "Scarlet Lake",
+        "jp_name": "スカーレットレーキ",
+        "series": "B",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PO73", "PR254", "PV19"]
+    },
+    {
+        "code": 25,
+        "en_name": "Brilliant Pink",
+        "jp_name": "ブリリアントピンク",
+        "series": "A",
+        "perm": 4,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PR209", "PW6"]
+    },
+    {
+        "code": 26,
+        "en_name": "Shell Pink",
+        "jp_name": "シェルピンク",
+        "series": "A",
+        "perm": 3,
+        "opacity": 2,
+        "staining": 1,
+        "granulation": false,
+        "pigments": ["PR209", "PW6"]
+    },
+    {
+        "code": 27,
+        "en_name": "Quinacridone Scarlet",
+        "jp_name": "キナクリドンスカーレット",
+        "series": "C",
+        "perm": 4,
+        "opacity": 1,
+        "staining": 1,
+        "granulation": true,
+        "pigments": ["PR209"]
+    }
+]
