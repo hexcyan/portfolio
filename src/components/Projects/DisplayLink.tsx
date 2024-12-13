@@ -78,6 +78,13 @@ export default function DisplayLink({ title, href, desc, img }: ProjectLink) {
                         />
                         <div className={styles.project__desc}>
                             <h3>{title}</h3>
+                            <p
+                                style={{
+                                    display: `none`,
+                                }}
+                            >
+                                {desc}
+                            </p>
                         </div>
                     </div>
                 </a>
