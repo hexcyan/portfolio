@@ -1,6 +1,9 @@
+"use client";
+
 import { Paint } from "@/lib/consts";
 import styles from "./Paints.module.css";
 import Image from "next/image";
+import { getCDNConfig } from "@/lib/cdn";
 import "./globals.css";
 
 interface PaintCardProps {
@@ -12,13 +15,18 @@ export default function PaintCard({ paint }: PaintCardProps) {
     const opacitySymbol = ["○", "⦶", "◐", "⬤"][paint.opacity];
     const stainingSymbol = ["☐", "◩", "◼"][paint.staining];
 
+    const { pullZone } = getCDNConfig();
+    if (!pullZone) return null;
+
+    const imgUrl = `${pullZone}/paints/hb/${paint.code}.jpg?quality=45`;
+
     return (
         <div className={styles.paint__card}>
             <Image
-                src="/temp-color.png"
+                src={imgUrl}
                 height={176}
                 width={388}
-                alt="temp color"
+                alt={paint.en_name}
                 className={styles.paint__img}
                 draggable={false}
             />
