@@ -58,3 +58,20 @@ export const projects: FileLink[] = [
         route: "/blog/wireless-keyboard",
     },
 ];
+
+export interface Paint {
+    code: number;
+    en_name: string;
+    jp_name: string;
+    series: "A" | "B" | "C" | "D" | "E" | "F";
+    perm: 1 | 2 | 3 | 4;
+    opacity: 0 | 1 | 2 | 3;
+    staining: 0 | 1 | 2;
+    granulation: boolean;
+    pigments: string[];
+}
+
+// Need to double check these values
+// Half of the properties are wrong coz Claude can't read apparently lol
+import HolbeinPaints from "./hbcolors.json";
+export const hbPaints: Paint[] = HolbeinPaints.map((paint) => paint as Paint);
