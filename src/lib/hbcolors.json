@@ -3,440 +3,520 @@
         "code": 5,
         "en_name": "Quinacridone Red",
         "jp_name": "キナクリドンレッド",
+        "fr_name": "Rouge Quinacridone",
         "series": "C",
         "perm": 4,
         "opacity": 1,
         "staining": 2,
         "granulation": false,
-        "pigments": ["PV19"]
+        "pigments": ["PV19"],
+        "large": false
     },
     {
         "code": 6,
         "en_name": "Pyrrole Rubin",
         "jp_name": "ピロールルビン",
+        "fr_name": "Pyrrole Rubis",
         "series": "A",
         "perm": 4,
         "opacity": 2,
         "staining": 2,
         "granulation": false,
-        "pigments": ["PR264"]
+        "pigments": ["PR264"],
+        "large": true
     },
     {
         "code": 7,
         "en_name": "Pyrrole Red",
         "jp_name": "ピロールレッド",
+        "fr_name": "Rouge Pyrrole",
         "series": "A",
         "perm": 4,
         "opacity": 2,
         "staining": 2,
         "granulation": false,
-        "pigments": ["PR254"]
+        "pigments": ["PR254"],
+        "large": true
     },
     {
         "code": 8,
         "en_name": "Perylene Maroon",
         "jp_name": "ペリレンマルーン",
+        "fr_name": "Marron Pérylène",
         "series": "B",
         "perm": 4,
         "opacity": 1,
         "staining": 2,
         "granulation": false,
-        "pigments": ["PR179"]
+        "pigments": ["PR179"],
+        "large": false
     },
     {
         "code": 9,
         "en_name": "Permanent Alizarin Crimson",
         "jp_name": "パーマネント アリザリンクリムソン",
+        "fr_name": "Alizarine Cramoisie Permanente",
         "series": "C",
         "perm": 4,
         "opacity": 2,
         "staining": 2,
         "granulation": false,
-        "pigments": ["PV19", "PBr25"]
+        "pigments": ["PV19", "PBr25"],
+        "large": true
     },
     {
         "code": 10,
         "en_name": "Crimson Lake",
         "jp_name": "クリムソンレーキ",
+        "fr_name": "Laque Cramoisie",
         "series": "A",
         "perm": 4,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PR177", "PR122", "PV19"]
+        "pigments": ["PR177", "PR122", "PV19"],
+        "large": true
     },
     {
         "code": 11,
         "en_name": "Carmine",
         "jp_name": "カーマイン",
+        "fr_name": "Carmin",
         "series": "A",
         "perm": 3,
         "opacity": 1,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PR83"]
+        "pigments": ["PR83"],
+        "large": true
     },
     {
         "code": 12,
         "en_name": "Rose Madder",
         "jp_name": "ローズマダー",
+        "fr_name": "Garance Rose",
         "series": "A",
         "perm": 2,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PR83"]
+        "pigments": ["PR83"],
+        "large": false
     },
     {
         "code": 13,
         "en_name": "Opera (Quinacridone Opera)",
         "jp_name": "オペラ(キナクリドン オペラ)",
+        "fr_name": "Opéra (Quinacridone Opéra)",
         "series": "B",
         "perm": 1,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PR83", "BV10", "PR122"]
+        "pigments": ["PR83", "BV10", "PR122"],
+        "large": false
     },
     {
         "code": 14,
         "en_name": "Cadmium Red Light",
         "jp_name": "カドミウムレッドライト",
+        "fr_name": "Rouge de Cadmium Clair",
         "series": "E",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": true,
-        "pigments": ["PO20", "PR108"]
+        "pigments": ["PO20", "PR108"],
+        "large": true
     },
     {
         "code": 15,
         "en_name": "Cadmium Red Deep",
         "jp_name": "カドミウムレッドディープ",
+        "fr_name": "Rouge de Cadmium Foncé",
         "series": "E",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": true,
-        "pigments": ["PR108"]
+        "pigments": ["PR108"],
+        "large": true
     },
     {
         "code": 16,
         "en_name": "Cadmium Red Orange",
         "jp_name": "カドミウムレッドオレンジ",
+        "fr_name": "Rouge de Cadmium Orangé",
         "series": "E",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": false,
-        "pigments": ["PO20"]
+        "pigments": ["PO20"],
+        "large": true
     },
     {
         "code": 17,
         "en_name": "Cadmium Red Purple",
         "jp_name": "カドミウムレッドパープル",
+        "fr_name": "Rouge de Cadmium Pourpre",
         "series": "E",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": true,
-        "pigments": ["PR108"]
+        "pigments": ["PR108"],
+        "large": true
     },
     {
         "code": 18,
         "en_name": "Vermilion Hue",
         "jp_name": "バーミリオンヒュー",
+        "fr_name": "Vermillon (Ton)",
         "series": "A",
         "perm": 4,
         "opacity": 2,
         "staining": 1,
         "granulation": true,
-        "pigments": ["PO20", "PR108"]
+        "pigments": ["PO20", "PR108"],
+        "large": true
     },
     {
         "code": 19,
         "en_name": "Vermilion Hue",
         "jp_name": "バーミリオンヒュー",
+        "fr_name": "Vermillon (Ton)",
         "series": "A",
         "perm": 4,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PO73", "PR254", "PY110"]
+        "pigments": ["PO73", "PR254", "PY110"],
+        "large": false
     },
     {
         "code": 22,
         "en_name": "Scarlet Lake",
         "jp_name": "スカーレットレーキ",
+        "fr_name": "Laque Écarlate",
         "series": "B",
         "perm": 4,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PO73", "PR254", "PV19"]
+        "pigments": ["PO73", "PR254", "PV19"],
+        "large": true
     },
     {
         "code": 25,
         "en_name": "Brilliant Pink",
         "jp_name": "ブリリアントピンク",
+        "fr_name": "Rose Brillant",
         "series": "A",
         "perm": 4,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PR209", "PW6"]
+        "pigments": ["PR209", "PW6"],
+        "large": true
     },
     {
         "code": 26,
         "en_name": "Shell Pink",
         "jp_name": "シェルピンク",
+        "fr_name": "Rose Coquille",
         "series": "A",
         "perm": 3,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": ["PR209", "PW6"]
+        "pigments": ["PR209", "PW6"],
+        "large": true
     },
     {
         "code": 27,
         "en_name": "Quinacridone Scarlet",
         "jp_name": "キナクリドンスカーレット",
+        "fr_name": "Écarlate de Quinacridone",
         "series": "C",
         "perm": 4,
         "opacity": 1,
         "staining": 1,
         "granulation": true,
-        "pigments": ["PR209"]
+        "pigments": ["PR209"],
+        "large": false
     },
     {
         "code": 30,
         "en_name": "Naples Yellow",
         "jp_name": "ネイプルス イエロー",
+        "fr_name": "Jaune de Naples",
         "series": "A",
         "perm": 4,
         "opacity": 4,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 31,
         "en_name": "Jaune Brilliant No. 1",
         "jp_name": "ジョーン ブリヤン No. 1",
+        "fr_name": "Jaune Brilliant No. 1",
         "series": "A",
         "perm": 4,
         "opacity": 4,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": false
     },
     {
         "code": 32,
         "en_name": "Jaune Brilliant No. 2",
         "jp_name": "ジョーン ブリヤン No. 2",
+        "fr_name": "Jaune Brilliant No. 2",
         "series": "A",
         "perm": 4,
         "opacity": 4,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": false
     },
     {
         "code": 33,
         "en_name": "Lemon Yellow",
         "jp_name": "レモン イエロー",
+        "fr_name": "Jaune Citron",
         "series": "A",
         "perm": 3,
         "opacity": 2,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 34,
         "en_name": "Yellow Ochre",
         "jp_name": "イエロー オーカー",
+        "fr_name": "Ocre Jaune",
         "series": "A",
         "perm": 5,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 35,
         "en_name": "Permanent Yellow Lemon",
         "jp_name": "パーマネント イエロー レモン",
+        "fr_name": "Jaune Citron Permanent",
         "series": "A",
         "perm": 3,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 36,
         "en_name": "Permanent Yellow Light",
         "jp_name": "パーマネント イエロー ライト",
+        "fr_name": "Jaune Clair Permanent",
         "series": "A",
         "perm": 3,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 37,
         "en_name": "Permanent Yellow Deep",
         "jp_name": "パーマネント イエロー ディープ",
+        "fr_name": "Jaune Foncé Permanent",
         "series": "A",
         "perm": 3,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 38,
         "en_name": "Permanent Yellow Orange",
         "jp_name": "パーマネント イエロー オレンジ",
+        "fr_name": "Jaune Orangé Permanent",
         "series": "A",
         "perm": 3,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 39,
         "en_name": "Aureolin",
         "jp_name": "オーレオリン",
+        "fr_name": "Auréoline",
         "series": "D",
         "perm": 4,
         "opacity": 0,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": false
     },
     {
         "code": 40,
         "en_name": "Cadmium Yellow Lemon",
         "jp_name": "カドミウム イエロー レモン",
+        "fr_name": "Jaune de Cadmium Citron",
         "series": "C",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 41,
         "en_name": "Cadmium Yellow Pale",
         "jp_name": "カドミウム イエロー ペール",
+        "fr_name": "Jaune de Cadmium Pâle",
         "series": "C",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 42,
         "en_name": "Cadmium Yellow Light",
         "jp_name": "カドミウム イエロー ライト",
+        "fr_name": "Jaune de Cadmium Clair",
         "series": "C",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 43,
         "en_name": "Cadmium Yellow Deep",
         "jp_name": "カドミウム イエロー ディープ",
+        "fr_name": "Jaune de Cadmium Foncé",
         "series": "C",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": true,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 44,
         "en_name": "Cadmium Yellow Orange",
         "jp_name": "カドミウム イエロー オレンジ",
+        "fr_name": "Jaune de Cadmium Orangé",
         "series": "C",
         "perm": 4,
         "opacity": 4,
         "staining": 2,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 46,
         "en_name": "Greenish Yellow",
         "jp_name": "グリニッシュ イエロー",
+        "fr_name": "Jaune Verdâtre",
         "series": "C",
         "perm": 4,
         "opacity": 0,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": false
     },
     {
         "code": 47,
         "en_name": "Brilliant Orange",
         "jp_name": "ブリリアント オレンジ",
+        "fr_name": "Orange Brillant",
         "series": "C",
         "perm": 4,
         "opacity": 2,
         "staining": 1,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 48,
         "en_name": "Gamboge Nova",
         "jp_name": "ガンボージ ノーバ",
+        "fr_name": "Gomme Gutte Nouvelle",
         "series": "B",
         "perm": 4,
         "opacity": 0,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": false
     },
     {
         "code": 49,
         "en_name": "Isoindolinone Yellow Deep",
         "jp_name": "インジノリノン イエロー ディープ",
+        "fr_name": "Jaune Isoindolinone Foncé",
         "series": "C",
         "perm": 4,
         "opacity": 0,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": false
     },
     {
         "code": 50,
         "en_name": "Imidazolone Yellow",
         "jp_name": "イミダゾロン イエロー",
+        "fr_name": "Jaune Imidazolone",
         "series": "B",
         "perm": 4,
         "opacity": 2,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     },
     {
         "code": 51,
         "en_name": "Imidazolone Lemon",
         "jp_name": "イミダゾロン レモン",
+        "fr_name": "Imidazolone Citron",
         "series": "B",
         "perm": 4,
         "opacity": 2,
         "staining": 0,
         "granulation": false,
-        "pigments": []
+        "pigments": [],
+        "large": true
     }
 ]

@@ -1,5 +1,5 @@
 import PaintCard from "./PaintCard";
-import { hbPaints } from "@/lib/consts";
+import { hbPaints } from "@/lib/paints";
 import styles from "./Paints.module.css";
 import PaintsFilter from "./PaintsFilter";
 

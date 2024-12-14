@@ -1,6 +1,5 @@
 .paint__card {
     width: stretch;
-    /* max-width: 256px; */
     border: 1px solid black;
     padding: 8px;
 }
@@ -9,6 +8,7 @@
     max-width: 100%;
     height: auto;
 }
+
 .paint__name {
     text-transform: uppercase;
 }
@@ -51,4 +51,16 @@
     width: stretch;
     padding: 8px 12px;
     margin-bottom: 18px;
+}
+
+.paint__pigments {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.paints__filter > input {
+    border: 0;
+    border-bottom: 1px solid black;
 }
