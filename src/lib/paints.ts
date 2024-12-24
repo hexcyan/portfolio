@@ -30,7 +30,7 @@ export const paintFilters = [
 ]
 
 export const paintSymbols = {
-    opacity: ["○", "⦶", "◐", "⬤"],
+    opacity: ["◯", "⦶", "◐", "⬤"],
     staining: ["☐", "◩", "◼"]
 }
 
