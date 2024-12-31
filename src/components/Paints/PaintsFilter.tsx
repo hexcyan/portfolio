@@ -1,10 +1,9 @@
-import { Paint, paintSymbols } from "@/lib/paints";
+import { Paint } from "@/lib/paints";
 import { Filters } from "./PaintsGallery";
 import styles from "./Paints.module.css";
 
 type SeriesType = Paint["series"]; // This extracts "A" | "B" | "C" | "D" | "E" | "F"
 const SERIES: SeriesType[] = ["A", "B", "C", "D", "E", "F"];
-const SIZE = ["60ml"];
 
 interface PaintsFilterProps {
     filters: Filters;
