@@ -1,15 +1,10 @@
-"use client";
 import { Paint, paintSymbols } from "@/lib/paints";
-import styles from "./Paints.module.css";
 import { Filters } from "./PaintsGallery";
+import styles from "./Paints.module.css";
 
 type SeriesType = Paint["series"]; // This extracts "A" | "B" | "C" | "D" | "E" | "F"
 const SERIES: SeriesType[] = ["A", "B", "C", "D", "E", "F"];
-
-// interface PaintsFilterProps {
-//     filters: FilterState;
-//     setFilters: (filters: FilterState) => void;
-// }
+const SIZE = ["60ml"];
 
 interface PaintsFilterProps {
     filters: Filters;
@@ -20,6 +15,21 @@ export default function PaintsFilter({
     filters,
     setFilters,
 }: PaintsFilterProps) {
+    // Toggle granulation
+    const toggleGranulation = () => {
+        console.log(filters.granulation);
+
+        setFilters((prev) => ({
+            ...prev,
+            granulation:
+                prev.granulation === null
+                    ? true
+                    : prev.granulation === true
+                    ? false
+                    : null,
+        }));
+    };
+
     // Toggle series selection
     const toggleSeries = (s: SeriesType) => {
         setFilters((prev) => ({
@@ -30,21 +40,43 @@ export default function PaintsFilter({
         }));
     };
 
+    // Toggle size selection
+    const toggleSize = () => {
+        setFilters((prev) => ({
+            ...prev,
+            selectedSize: !prev.selectedSize,
+        }));
+    };
+
     return (
         <div className={styles.paints__filter}>
             <p>Filter:</p>
-            <p>Permanence: ≤ = ≥ ✻✻✻✻</p>
+            {/* <p>Permanence: ≤ = ≥ ✻✻✻✻</p>
             <p>Opacity: ≤ = ≥ {paintSymbols.opacity}</p>
-            <p>Staining: ≤ = ≥ {paintSymbols.staining}</p>
-            {/* Replace with 3 state checkbox: yes, no, idc */}
-            <p>Granulating</p> <input type="checkbox"></input>
+            <p>Staining: ≤ = ≥ {paintSymbols.staining}</p> */}
+
+            {/* Granulation filter with 3 states: True | False | null */}
+            <button
+                className={`${styles.filter__btn} ${
+                    filters.granulation === false && styles.filter__strike
+                } ${filters.granulation === true && styles.filter__selected}`}
+                onClick={toggleGranulation}
+            >
+                Granulating{" "}
+                {filters.granulation === true
+                    ? "✅"
+                    : filters.granulation === false
+                    ? "❌"
+                    : "☁️"}
+            </button>
+
             {/* Series Filter */}
             <div className={styles.paints__filter__group}>
                 <p>Series</p>
                 {SERIES.map((s) => (
                     <button
                         key={s}
-                        className={`${styles.filter__series}
+                        className={`${styles.filter__btn}
                             ${
                                 filters.selectedSeries.includes(s)
                                     ? styles.filter__selected
@@ -69,7 +101,22 @@ export default function PaintsFilter({
                     </button>
                 )}
             </div>
-            {/* <p>Size: 5ml 15ml 60ml</p>
+
+            {/* Size filter (All colors have 5 / 15ml sizes, no need to filter those) */}
+            <div className={styles.paints__filter__group}>
+                {/* <p>Size</p> */}
+                <button
+                    className={`${styles.filter__btn}
+                            ${
+                                filters.selectedSize
+                                    ? styles.filter__selected
+                                    : ""
+                            }`}
+                    onClick={() => toggleSize()}
+                >
+                    60ml
+                </button>
+            </div>
             {/* Dropdowns: Red, Yellow, Green, Blue, Violet, Brown, Black, Grey, White, Gold, Silver */}
             {/* <p>Color ▼</p> */}
             {/* <p>Sets ▼</p> */}

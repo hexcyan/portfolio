@@ -60,23 +60,30 @@
     gap: 8px;
 }
 
-.filter__series {
+/* Series */
+.filter__btn {
     border: 1px solid black;
     background-color: white;
     padding: 0 8px;
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
         box-shadow 0.1s ease-in-out, border 0.1s ease-in-out;
+    cursor: pointer;
 }
 
-.filter__series:hover {
+.filter__btn:hover {
     box-shadow: 0 0 0 1px var(--hb-red);
     border: 1px solid var(--hb-red);
+}
+
+.filter__strike {
+    text-decoration: line-through;
 }
 
 .filter__selected {
     background-color: var(--hb-red);
     color: white;
 }
+
 .paint__pigments {
     display: flex;
     gap: 8px;
