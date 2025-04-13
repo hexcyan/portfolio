@@ -8,11 +8,6 @@
     font-family: "RedHatMono", monospace;
     font-size: 1em;
     font-weight: 650;
-    flex-shrink: 0;
-}
-
-.titlebar p {
-    margin: 0;
 }
 
 .titleThing {
@@ -60,9 +55,10 @@
 .sideWindow {
     width: 100%;
     height: 100%;
+
+    border: 1px solid var(--cyan);
     display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Prevent scrolling */
+    flex-flow: column;
 }
 
 .prose {
@@ -71,19 +67,20 @@
 }
 
 .contentBox {
-    color: white;
-    background-color: var(--box-bg);
-    border: 1px solid var(--cyan);
-    box-sizing: border-box;
-    width: 100%;
-    padding: 24px 48px;
-    height: 100%;
-    flex: 1;
-    overflow-y: auto;
-    /* Text */
-    overflow: auto;
+    max-height: calc(100vh - 2.2rem - 156px);
+    overflow: hidden;
     overflow-wrap: break-word;
     hyphens: auto;
+    color: white;
+    border: 1px solid var(--cyan);
+    background-color: var(--box-bg);
+    width: 100%;
+    max-width: inherit;
+    padding: 10px;
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 24px 48px;
 }
 
 footer.titlebar {
@@ -106,6 +103,20 @@ footer.titlebar {
     flex-direction: row;
     gap: 32px;
     padding: 48px 32px;
+}
+
+.myButton {
+    background-color: var(--titlebar-bg);
+    color: white;
+    border: 1px solid var(--cyan);
+    max-width: inherit;
+    box-sizing: border-box;
+    font-family: "RedHatMono", monospace;
+    font-size: 1em;
+    font-weight: 650;
+    max-width: fit-content;
+    padding: 4px 8px;
+    margin-top: 24px;
 }
 
 @media only screen and (max-width: 960px) {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./myButton.module.css";
+import styles from "./Window.module.css";
 
 interface MyButtonProps {
     text: string;

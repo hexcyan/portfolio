@@ -1,15 +1,15 @@
 .statusbar {
     display: flex;
+    width: 100%;
     height: 2.2rem;
     font-size: small;
     background-color: var(--statusbar-bg);
-    padding: 0rem 0.8rem;
+    padding: 0.3rem 0.8rem;
     color: white;
     align-items: center;
     gap: 1rem;
     font-family: "RedHatMono", sans-serif;
     font-size: 1rem;
-    flex-shrink: 0;
     /* justify-content: space-between; */
 }
 
