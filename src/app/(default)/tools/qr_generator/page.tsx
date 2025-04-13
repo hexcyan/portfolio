@@ -6,13 +6,11 @@ import styles from "./QRGenerator.module.css";
 export default function QRCodeGenerator() {
     const [url, setUrl] = useState("https://hexcyan.xyz");
     const [qrCodeDataURL, setQRCodeDataURL] = useState("");
-    const [frameColor, setFrameColor] = useState("#000000");
     const [codeColor, setCodeColor] = useState("#000000");
     const [bgColor, setBgColor] = useState("#ffffff");
     const [qrType, setQrType] = useState("regular");
     const [errorCorrectionLevel, setErrorCorrectionLevel] = useState("M");
     const [transparentBg, setTransparentBg] = useState(false);
-    const [logoFile, setLogoFile] = useState<File | null>(null);
     const [logoPreview, setLogoPreview] = useState<string | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -117,7 +115,6 @@ export default function QRCodeGenerator() {
     const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setLogoFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setLogoPreview(reader.result as string);
@@ -143,7 +140,6 @@ export default function QRCodeGenerator() {
         }
     }, [
         url,
-        frameColor,
         codeColor,
         bgColor,
         qrType,
@@ -282,7 +278,7 @@ export default function QRCodeGenerator() {
                                 </select>
                                 <p className={styles.helpText}>
                                     Higher levels offer better error resistance,
-                                    but reduce the QR code's capacity.
+                                    but reduce the QR code&apos;s capacity.
                                 </p>
                             </div>
                         )}
