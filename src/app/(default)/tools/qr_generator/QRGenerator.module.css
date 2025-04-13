@@ -346,7 +346,6 @@
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .colorPickers {
-        flex-direction: column;
         gap: 16px;
     }
 
