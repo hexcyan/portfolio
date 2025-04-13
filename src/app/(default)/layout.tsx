@@ -27,6 +27,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                 <Window>{children}</Window>
             </div>
         </div>
+        // </div>
     );
 }
 
@@ -39,7 +40,9 @@ export default function RootLayout({
         <html lang="en">
             <body>
                 <StatusBar />
-                <DefaultLayout>{children}</DefaultLayout>
+                <main>
+                    <DefaultLayout>{children}</DefaultLayout>
+                </main>
             </body>
         </html>
     );

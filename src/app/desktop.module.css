@@ -1,15 +1,18 @@
+.desktopContainer {
+    display: flex;
+}
 .desktop {
     display: grid;
     grid-template-columns: minmax(240px, 1fr) minmax(auto, 4fr);
     gap: 64px;
     width: 100%;
-    min-height: calc(100vh - 2.2rem);
     max-width: 1920px;
     margin: 0 auto;
     padding: 40px 64px;
     box-sizing: border-box;
+    height: 100%; /* Take full height of parent */
+    overflow: hidden; /* Prevent scrolling */
 }
-
 .desktop__sidebar {
     display: flex;
     flex-direction: column;
@@ -19,11 +22,15 @@
     flex-grow: 1;
 }
 
+.desktop__content {
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+}
+
 @media only screen and (max-width: 960px) {
     .desktop {
         display: flex;
         padding: 8px;
-        min-height: calc(100vh - 2.2rem);
     }
 
     .desktop__sidebar {

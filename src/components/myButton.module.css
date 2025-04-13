@@ -1,0 +1,22 @@
+.myButton {
+    background-color: var(--titlebar-bg);
+    color: white;
+    border: 1px solid var(--cyan, #00ffff);
+    padding: 12px 24px;
+    cursor: pointer;
+    font-family: "RedHatMono", monospace;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    width: fit-content;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.5px;
+    text-decoration: none !important;
+}
+
+.myButton:hover {
+    background-color: var(--cyan, #00ffff);
+    color: black;
+    transform: translateY(-2px);
+}

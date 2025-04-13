@@ -6,111 +6,9 @@
     line-height: 1.75;
 }
 
-/* Headings */
-.prose h1 {
-    font-family: "RedHatMono", monospace;
-    font-size: 2.25rem;
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-}
-
-.prose h2 {
-    font-family: "RedHatMono", monospace;
-    font-size: 1.875rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    color: var(--cyan);
-}
-
-.prose h3 {
-    font-family: "RedHatMono", monospace;
-    font-size: 1.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-}
-
-/* Paragraphs and Lists */
 .prose p {
-    margin-bottom: 1.25rem;
-}
-
-.prose ul,
-.prose ol {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
-}
-
-.prose li {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-/* Links */
-.prose a {
-    color: var(--cyan);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    transition: opacity 0.2s;
-}
-
-.prose a:hover {
-    opacity: 0.8;
-}
-
-/* Code blocks */
-.prose pre {
-    background-color: var(--box-bg);
-    border: 1px solid var(--cyan);
-    border-radius: 4px;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    overflow-x: auto;
-    font-family: "RedHatMono", monospace;
-}
-
-.prose code {
-    font-family: "RedHatMono", monospace;
-    background-color: var(--statusbar-bg);
-    padding: 0.2em 0.4em;
-    border-radius: 3px;
-    font-size: 0.875em;
-}
-
-/* Blockquotes */
-.prose blockquote {
-    border-left: 4px solid var(--cyan);
-    background-color: var(--statusbar-bg);
-    padding: 0.8rem 2rem;
-    margin: 1.5rem 0;
-    font-style: italic;
-    color: #eeffff;
-}
-
-.prose blockquote > *:last-child {
-    margin-bottom: 0;
-}
-
-/* Tables */
-.prose table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-}
-
-.prose th {
-    background-color: var(--titlebar-bg);
-    border: 1px solid var(--cyan);
-    padding: 0.75rem;
-    text-align: left;
-}
-
-.prose td {
-    border: 1px solid var(--cyan);
-    padding: 0.75rem;
+    font-family: "RedHatText", sans-serif;
+    font-size: 1rem;
 }
 
 /* Images */
@@ -129,18 +27,18 @@
     margin: 1.5rem auto;
 }
 
-.prose .imgContainer {
+.imgContainer {
     width: 100%;
     /* height: auto !important; */
 }
 
-/* Horizontal Rule */
-.prose hr {
-    border: 0;
-    border-top: 1px solid var(--cyan);
-    margin: 2rem 0;
-}
-
 .banner {
     width: auto;
+}
+
+.prose a {
+    color: var(--cyan);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.2s;
 }
