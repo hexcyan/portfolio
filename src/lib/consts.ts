@@ -4,6 +4,7 @@ export const links = [
     // "projects",
     "blog",
     "gallery",
+    "tools",
 ];
 
 export const socials = [
@@ -30,7 +31,12 @@ export interface FileLink {
 
 export const files: FileLink[] = [
     {
-        title: "gallery (new!)",
+        title: "tools",
+        type: "briefcase",
+        route: "/tools",
+    },
+    {
+        title: "gallery",
         type: "folder",
         route: "/gallery",
     },
