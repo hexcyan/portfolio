@@ -114,6 +114,6 @@ footer.titlebar {
         height: 100%;
     }
     .contentBox {
-        max-height: calc(100vh - 2.2rem - 4px);
+        padding: 0;
     }
 }
