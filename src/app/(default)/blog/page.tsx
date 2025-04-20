@@ -6,8 +6,8 @@ import { getAllPosts } from "@/lib/blog";
 export default function Blog() {
     const posts = getAllPosts();
     return (
-        <>
-            <h1 className={styles.blogTitle}>Blog Posts</h1>
+        <div className="explorer">
+            <h1>Blog Posts</h1>
             <div className={styles.blogGrid}>
                 {posts.map((post) => (
                     <Link
@@ -55,6 +55,6 @@ export default function Blog() {
                     </Link>
                 ))}
             </div>
-        </>
+        </div>
     );
 }

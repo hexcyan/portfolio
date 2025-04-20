@@ -204,3 +204,7 @@ hr {
     border-top: 1px solid var(--cyan);
     margin: 2rem 0;
 }
+
+.explorer {
+    padding: 24px 48px;
+}

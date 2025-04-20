@@ -11,14 +11,22 @@ export default function PopupWindow({ children }: WindowProps) {
         <div className={styles.popupWindow}>
             <TitleBar />
 
-            <article className={styles.contentBox}>
+            <article
+                className={styles.contentBox}
+                style={{
+                    paddingBottom: 48,
+                }}
+            >
                 <Image
                     src="/assets/alert.png"
                     alt="Alert"
                     width={48}
                     height={48}
+                    style={{
+                        marginTop: 24,
+                    }}
                 />
-                <div className="prose">{children}</div>
+                <div>{children}</div>
             </article>
         </div>
     );

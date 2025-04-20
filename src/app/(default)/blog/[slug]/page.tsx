@@ -1,4 +1,4 @@
-import { getPostBySlug } from "@/lib/blog";
+import { BlogFrontMatter, getPostBySlug } from "@/lib/blog";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import styles from "../../../blog.module.css";
@@ -35,20 +35,28 @@ const options: MDXRemoteProps["options"] = {
 };
 
 export default async function Blog({ params }: { params: { slug: string } }) {
-    const { slug } = await params;
-    // const post = getPostBySlug(slug);
+    const { slug } = params;
 
     try {
         const post = getPostBySlug(slug);
+
         return (
-            <article className={styles.prose}>
-                <h1>{post.fm.title}</h1>
-                <MDXRemote
-                    source={post.content}
-                    options={options}
-                    components={components}
-                />
-            </article>
+            <>
+                {post.fm.splash && (
+                    <div className={styles.splash}>
+                        <img src={post.fm.splash} alt={post.fm.title} />
+                    </div>
+                )}
+
+                <article className={styles.prose}>
+                    <h1>{post.fm.title}</h1>
+                    <MDXRemote
+                        source={post.content}
+                        options={options}
+                        components={components}
+                    />
+                </article>
+            </>
         );
     } catch {
         notFound();

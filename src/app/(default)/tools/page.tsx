@@ -1,5 +1,4 @@
 import FileLinks from "@/components/FileLinks";
-import styles from "./tools.module.css";
 import { FileLink } from "@/lib/consts";
 
 export default function ToolsPage() {
@@ -9,13 +8,18 @@ export default function ToolsPage() {
             route: "/tools/qr_generator",
             type: "contrast",
         },
+        {
+            title: "Holbein Paints Explorer",
+            route: "/paints",
+            type: "paints",
+        },
     ];
 
     return (
-        <div className={styles.toolsContainer}>
+        <div className="explorer">
             <h1>Tools</h1>
 
-            <div className={styles.toolsGrid}>
+            <div>
                 <FileLinks arr={tools} />
             </div>
         </div>

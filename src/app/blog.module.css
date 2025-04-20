@@ -4,6 +4,7 @@
     margin: 0 auto;
     font-family: "RedHatDisplay", sans-serif;
     line-height: 1.75;
+    padding: 0 48px;
 }
 
 .prose p {
@@ -29,7 +30,6 @@
 
 .imgContainer {
     width: 100%;
-    /* height: auto !important; */
 }
 
 .banner {
@@ -41,4 +41,30 @@
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: opacity 0.2s;
+}
+
+.splash {
+    width: 100%;
+    height: 360px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 48px;
+}
+.splash img {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    object-position: center;
+    object-fit: cover;
+    transform-origin: center center;
+}
+
+@media only screen and (max-width: 960px) {
+    .prose {
+        padding: 0 24px;
+    }
+    .blogSplash {
+        margin-bottom: 24px;
+    }
 }

@@ -18,7 +18,5 @@
 .filelink__filename {
     margin-top: 8px;
     max-width: inherit;
-    /* display: block; */
-    /* overflow: hidden; */
     text-overflow: ellipsis;
 }

@@ -10,6 +10,7 @@ export interface BlogFrontMatter {
     description?: string;
     slug: string;
     tags?: string[];
+    splash?: string[];
 }
 
 const BLOG_PATH = join(process.cwd(), "content", "blog");
