@@ -1,4 +1,4 @@
-import { BlogFrontMatter, getPostBySlug } from "@/lib/blog";
+import { getPostBySlug } from "@/lib/blog";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import styles from "../../../blog.module.css";
