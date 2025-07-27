@@ -15,7 +15,7 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
         const images = await getImagesFromFolder(`gallery/${slug}`);
 
         return (
-            <div className={styles.galleryPage}>
+            <div className="explorer">
                 <h1 className={styles.blogTitle}>
                     Photos from {slug.charAt(0).toUpperCase() + slug.slice(1)}
                 </h1>

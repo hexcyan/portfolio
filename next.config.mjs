@@ -19,7 +19,6 @@ const nextConfig = {
                 pathname: "/**",
             },
         ],
-        domains: ["x65535.b-cdn.net", "pbs.twimg.com"],
     },
 };
 

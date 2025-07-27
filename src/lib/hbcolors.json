@@ -8,12 +8,13 @@
         "opacity": 1,
         "staining": 2,
         "granulation": false,
-        "pigments": ["PV19"]
+        "pigments": ["PV19"],
+        "sets": [0, 0, 0, 0, 0, 0, 0, 0]
     },
     {
         "code": 6,
         "en_name": "Pyrrole Rubin",
-        "jp_name": "ピロールルビン",
+        "jp_name": "ピロール ルビン",
         "series": "A",
         "perm": 4,
         "opacity": 2,
