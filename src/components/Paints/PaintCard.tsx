@@ -15,6 +15,7 @@ export default function PaintCard({ paint }: PaintCardProps) {
     const opacitySymbol = ["○", "⦶", "◐", "⬤"][paint.opacity];
     const stainingSymbol = ["☐", "◩", "◼"][paint.staining];
 
+    const paintCode = paint.code.toString().padStart(3, "0");
     const { pullZone } = getCDNConfig();
     if (!pullZone) return null;
 
@@ -31,9 +32,11 @@ export default function PaintCard({ paint }: PaintCardProps) {
                 draggable={false}
             />
             <p>
-                W{paint.code.toString().padStart(3, "0")} W
-                {(paint.code + 200).toString()}{" "}
-                {paint.size[2] && `WW${paint.code.toString().padStart(3, "0")}`}
+                W{paintCode} W
+                {/* Special condition for the "White" paint W002*/}
+                {/* If the paint code is 2, the code below should be "W201" instead of "W002" */}
+                {paint.code == 2 ? "201" : paint.code + 200}{" "}
+                {paint.size[2] != 0 && `WW${paintCode}`}
             </p>
             <p className={styles.paint__name}>{paint.en_name}</p>
             <p>{paint.fr_name}</p>
@@ -46,7 +49,8 @@ export default function PaintCard({ paint }: PaintCardProps) {
                 {paint.granulation && <span title="Granulating">G</span>}
 
                 <div className={styles.series}>
-                    Pigments: <span>{paint.pigments}</span>
+                    {/* Pigments:  */}
+                    <span>{paint.pigments}</span>
                 </div>
                 <div className={styles.series}>
                     Series{" "}
