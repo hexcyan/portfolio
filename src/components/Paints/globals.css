@@ -1,3 +1,6 @@
+:root {
+    --hb-red: #cd1b2f;
+}
 header {
     color: #727272;
     margin-bottom: 12px;
