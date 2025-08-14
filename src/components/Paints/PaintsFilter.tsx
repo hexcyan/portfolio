@@ -51,9 +51,9 @@ export default function PaintsFilter({
     return (
         <div className={styles.paints__filter}>
             <p>Filter:</p>
-            {/* <p>Permanence: ≤ = ≥ ✻✻✻✻</p>
+            <p>Permanence: ≤ = ≥ ✻✻✻✻</p>
             <p>Opacity: ≤ = ≥ {paintSymbols.opacity}</p>
-            <p>Staining: ≤ = ≥ {paintSymbols.staining}</p> */}
+            <p>Staining: ≤ = ≥ {paintSymbols.staining}</p>
 
             {/* Granulation filter with 3 states: True | False | null */}
             <button

@@ -15,7 +15,7 @@ export default function Home() {
             <article className={styles.prose}>
                 <h2>welcome to my digital corner</h2>
                 <p>hi i like making websites</p>
-                <p>but this one isn't done yet :grin:</p>
+                <p>but this one isn&apos;t done yet :grin:</p>
                 <MyButton path="/blog" text="check out the blog ->" />
             </article>
         </>
