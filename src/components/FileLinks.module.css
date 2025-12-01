@@ -12,9 +12,12 @@
     line-height: 1;
     width: 96px;
     min-width: 96px;
-    /* width: auto; */
-
     text-align: center;
+}
+
+.center {
+    display: flex;
+    align-items: center;
 }
 .filelink__filename {
     margin-top: 8px;

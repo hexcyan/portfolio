@@ -6,11 +6,12 @@ import styles from "./FileLinks.module.css";
 interface IconProps {
     file: IIcon;
     index: number;
+    center?: boolean;
 }
 
-export default function Icon({ file }: IconProps) {
+export default function Icon({ file, center }: IconProps) {
     return (
-        <div className={styles.filelink}>
+        <div className={`${styles.filelink} ${center && styles.center}`}>
             {/* render icon based on file type */}
             <Link
                 href={file.route}

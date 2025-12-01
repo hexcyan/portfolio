@@ -59,14 +59,29 @@ export const files: IIcon[] = [
 ];
 
 export const projects: IIcon[] = [
-    {
-        title: "KeebSoc",
-        type: "keebsoc",
-        route: "https://keebsoc.com",
-        descr: "The website for the Mechanical Keyboard Society of the University of New South Wales!",
+        {
+            title: "KeebSoc",
+            type: "keebsoc",
+            route: "https://keebsoc.com",
+            descr: "The website rework for the Mechanical Keyboard Society of the University of New South Wales :)",
+        },
+    ];
 
-    },
-];
+export const tools: IIcon[] = [
+        {
+            title: "QR Code Generator",
+            route: "/tools/qr_generator",
+            type: "contrast",
+            descr: "Simple, no-frills, no-ads QR Code generator with transparency and logos.",
+        },
+        {
+            title: "Holbein Paints Explorer",
+            route: "/paints",
+            type: "paints",
+            // descr: "The Holbein Watercolor Paints catalogue is readily availiable in print and pdf form. However, these are not interactive and cannot be easily filtered or searched. Find the exact (Holbein) color you're looking for :D\nView the database here → (Currently not deployed lol)",
+            descr: "The Holbein Watercolor Paints catalogue is readily availiable in print and pdf form. However, these catalogues are not interactive and cannot be easily filtered or searched. Find the exact (Holbein) color you're looking for :D\nView the database here → (Currently not deployed lol)",
+        },
+    ];
 
 export interface Paint {
     code: number;

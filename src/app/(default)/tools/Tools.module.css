@@ -9,6 +9,14 @@
     font-size: 20px;
 }
 
+.hoverLabel p {
+    margin-bottom: 0.5rem;
+}
+
+.hoverLabel p:last-child {
+    margin-bottom: 0;
+}
+
 .projectRow {
     display: flex;
     gap: 2rem;
