@@ -1,4 +1,4 @@
-import { FileLink } from "./consts";
+import { IIcon } from "./consts";
 interface BunnyStorageObject {
     ObjectName: string;
     Path: string;
@@ -50,7 +50,7 @@ export async function getImagesFromFolder(folderPath: string) {
     }
 }
 
-export async function getFolders(folderPath: string): Promise<FileLink[]> {
+export async function getFolders(folderPath: string): Promise<IIcon[]> {
     if (!storageZone || !apiKey) {
         throw new Error("CDN credentials not configured");
     }

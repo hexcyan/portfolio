@@ -23,13 +23,14 @@ export const socials = [
 ];
 
 // filelink arrays
-export interface FileLink {
+export interface IIcon {
     title: string;
     type: string;
     route: string;
+    descr?: string;
 }
 
-export const files: FileLink[] = [
+export const files: IIcon[] = [
     {
         title: "tools",
         type: "briefcase",
@@ -57,16 +58,25 @@ export const files: FileLink[] = [
     },
 ];
 
-export const projects: FileLink[] = [
+export const projects: IIcon[] = [
+        {
+            title: "QR Code Generator",
+            route: "/tools/qr_generator",
+            type: "contrast",
+            descr: "Hello",
+        },
+        {
+            title: "Holbein Paints Explorer",
+            route: "/paints",
+            type: "paints",
+            descr: "View the collection of Holbein Paints Watercolor",
+        },
     {
-        title: "gallery (coming soon)",
-        type: "folder",
-        route: "/gallery",
-    },
-    {
-        title: "this site",
-        type: "file",
-        route: "/blog/wireless-keyboard",
+        title: "KeebSoc",
+        type: "keebsoc",
+        route: "https://keebsoc.com",
+        descr: "The website for the Mechanical Keyboard Society of the University of New South Wales!",
+
     },
 ];
 

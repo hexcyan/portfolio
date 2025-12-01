@@ -1,17 +1,21 @@
 import FileLinks from "@/components/FileLinks";
-import { FileLink } from "@/lib/consts";
+import Icon from "@/components/Icon";
+import { IIcon, projects } from "@/lib/consts";
+import styles from "./Tools.module.css";
 
 export default function ToolsPage() {
-    const tools: FileLink[] = [
+    const tools: IIcon[] = [
         {
             title: "QR Code Generator",
             route: "/tools/qr_generator",
             type: "contrast",
+            descr: "Hello",
         },
         {
             title: "Holbein Paints Explorer",
             route: "/paints",
             type: "paints",
+            descr: "View the collection of Holbein Paints Watercolor",
         },
     ];
 
@@ -21,6 +25,23 @@ export default function ToolsPage() {
 
             <div>
                 <FileLinks arr={tools} />
+            </div>
+
+            <h1>Projects</h1>
+            <div>
+                {projects.map((file, index) => {
+                    return (
+                        <div
+                            key={`${file.title}-${index}`}
+                            className={styles.projectRow}
+                        >
+                            <Icon file={file} index={index} />
+                            <div className={styles.hoverLabel}>
+                                {file.descr}
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

@@ -1,0 +1,11 @@
+.hoverLabel {
+    background-color: #ffffe1;
+    color: black;
+    padding: 8px;
+    border: 1px black solid;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.projectRow {
+    display: flex;
+}
