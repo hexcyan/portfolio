@@ -1,4 +1,3 @@
-import FileLinks from "@/components/FileLinks";
 import Icon from "@/components/Icon";
 import { IIcon, projects } from "@/lib/consts";
 import styles from "./Tools.module.css";
@@ -9,7 +8,7 @@ export default function ToolsPage() {
             title: "QR Code Generator",
             route: "/tools/qr_generator",
             type: "contrast",
-            descr: "Hello",
+            descr: "Simple, no-frills, no-ads QR Code generator with transparency and logos",
         },
         {
             title: "Holbein Paints Explorer",
@@ -20,11 +19,23 @@ export default function ToolsPage() {
     ];
 
     return (
-        <div className="explorer">
+        <div className="explorer narrow">
             <h1>Tools</h1>
 
             <div>
-                <FileLinks arr={tools} />
+                {tools.map((file, index) => {
+                    return (
+                        <div
+                            key={`${file.title}-${index}`}
+                            className={styles.projectRow}
+                        >
+                            <Icon file={file} index={index} />
+                            <div className={styles.hoverLabel}>
+                                {file.descr}
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
 
             <h1>Projects</h1>

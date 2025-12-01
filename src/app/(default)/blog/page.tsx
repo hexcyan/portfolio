@@ -6,7 +6,7 @@ import { getAllPosts } from "@/lib/blog";
 export default function Blog() {
     const posts = getAllPosts();
     return (
-        <div className="explorer">
+        <div className="explorer narrow">
             <h1>Blog Posts</h1>
             <div className={styles.blogGrid}>
                 {posts.map((post) => (

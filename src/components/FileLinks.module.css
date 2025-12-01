@@ -10,8 +10,9 @@
     color: white;
     font-family: "RedHatDisplay", sans-serif !important;
     line-height: 1;
-    width: 100%;
+    width: 96px;
     min-width: 96px;
+    /* width: auto; */
 
     text-align: center;
 }
@@ -19,4 +20,5 @@
     margin-top: 8px;
     max-width: inherit;
     text-overflow: ellipsis;
+    margin-bottom: 0;
 }

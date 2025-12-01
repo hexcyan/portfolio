@@ -8,9 +8,9 @@ interface IconProps {
     index: number;
 }
 
-export default function Icon({ file, index }: IconProps) {
+export default function Icon({ file }: IconProps) {
     return (
-        <div key={`${file.title}-${index}`} className={styles.filelink}>
+        <div className={styles.filelink}>
             {/* render icon based on file type */}
             <Link
                 href={file.route}

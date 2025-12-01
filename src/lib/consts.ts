@@ -59,18 +59,6 @@ export const files: IIcon[] = [
 ];
 
 export const projects: IIcon[] = [
-        {
-            title: "QR Code Generator",
-            route: "/tools/qr_generator",
-            type: "contrast",
-            descr: "Hello",
-        },
-        {
-            title: "Holbein Paints Explorer",
-            route: "/paints",
-            type: "paints",
-            descr: "View the collection of Holbein Paints Watercolor",
-        },
     {
         title: "KeebSoc",
         type: "keebsoc",
