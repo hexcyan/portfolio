@@ -14,6 +14,10 @@
     text-transform: uppercase;
 }
 
+.jp_name {
+    font-size: 0.85rem;
+}
+
 .paint__properties {
     font-size: 14px;
     display: flex;
@@ -45,7 +49,7 @@
 
 .paints__gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(39ch, 1fr));
     gap: 18px;
 }
 
@@ -65,6 +69,30 @@
 }
 
 /* Series */
+.star {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.star:hover {
+    color: blue;
+}
+
+.star__active {
+    text-shadow: 0 1px 0 var(--hb-red);
+    color: var(--hb-red);
+}
+
+.op__btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.op__btn__active {
+    text-shadow: 0 1px 0 black;
+}
+
 .filter__btn {
     border: 1px solid black;
     background-color: white;

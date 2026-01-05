@@ -36,7 +36,7 @@ export default function PaintCard({ paint }: PaintCardProps) {
             </p>
             <p className={styles.paint__name}>{paint.en_name}</p>
             <p>{paint.fr_name}</p>
-            <p>{paint.jp_name}</p>
+            <p className={styles.jp_name}>{paint.jp_name}</p>
 
             <div className={styles.paint__properties}>
                 <span title="Permanence">{permanenceSymbol}</span>
