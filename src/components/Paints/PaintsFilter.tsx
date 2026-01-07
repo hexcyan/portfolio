@@ -24,6 +24,17 @@ const colorCategories = [
     { key: "gold_silver", label: "Gold & Silver" },
 ] as const;
 
+const setNames = [
+    "12 colors",
+    "Pastel Set 12 colors",
+    "18 colors",
+    "24 colors",
+    "Botanical Art 24 colors",
+    "30 colors",
+    "48 colors",
+    "60 colors",
+];
+
 export interface PaintsFilterProps {
     filters: Filters;
     setFilters: React.Dispatch<React.SetStateAction<Filters>>;
@@ -34,7 +45,8 @@ export default function PaintsFilter({
     setFilters,
 }: PaintsFilterProps) {
     const [searchTerm, setSearchTerm] = useState("");
-    const [hoverValue, setHoverValue] = useState<number | null>(null);
+    const [showColorDropdown, setShowColorDropdown] = useState(false);
+    const [showSetDropdown, setShowSetDropdown] = useState(false);
     // Toggle size selection
     // const toggleSize = () => {
     //     setFilters((prev) => ({
@@ -50,33 +62,6 @@ export default function PaintsFilter({
             selectedSeries: prev.selectedSeries.includes(s)
                 ? prev.selectedSeries.filter((series) => series !== s)
                 : [...prev.selectedSeries, s],
-        }));
-    };
-
-    // Toggle perm/opacity/staining
-    const updateRangeFilter = (
-        filterType: RangeFilterType,
-        value: number | null
-    ) => {
-        setFilters((prev) => ({
-            ...prev,
-            [filterType]: {
-                ...prev[filterType],
-                value: value,
-            },
-        }));
-    };
-
-    const setRangeOperator = (
-        filterType: RangeFilterType,
-        operator: RangeOperatorType
-    ) => {
-        setFilters((prev) => ({
-            ...prev,
-            [filterType]: {
-                ...prev[filterType],
-                operator: operator,
-            },
         }));
     };
 
@@ -105,6 +90,18 @@ export default function PaintsFilter({
         }));
     };
 
+    // Toggle set family
+    const toggleSet = (setIndex: number) => {
+        setFilters((prev) => ({
+            ...prev,
+            selectedSets: prev.selectedSets.map((val, idx) =>
+                idx === setIndex ? ((val === 0 ? 1 : 0) as 0 | 1) : val
+            ),
+        }));
+
+        console.log(filters);
+    };
+
     // Handle search
     const handleSearch = (value: string) => {
         setSearchTerm(value);
@@ -123,6 +120,7 @@ export default function PaintsFilter({
             selectedOpacity: { operator: "eq", value: null },
             selectedStaining: { operator: "eq", value: null },
             selectedColors: [],
+            selectedSets: [0, 0, 0, 0, 0, 0, 0, 0],
             searchTerm: "",
         });
         setSearchTerm("");
@@ -149,6 +147,39 @@ export default function PaintsFilter({
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
                 />
+            </div>
+
+            {/* Color Categories Filter */}
+            <div className={styles.paints__filter__group}>
+                <button
+                    onClick={() => setShowColorDropdown(!showColorDropdown)}
+                >
+                    Color {showColorDropdown ? "▼" : "▶"}
+                    {filters.selectedColors.length > 0 &&
+                        ` (${filters.selectedColors.length})`}
+                </button>
+
+                {showColorDropdown && (
+                    <div>
+                        {colorCategories.map((category) => (
+                            <button
+                                key={category.key}
+                                className={`${styles.filter__btn} ${
+                                    filters.selectedColors.includes(
+                                        category.key
+                                    )
+                                        ? styles.filter__selected
+                                        : ""
+                                }`}
+                                onClick={() =>
+                                    toggleColorCategory(category.key)
+                                }
+                            >
+                                {category.label}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Permanence Filter */}
@@ -220,26 +251,49 @@ export default function PaintsFilter({
                 )}
             </div>
 
-            {/* Size filter (All colors have 5 / 15ml sizes, no need to filter those) */}
+            {/* Set filter */}
             <div className={styles.paints__filter__group}>
-                {/* <p>Size</p> */}
-                {/* <button
-                    className={`${styles.filter__btn}
-                            ${
-                                filters.selectedSize
-                                    ? styles.filter__selected
-                                    : ""
-                            }`}
-                    onClick={() => toggleSize()}
-                >
-                    60ml
-                </button> */}
+                {/* <p>Sets ▼</p> */}
+
+                <button onClick={() => setShowSetDropdown(!showSetDropdown)}>
+                    Sets {showSetDropdown ? "▼" : "▶"}
+                    {filters.selectedSets.filter((val) => val === 1).length >
+                        0 &&
+                        ` (${
+                            filters.selectedSets.filter((val) => val === 1)
+                                .length
+                        })`}
+                </button>
+
+                {showSetDropdown && (
+                    <div>
+                        {setNames.map((setName, index) => (
+                            <button
+                                key={setName}
+                                className={`${styles.filter__btn} ${
+                                    filters.selectedColors.includes(setName)
+                                        ? styles.filter__selected
+                                        : ""
+                                }`}
+                                onClick={() => toggleSet(index)}
+                            >
+                                {setName}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
-            {/* Dropdowns: Red, Yellow, Green, Blue, Violet, Brown, Black, Grey, White, Gold, Silver */}
-            {/* <p>Color ▼</p> */}
-            {/* <p>Sets ▼</p> */}
-            {/* <input type="text" placeholder="Search.."></input> */}
-            {/* suggest groups, update per keystroke union all matches */}
+
+            <div>
+                {hasActiveFilters && (
+                    <button
+                        className={`${styles.filter__btn} ${styles.clear__btn}`}
+                        onClick={clearAllFilters}
+                    >
+                        Clear All
+                    </button>
+                )}
+            </div>
         </div>
     );
 }

@@ -50,7 +50,7 @@ export default function PaintRange({
 
     const [hoverValue, setHoverValue] = useState<number | null>(null);
     const filterType = `selected${label}` as RangeFilterType;
-    // TODO: Special Case for permanence since that one starts at 1, while the other ones all start at 0
+    const startVal = label === "Permanence" ? 1 : 0;
 
     return (
         <div className={styles.paints__filter__group}>
@@ -73,26 +73,29 @@ export default function PaintRange({
             <div>
                 {symbols.map((symbol, index) => {
                     const selectedValue = filters[filterType].value;
-
+                    const actualValue = startVal + index;
                     const effectiveValue =
                         hoverValue !== null ? hoverValue : selectedValue;
 
                     const isActive =
-                        effectiveValue !== null && index <= effectiveValue;
+                        effectiveValue !== null &&
+                        actualValue <= effectiveValue;
 
                     return (
                         <button
-                            key={`${label}-${index}`}
+                            key={`${label}-${actualValue}`}
                             className={`${styles.star} ${
                                 isActive ? styles.star__active : ""
                             }`}
                             onClick={() =>
                                 updateRangeFilter(
                                     filterType,
-                                    selectedValue === index ? null : index
+                                    selectedValue === actualValue
+                                        ? null
+                                        : actualValue
                                 )
                             }
-                            onMouseEnter={() => setHoverValue(index)}
+                            onMouseEnter={() => setHoverValue(actualValue)}
                             onMouseLeave={() => setHoverValue(null)}
                         >
                             {symbol}

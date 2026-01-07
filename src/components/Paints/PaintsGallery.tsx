@@ -22,6 +22,7 @@ export interface Filters {
     selectedOpacity: RangeFilter;
     selectedStaining: RangeFilter;
     selectedColors: string[];
+    selectedSets: (0 | 1)[];
     searchTerm: string;
 }
 
@@ -32,6 +33,7 @@ const initialFilters: Filters = {
     selectedOpacity: { operator: "eq", value: null },
     selectedStaining: { operator: "eq", value: null },
     selectedColors: [],
+    selectedSets: [0, 0, 0, 0, 0, 0, 0, 0],
     searchTerm: "",
 };
 
@@ -91,22 +93,29 @@ export default function PaintsGallery() {
                     return familyCodes.includes(paint.code);
                 });
 
-            // Search filter (searches in English, French, and Japanese names)
+            // color set filter
+            const matchesSet =
+                filters.selectedSets.every((val) => val === 0) ||
+                filters.selectedSets.some(
+                    (val, idx) => val === 1 && paint.sets[idx] === 1
+                );
+
+            // Search filter (searches in paint code, English, French, Japanese names and pigments)
+            const searchLower = filters.searchTerm.toLowerCase();
+            const paintCode = paint.code.toString().padStart(3, "0");
+
             const matchesSearch =
                 filters.searchTerm === "" ||
-                paint.en_name
-                    .toLowerCase()
-                    .includes(filters.searchTerm.toLowerCase()) ||
-                paint.fr_name
-                    .toLowerCase()
-                    .includes(filters.searchTerm.toLowerCase()) ||
-                paint.jp_name
-                    .toLowerCase()
-                    .includes(filters.searchTerm.toLowerCase()) ||
+                `w${paintCode} w${
+                    paint.code === 2 ? "201" : paint.code + 200
+                } ${paint.size[2] !== 0 && `ww${paintCode}`}`.includes(
+                    searchLower
+                ) ||
+                paint.en_name.toLowerCase().includes(searchLower) ||
+                paint.fr_name.toLowerCase().includes(searchLower) ||
+                paint.jp_name.toLowerCase().includes(searchLower) ||
                 paint.pigments.some((pigment) =>
-                    pigment
-                        .toLowerCase()
-                        .includes(filters.searchTerm.toLowerCase())
+                    pigment.toLowerCase().includes(searchLower)
                 ) ||
                 paint.code.toString().includes(filters.searchTerm);
 
@@ -117,6 +126,7 @@ export default function PaintsGallery() {
                 matchesOpacity &&
                 matchesStaining &&
                 matchesColor &&
+                matchesSet &&
                 matchesSearch
             );
         });
