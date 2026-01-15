@@ -1,9 +1,8 @@
 "use client";
 
-import { Paint } from "@/lib/consts";
+import { Paint, paintSymbols } from "@/lib/paints";
 import styles from "./Paints.module.css";
 import Image from "next/image";
-import { getCDNConfig } from "@/lib/cdn";
 import "./globals.css";
 
 interface PaintCardProps {
@@ -12,14 +11,11 @@ interface PaintCardProps {
 
 export default function PaintCard({ paint }: PaintCardProps) {
     const permanenceSymbol = "✻".repeat(paint.perm);
-    const opacitySymbol = ["○", "⦶", "◐", "⬤"][paint.opacity];
-    const stainingSymbol = ["☐", "◩", "◼"][paint.staining];
-
+    const opacitySymbol = paintSymbols.opacity[paint.opacity];
+    const stainingSymbol = paintSymbols.staining[paint.staining];
     const paintCode = paint.code.toString().padStart(3, "0");
-    const { pullZone } = getCDNConfig();
-    if (!pullZone) return null;
 
-    const imgUrl = `${pullZone}/paints/hb/${paint.code}.jpg?quality=45`;
+    const imgUrl = `https://x65535.b-cdn.net/paints/hb/${paint.code}.jpg?quality=45`;
 
     return (
         <div className={styles.paint__card}>
@@ -40,7 +36,7 @@ export default function PaintCard({ paint }: PaintCardProps) {
             </p>
             <p className={styles.paint__name}>{paint.en_name}</p>
             <p>{paint.fr_name}</p>
-            <p>{paint.jp_name}</p>
+            <p className={styles.jp_name}>{paint.jp_name}</p>
 
             <div className={styles.paint__properties}>
                 <span title="Permanence">{permanenceSymbol}</span>
@@ -48,9 +44,11 @@ export default function PaintCard({ paint }: PaintCardProps) {
                 <span title="Staining">{stainingSymbol}</span>
                 {paint.granulation && <span title="Granulating">G</span>}
 
-                <div className={styles.series}>
+                <div className={styles.pigments}>
                     {/* Pigments:  */}
-                    <span>{paint.pigments}</span>
+                    {paint.pigments.map((pig) => (
+                        <span key={pig}>{pig}</span>
+                    ))}
                 </div>
                 <div className={styles.series}>
                     Series{" "}

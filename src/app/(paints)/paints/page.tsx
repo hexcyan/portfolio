@@ -1,5 +1,6 @@
 import PaintsGallery from "@/components/Paints/PaintsGallery";
 import "./paintsPage.css";
+
 export default function Paints() {
     return (
         <>

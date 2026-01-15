@@ -1,16 +1,21 @@
+/* Paint Card */
 .paint__card {
     width: stretch;
-    /* max-width: 256px; */
     border: 1px solid black;
     padding: 8px;
 }
 
 .paint__card > img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
 }
+
 .paint__name {
     text-transform: uppercase;
+}
+
+.jp_name {
+    font-size: 0.85rem;
 }
 
 .paint__properties {
@@ -24,6 +29,10 @@
 .paint__box {
     border: 1px solid black;
     padding: 4px;
+}
+
+.pigments > span {
+    margin-left: 1ch;
 }
 
 .series {
@@ -40,15 +49,152 @@
 
 .paints__gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(39ch, 1fr));
     gap: 18px;
 }
 
+/* Paints Filter */
 .paints__filter {
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 12px;
     border: 1px solid black;
     width: stretch;
     padding: 8px 12px;
     margin-bottom: 18px;
+}
+
+.paints__filter__group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* min-width: 200px; */
+}
+
+/* Stock */
+
+.stockDot {
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background-color: #22c55e; /* nice modern green */
+    display: inline-block;
+
+    animation: breathe 2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.6;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+    100% {
+        transform: scale(0.85);
+        opacity: 0.6;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+
+/* Dropdown */
+.dropdown__btn {
+    cursor: pointer;
+    width: 100%;
+    background-color: #ddd !important;
+}
+
+.dropdown__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 20ch;
+    overflow-y: auto;
+}
+
+.dropdown__menu button {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+/* Series */
+.star {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.star:hover {
+    color: blue;
+}
+
+.star__active {
+    text-shadow: 0 1px 0 var(--hb-red);
+    color: var(--hb-red);
+}
+
+.op__btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.op__btn__active {
+    text-shadow: 0 1px 0 black;
+}
+
+.filter__btn {
+    height: 100%;
+    border: 1px solid black;
+    background-color: white;
+    padding: 2px 8px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+        box-shadow 0.1s ease-in-out, border 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+.filter__btn:hover,
+.search__bar:focus {
+    box-shadow: 0 0 0 1px var(--hb-red);
+    border: 1px solid var(--hb-red);
+    outline: none;
+}
+
+.clear__btn {
+    color: white;
+    background-color: var(--hb-red);
+}
+
+.search__bar {
+    padding: 2px 8px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.filter__strike {
+    text-decoration: line-through;
+}
+
+.filter__selected {
+    background-color: var(--hb-red);
+    color: white;
+}
+
+.paint__pigments {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+    justify-content: flex-end;
 }

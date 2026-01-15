@@ -1,5 +1,6 @@
 export const metadata = {
-    title: "HB WC Explorer",
+    title: "Holbein WC Viewer",
+    description: "search and filter holbein watercolor paints",
 };
 
 export default function RootLayout({

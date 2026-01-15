@@ -1,5 +1,9 @@
+:root {
+    --hb-red: #cd1b2f;
+    --hb-grey: #727272;
+}
 header {
-    color: #727272;
+    color: var(--hb-grey);
     margin-bottom: 12px;
 }
 p {
