@@ -6,12 +6,6 @@ import PaintRange from "./PaintRange";
 
 type SeriesType = Paint["series"]; // This extracts "A" | "B" | "C" | "D" | "E" | "F"
 const SERIES: SeriesType[] = ["A", "B", "C", "D", "E", "F"];
-type RangeFilterType =
-    | "selectedPermanence"
-    | "selectedOpacity"
-    | "selectedStaining";
-const RangeOperator = ["lte", "eq", "gte"];
-type RangeOperatorType = (typeof RangeOperator)[number];
 
 const colorCategories = [
     { key: "red", label: "Red" },
@@ -47,13 +41,6 @@ export default function PaintsFilter({
     const [searchTerm, setSearchTerm] = useState("");
     const [showColorDropdown, setShowColorDropdown] = useState(false);
     const [showSetDropdown, setShowSetDropdown] = useState(false);
-    // Toggle size selection
-    // const toggleSize = () => {
-    //     setFilters((prev) => ({
-    //         ...prev,
-    //         selectedSize: !prev.selectedSize,
-    //     }));
-    // };
 
     // Toggle series selection
     const toggleSeries = (s: SeriesType) => {
@@ -124,14 +111,16 @@ export default function PaintsFilter({
             searchTerm: "",
         });
         setSearchTerm("");
+
+        console.log(filters);
     };
 
     const hasActiveFilters =
         filters.granulation !== null ||
         filters.selectedSeries.length > 0 ||
-        filters.selectedPermanence !== null ||
-        filters.selectedOpacity !== null ||
-        filters.selectedStaining !== null ||
+        filters.selectedPermanence.value !== null ||
+        filters.selectedOpacity.value !== null ||
+        filters.selectedStaining.value !== null ||
         filters.selectedColors.length > 0 ||
         filters.searchTerm !== "";
 
@@ -139,12 +128,24 @@ export default function PaintsFilter({
         <div className={styles.paints__filter}>
             <p>Filter:</p>
 
+            {/* In Stock Filter */}
+            {/* <div className={styles.paints__filter__group}>
+                <button
+                    className={`${styles.filter__btn}`}
+                    // onClick={toggleStock}
+                >
+                    <span className={styles.stockDot} />
+                    In Stock
+                </button>
+            </div> */}
+
             {/* Search */}
             <div className={styles.paints__filter__group}>
                 <input
                     type="text"
                     placeholder="Search paints..."
                     value={searchTerm}
+                    className={`${styles.filter__btn} ${styles.search__bar}`}
                     onChange={(e) => handleSearch(e.target.value)}
                 />
             </div>
@@ -152,6 +153,7 @@ export default function PaintsFilter({
             {/* Color Categories Filter */}
             <div className={styles.paints__filter__group}>
                 <button
+                    className={`${styles.dropdown__btn} ${styles.filter__btn}`}
                     onClick={() => setShowColorDropdown(!showColorDropdown)}
                 >
                     Color {showColorDropdown ? "▼" : "▶"}
@@ -160,7 +162,7 @@ export default function PaintsFilter({
                 </button>
 
                 {showColorDropdown && (
-                    <div>
+                    <div className={styles.dropdown__menu}>
                         {colorCategories.map((category) => (
                             <button
                                 key={category.key}
@@ -205,19 +207,23 @@ export default function PaintsFilter({
             />
 
             {/* Granulation filter with 3 states: True | False | null */}
-            <button
-                className={`${styles.filter__btn} ${
-                    filters.granulation === false && styles.filter__strike
-                } ${filters.granulation === true && styles.filter__selected}`}
-                onClick={toggleGranulation}
-            >
-                Granulating{" "}
-                {filters.granulation === true
-                    ? "✅"
-                    : filters.granulation === false
-                    ? "❌"
-                    : "☁️"}
-            </button>
+            <div className={styles.paints__filter__group}>
+                <button
+                    className={`${styles.filter__btn} ${
+                        filters.granulation === false && styles.filter__strike
+                    } ${
+                        filters.granulation === true && styles.filter__selected
+                    }`}
+                    onClick={toggleGranulation}
+                >
+                    Granulating{" "}
+                    {filters.granulation === true
+                        ? "✅"
+                        : filters.granulation === false
+                        ? "❌"
+                        : "☁️"}
+                </button>
+            </div>
 
             {/* Series Filter */}
             <div className={styles.paints__filter__group}>
@@ -253,9 +259,10 @@ export default function PaintsFilter({
 
             {/* Set filter */}
             <div className={styles.paints__filter__group}>
-                {/* <p>Sets ▼</p> */}
-
-                <button onClick={() => setShowSetDropdown(!showSetDropdown)}>
+                <button
+                    className={`${styles.dropdown__btn} ${styles.filter__btn}`}
+                    onClick={() => setShowSetDropdown(!showSetDropdown)}
+                >
                     Sets {showSetDropdown ? "▼" : "▶"}
                     {filters.selectedSets.filter((val) => val === 1).length >
                         0 &&
@@ -266,12 +273,12 @@ export default function PaintsFilter({
                 </button>
 
                 {showSetDropdown && (
-                    <div>
+                    <div className={styles.dropdown__menu}>
                         {setNames.map((setName, index) => (
                             <button
                                 key={setName}
                                 className={`${styles.filter__btn} ${
-                                    filters.selectedColors.includes(setName)
+                                    filters.selectedSets[index]
                                         ? styles.filter__selected
                                         : ""
                                 }`}

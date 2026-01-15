@@ -13,17 +13,6 @@ export interface Paint {
     sets: [number, number, number, number, number, number, number, number];
 }
 
-export const paintFilters = [
-    "Permanence",
-    "Opacity",
-    "Staining",
-    "Granulating",
-    "Series",
-    "Family",
-    "Sets",
-    "Size",
-];
-
 export const paintSymbols = {
     opacity: ["◯", "⦶", "◐", "⬤"],
     staining: ["☐", "◩", "◼"],

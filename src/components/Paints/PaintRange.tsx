@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Paint, paintSymbols } from "@/lib/paints";
-import { Filters } from "./PaintsGallery";
 import styles from "./Paints.module.css";
 import { PaintsFilterProps } from "./PaintsFilter";
 type RangeFilterType =
@@ -56,7 +54,7 @@ export default function PaintRange({
         <div className={styles.paints__filter__group}>
             <p>{label}</p>
             <div>
-                {(["lte", "eq", "gte"] as const).map((op) => (
+                {RangeOperator.map((op) => (
                     <button
                         key={op}
                         onClick={() => setRangeOperator(filterType, op)}
