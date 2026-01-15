@@ -1,0 +1,24 @@
+.hoverLabel {
+    background-color: #ffffe1;
+    color: black;
+    padding: 8px;
+    border: 1px black solid;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    font-family: "TahomaXP", "Courier New", Courier, monospace;
+    font-size: 20px;
+}
+
+.hoverLabel p {
+    margin-bottom: 0.5rem;
+}
+
+.hoverLabel p:last-child {
+    margin-bottom: 0;
+}
+
+.projectRow {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}

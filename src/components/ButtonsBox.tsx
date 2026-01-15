@@ -31,7 +31,7 @@ export default async function ButtonsBox() {
                 <div className={styles.buttons}>
                     {buttonFiles.map((file) => {
                         return (
-                            <Image
+                            <img
                                 key={file}
                                 src={`/buttons/${file}`}
                                 alt={file}

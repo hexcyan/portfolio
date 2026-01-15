@@ -14,8 +14,17 @@ export default function Home() {
             </div>
             <article className={styles.prose}>
                 <h2>welcome to my digital corner</h2>
-                <p>hi i like making websites</p>
-                <p>but this one isn&apos;t done yet :grin:</p>
+                <p>
+                    did you know that when you die, you can&apos;t use your
+                    computer anymore?
+                </p>
+                <p>
+                    so while you&apos;re still alive, make sure to use the
+                    computer as much as possible because one day you won&apos;t
+                    be able to use it anymore!
+                </p>
+                {/* <p>hi i like making websites</p> */}
+                {/* <p>but this one isn't done yet :grin:</p> */}
                 <MyButton path="/blog" text="check out the blog ->" />
             </article>
         </>

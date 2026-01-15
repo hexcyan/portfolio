@@ -36,6 +36,13 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "TahomaXP";
+    src: url("/fonts/Tahoma-XP.woff2") format("woff2-variations");
+    font-style: normal;
+    font-display: swap;
+}
+
 html,
 body {
     margin: 0;
@@ -207,4 +214,9 @@ hr {
 
 .explorer {
     padding: 24px 48px;
+}
+
+.narrow {
+    max-width: 80ch;
+    margin: auto;
 }
