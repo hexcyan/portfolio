@@ -1,4 +1,4 @@
-import { Paint, paintSymbols } from "@/lib/paints";
+import { Paint, paintSymbols, stockSizeLabels } from "@/lib/paints";
 import { Filters } from "./PaintsGallery";
 import styles from "./Paints.module.css";
 import { useState } from "react";
@@ -101,6 +101,8 @@ export default function PaintsFilter({
     // Clear ALL filters
     const clearAllFilters = () => {
         setFilters({
+            inStock: null,
+            stockSize: null,
             granulation: null,
             selectedSeries: [],
             selectedPermanence: { operator: "eq", value: null },
@@ -116,6 +118,7 @@ export default function PaintsFilter({
     };
 
     const hasActiveFilters =
+        filters.inStock !== null ||
         filters.granulation !== null ||
         filters.selectedSeries.length > 0 ||
         filters.selectedPermanence.value !== null ||
@@ -129,15 +132,56 @@ export default function PaintsFilter({
             <p>Filter:</p>
 
             {/* In Stock Filter */}
-            {/* <div className={styles.paints__filter__group}>
+            <div className={styles.paints__filter__group}>
                 <button
-                    className={`${styles.filter__btn}`}
-                    // onClick={toggleStock}
+                    className={`${styles.filter__btn} ${
+                        filters.inStock === false && styles.filter__strike
+                    } ${
+                        filters.inStock === true && styles.filter__selected
+                    }`}
+                    onClick={() =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            inStock:
+                                prev.inStock === null
+                                    ? true
+                                    : prev.inStock === true
+                                    ? false
+                                    : null,
+                            stockSize:
+                                prev.inStock === true ? null : prev.stockSize,
+                        }))
+                    }
                 >
                     <span className={styles.stockDot} />
-                    In Stock
+                    In Stock{" "}
+                    {filters.inStock === true
+                        ? "✅"
+                        : filters.inStock === false
+                        ? "❌"
+                        : ""}
                 </button>
-            </div> */}
+                {filters.inStock === true &&
+                    stockSizeLabels.map((label, idx) => (
+                        <button
+                            key={label}
+                            className={`${styles.filter__btn} ${
+                                filters.stockSize === idx
+                                    ? styles.filter__selected
+                                    : ""
+                            }`}
+                            onClick={() =>
+                                setFilters((prev) => ({
+                                    ...prev,
+                                    stockSize:
+                                        prev.stockSize === idx ? null : idx,
+                                }))
+                            }
+                        >
+                            {label}
+                        </button>
+                    ))}
+            </div>
 
             {/* Search */}
             <div className={styles.paints__filter__group}>

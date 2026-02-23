@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import PaintCard from "./PaintCard";
-import { hbPaints, Paint } from "@/lib/paints";
+import { hbPaints, Paint, myStock } from "@/lib/paints";
 import styles from "./Paints.module.css";
 import PaintsFilter from "./PaintsFilter";
 import { paintFamily } from "@/lib/paints";
@@ -16,6 +16,8 @@ export interface RangeFilter {
 }
 
 export interface Filters {
+    inStock: boolean | null;
+    stockSize: number | null; // index into stockSizeLabels (0-3), or null for "any size"
     granulation: boolean | null;
     selectedSeries: SeriesType[];
     selectedPermanence: RangeFilter;
@@ -26,7 +28,11 @@ export interface Filters {
     searchTerm: string;
 }
 
+const stockSet = new Set(Object.keys(myStock).map(Number));
+
 const initialFilters: Filters = {
+    inStock: null,
+    stockSize: null,
     granulation: null,
     selectedSeries: [],
     selectedPermanence: { operator: "eq", value: null },
@@ -60,6 +66,22 @@ export default function PaintsGallery() {
 
     const filterPaints = (paints: Paint[]) => {
         return paints.filter((paint) => {
+            // In Stock filter (with optional size narrowing)
+            let matchesStock = true;
+            if (filters.inStock !== null) {
+                const owned = stockSet.has(paint.code);
+                if (filters.inStock === false) {
+                    matchesStock = !owned;
+                } else {
+                    // inStock === true
+                    if (!owned) {
+                        matchesStock = false;
+                    } else if (filters.stockSize !== null) {
+                        matchesStock = myStock[paint.code][filters.stockSize] === 1;
+                    }
+                }
+            }
+
             // Series filter
             const matchesSeries =
                 filters.selectedSeries.length === 0 ||
@@ -120,6 +142,7 @@ export default function PaintsGallery() {
                 paint.code.toString().includes(filters.searchTerm);
 
             return (
+                matchesStock &&
                 matchesSeries &&
                 matchesGranulation &&
                 matchesPermanence &&
@@ -138,7 +161,7 @@ export default function PaintsGallery() {
 
             <div className={styles.paints__gallery}>
                 {filterPaints(hbPaints).map((paint) => (
-                    <PaintCard key={paint.code} paint={paint} />
+                    <PaintCard key={paint.code} paint={paint} inStock={stockSet.has(paint.code)} stockSizes={filters.inStock === true ? myStock[paint.code] : undefined} />
                 ))}
             </div>
         </>

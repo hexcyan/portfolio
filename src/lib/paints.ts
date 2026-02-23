@@ -1,3 +1,5 @@
+export type Bit = 0 | 1;
+
 export interface Paint {
     code: number;
     en_name: string;
@@ -9,8 +11,8 @@ export interface Paint {
     staining: 0 | 1 | 2;
     granulation: boolean;
     pigments: string[];
-    size: [number, number, number]; // 5ml 15ml 60ml
-    sets: [number, number, number, number, number, number, number, number];
+    size: [Bit, Bit, Bit]; // 5ml 15ml 60ml
+    sets: [Bit, Bit, Bit, Bit, Bit, Bit, Bit, Bit];
 }
 
 export const paintSymbols = {
@@ -37,6 +39,60 @@ export const paintFamily = {
     ],
     grey_white: [151, 152, 153, 155, 156, 157, 2, 3],
     gold_silver: [190, 191],
+};
+
+// ─── My Stock ───────────────────────────────────────────────
+// Track which sizes you own per paint: [5ml, 15ml, 60ml, minipan]
+// Example: { 5: [1, 0, 0, 1] } means you own Quinacridone Red in 5ml and minipan
+export const stockSizeLabels = ["5ml", "15ml", "60ml", "Mini"] as const;
+export const myStock: Record<number, [Bit, Bit, Bit, Bit]> = {
+    2:   [0, 1, 1, 0],
+    7:   [0, 0, 1, 1],
+    10:  [0, 1, 1, 1],
+    12:  [0, 1, 1, 1],
+    13:  [0, 1, 0, 0],
+    19:  [0, 1, 1, 1],
+    25:  [0, 1, 0, 0],
+    26:  [0, 1, 0, 0],
+    30:  [0, 1, 0, 0],
+    31:  [0, 0, 1, 1],
+    32:  [0, 1, 0, 0],
+    34:  [0, 1, 1, 1],
+    35:  [0, 1, 1, 0],
+    37:  [0, 1, 1, 1],
+    47:  [0, 0, 1, 1],
+    61:  [0, 1, 1, 1],
+    62:  [0, 1, 0, 0],
+    63:  [0, 1, 0, 1],
+    65:  [0, 1, 0, 1],
+    66:  [0, 1, 1, 1],
+    67:  [0, 1, 0, 1],
+    71:  [0, 1, 0, 0],
+    75:  [0, 0, 1, 1],
+    77:  [0, 0, 1, 0],
+    90:  [0, 0, 1, 0],
+    91:  [0, 1, 0, 0],
+    92:  [0, 1, 1, 1],
+    94:  [0, 1, 1, 1],
+    96:  [0, 1, 0, 0],
+    97:  [0, 1, 1, 1],
+    104: [0, 1, 0, 0],
+    106: [0, 0, 1, 1],
+    107: [0, 0, 1, 1],
+    112: [0, 1, 0, 0],
+    115: [0, 0, 1, 1],
+    116: [0, 1, 0, 0],
+    117: [0, 1, 0, 0],
+    119: [0, 0, 1, 0],
+    130: [0, 1, 0, 1],
+    131: [0, 0, 1, 0],
+    132: [0, 0, 1, 1],
+    133: [0, 1, 1, 0],
+    134: [0, 1, 1, 0],
+    138: [0, 1, 0, 0],
+    139: [0, 0, 1, 0],
+    151: [0, 1, 1, 0],
+    153: [0, 0, 1, 0],
 };
 
 export const hbPaints: Paint[] = [
