@@ -11,9 +11,9 @@
     "dependencies": {
         "@mdx-js/loader": "^3.1.0",
         "@mdx-js/react": "^3.1.0",
-        "@next/mdx": "^15.0.3",
+        "@next/mdx": "^16.1.6",
         "gray-matter": "^4.0.3",
-        "next": "^14.2.31",
+        "next": "^16.1.6",
         "next-mdx-remote": "^5.0.0",
         "qrcode": "^1.5.4",
         "react": "^18.3.1",
@@ -27,8 +27,8 @@
         "@types/qrcode": "^1.5.5",
         "@types/react": "^18",
         "@types/react-dom": "^18",
-        "eslint": "^8",
-        "eslint-config-next": "15.0.3",
+        "eslint": "^10.0.1",
+        "eslint-config-next": "^0.2.4",
         "typescript": "^5"
     }
 }
