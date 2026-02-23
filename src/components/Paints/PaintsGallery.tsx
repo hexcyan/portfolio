@@ -15,9 +15,12 @@ export interface RangeFilter {
     value: number | null;
 }
 
+export type TriState = null | true | false;
+
 export interface Filters {
     inStock: boolean | null;
-    stockSize: number | null; // index into stockSizeLabels (0-3), or null for "any size"
+    soldSizeFilter: TriState[]; // [5ml, 15ml, 60ml] — filters on paint.size
+    stockSizeFilter: TriState[]; // [5ml, 15ml, 60ml, Mini] — filters on myStock
     granulation: boolean | null;
     selectedSeries: SeriesType[];
     selectedPermanence: RangeFilter;
@@ -32,7 +35,8 @@ const stockSet = new Set(Object.keys(myStock).map(Number));
 
 const initialFilters: Filters = {
     inStock: null,
-    stockSize: null,
+    soldSizeFilter: [null, null, null],
+    stockSizeFilter: [null, null, null, null],
     granulation: null,
     selectedSeries: [],
     selectedPermanence: { operator: "eq", value: null },
@@ -66,7 +70,17 @@ export default function PaintsGallery() {
 
     const filterPaints = (paints: Paint[]) => {
         return paints.filter((paint) => {
-            // In Stock filter (with optional size narrowing)
+            // Sold-size filters (paint.size: [5ml, 15ml, 60ml]) — always active
+            let matchesSoldSize = true;
+            for (let i = 0; i < filters.soldSizeFilter.length; i++) {
+                const f = filters.soldSizeFilter[i];
+                if (f === null) continue;
+                const hasSoldSize = paint.size[i] === 1;
+                if (f === true && !hasSoldSize) { matchesSoldSize = false; break; }
+                if (f === false && hasSoldSize) { matchesSoldSize = false; break; }
+            }
+
+            // In Stock filter (with owned-size include/exclude)
             let matchesStock = true;
             if (filters.inStock !== null) {
                 const owned = stockSet.has(paint.code);
@@ -76,8 +90,16 @@ export default function PaintsGallery() {
                     // inStock === true
                     if (!owned) {
                         matchesStock = false;
-                    } else if (filters.stockSize !== null) {
-                        matchesStock = myStock[paint.code][filters.stockSize] === 1;
+                    } else {
+                        // Stock-size filters (myStock: [5ml, 15ml, 60ml, Mini])
+                        const stock = myStock[paint.code];
+                        for (let i = 0; i < filters.stockSizeFilter.length; i++) {
+                            const f = filters.stockSizeFilter[i];
+                            if (f === null) continue;
+                            const hasSize = stock[i] === 1;
+                            if (f === true && !hasSize) { matchesStock = false; break; }
+                            if (f === false && hasSize) { matchesStock = false; break; }
+                        }
                     }
                 }
             }
@@ -142,6 +164,7 @@ export default function PaintsGallery() {
                 paint.code.toString().includes(filters.searchTerm);
 
             return (
+                matchesSoldSize &&
                 matchesStock &&
                 matchesSeries &&
                 matchesGranulation &&

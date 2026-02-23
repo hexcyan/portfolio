@@ -46,7 +46,7 @@ export const paintFamily = {
 // Example: { 5: [1, 0, 0, 1] } means you own Quinacridone Red in 5ml and minipan
 export const stockSizeLabels = ["5ml", "15ml", "60ml", "Mini"] as const;
 export const myStock: Record<number, [Bit, Bit, Bit, Bit]> = {
-    2:   [0, 1, 1, 0],
+    2:   [0, 1, 1, 1],
     7:   [0, 0, 1, 1],
     10:  [0, 1, 1, 1],
     12:  [0, 1, 1, 1],
@@ -58,7 +58,7 @@ export const myStock: Record<number, [Bit, Bit, Bit, Bit]> = {
     31:  [0, 0, 1, 1],
     32:  [0, 1, 0, 0],
     34:  [0, 1, 1, 1],
-    35:  [0, 1, 1, 0],
+    35:  [0, 1, 1, 1],
     37:  [0, 1, 1, 1],
     47:  [0, 0, 1, 1],
     61:  [0, 1, 1, 1],

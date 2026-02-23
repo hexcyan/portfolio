@@ -62,8 +62,8 @@ export default function PaintsFilter({
                 prev.granulation === null
                     ? true
                     : prev.granulation === true
-                    ? false
-                    : null,
+                        ? false
+                        : null,
         }));
     };
 
@@ -102,7 +102,8 @@ export default function PaintsFilter({
     const clearAllFilters = () => {
         setFilters({
             inStock: null,
-            stockSize: null,
+            soldSizeFilter: [null, null, null],
+            stockSizeFilter: [null, null, null, null],
             granulation: null,
             selectedSeries: [],
             selectedPermanence: { operator: "eq", value: null },
@@ -119,6 +120,8 @@ export default function PaintsFilter({
 
     const hasActiveFilters =
         filters.inStock !== null ||
+        filters.soldSizeFilter.some((v) => v !== null) ||
+        filters.stockSizeFilter.some((v) => v !== null) ||
         filters.granulation !== null ||
         filters.selectedSeries.length > 0 ||
         filters.selectedPermanence.value !== null ||
@@ -134,23 +137,23 @@ export default function PaintsFilter({
             {/* In Stock Filter */}
             <div className={styles.paints__filter__group}>
                 <button
-                    className={`${styles.filter__btn} ${
-                        filters.inStock === false && styles.filter__strike
-                    } ${
-                        filters.inStock === true && styles.filter__selected
-                    }`}
+                    className={`${styles.filter__btn} ${filters.inStock === false && styles.filter__strike
+                        } ${filters.inStock === true && styles.filter__selected
+                        }`}
                     onClick={() =>
-                        setFilters((prev) => ({
-                            ...prev,
-                            inStock:
-                                prev.inStock === null
-                                    ? true
-                                    : prev.inStock === true
+                        setFilters((prev) => {
+                            const next = prev.inStock === null
+                                ? true
+                                : prev.inStock === true
                                     ? false
-                                    : null,
-                            stockSize:
-                                prev.inStock === true ? null : prev.stockSize,
-                        }))
+                                    : null;
+                            return {
+                                ...prev,
+                                inStock: next,
+                                // Clear stock size filter when cycling back to null
+                                stockSizeFilter: next === null ? [null, null, null, null] : prev.stockSizeFilter,
+                            };
+                        })
                     }
                 >
                     <span className={styles.stockDot} />
@@ -158,29 +161,48 @@ export default function PaintsFilter({
                     {filters.inStock === true
                         ? "✅"
                         : filters.inStock === false
-                        ? "❌"
-                        : ""}
+                            ? "❌"
+                            : ""}
                 </button>
-                {filters.inStock === true &&
-                    stockSizeLabels.map((label, idx) => (
-                        <button
-                            key={label}
-                            className={`${styles.filter__btn} ${
-                                filters.stockSize === idx
+
+                {/* Stock-size tri-state filters (only when inStock === true) */}
+                {filters.inStock === true && (
+                    <>
+                        {stockSizeLabels.map((label, idx) => (
+                            <button
+                                key={`stock-${label}`}
+                                className={`${styles.filter__btn} ${filters.stockSizeFilter[idx] === true
                                     ? styles.filter__selected
-                                    : ""
-                            }`}
-                            onClick={() =>
-                                setFilters((prev) => ({
-                                    ...prev,
-                                    stockSize:
-                                        prev.stockSize === idx ? null : idx,
-                                }))
-                            }
-                        >
-                            {label}
-                        </button>
-                    ))}
+                                    : filters.stockSizeFilter[idx] === false
+                                        ? styles.filter__strike
+                                        : ""
+                                    }`}
+                                onClick={() =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        stockSizeFilter: prev.stockSizeFilter.map(
+                                            (v, i) =>
+                                                i === idx
+                                                    ? v === null
+                                                        ? true
+                                                        : v === true
+                                                            ? false
+                                                            : null
+                                                    : v
+                                        ),
+                                    }))
+                                }
+                            >
+                                {label}
+                                {filters.stockSizeFilter[idx] === true
+                                    ? " ✅"
+                                    : filters.stockSizeFilter[idx] === false
+                                        ? " ❌"
+                                        : ""}
+                            </button>
+                        ))}
+                    </>
+                )}
             </div>
 
             {/* Search */}
@@ -210,13 +232,12 @@ export default function PaintsFilter({
                         {colorCategories.map((category) => (
                             <button
                                 key={category.key}
-                                className={`${styles.filter__btn} ${
-                                    filters.selectedColors.includes(
-                                        category.key
-                                    )
-                                        ? styles.filter__selected
-                                        : ""
-                                }`}
+                                className={`${styles.filter__btn} ${filters.selectedColors.includes(
+                                    category.key
+                                )
+                                    ? styles.filter__selected
+                                    : ""
+                                    }`}
                                 onClick={() =>
                                     toggleColorCategory(category.key)
                                 }
@@ -253,19 +274,17 @@ export default function PaintsFilter({
             {/* Granulation filter with 3 states: True | False | null */}
             <div className={styles.paints__filter__group}>
                 <button
-                    className={`${styles.filter__btn} ${
-                        filters.granulation === false && styles.filter__strike
-                    } ${
-                        filters.granulation === true && styles.filter__selected
-                    }`}
+                    className={`${styles.filter__btn} ${filters.granulation === false && styles.filter__strike
+                        } ${filters.granulation === true && styles.filter__selected
+                        }`}
                     onClick={toggleGranulation}
                 >
                     Granulating{" "}
                     {filters.granulation === true
                         ? "✅"
                         : filters.granulation === false
-                        ? "❌"
-                        : "☁️"}
+                            ? "❌"
+                            : "☁️"}
                 </button>
             </div>
 
@@ -276,10 +295,9 @@ export default function PaintsFilter({
                     <button
                         key={s}
                         className={`${styles.filter__btn}
-                            ${
-                                filters.selectedSeries.includes(s)
-                                    ? styles.filter__selected
-                                    : ""
+                            ${filters.selectedSeries.includes(s)
+                                ? styles.filter__selected
+                                : ""
                             }`}
                         onClick={() => toggleSeries(s as SeriesType)}
                     >
@@ -301,6 +319,44 @@ export default function PaintsFilter({
                 )}
             </div>
 
+            {/* Sold-size tri-state filters (always available) */}
+            <div className={styles.paints__filter__group}>
+                <span>Sizes:</span>
+                {(["5ml", "15ml", "60ml"] as const).map((label, idx) => (
+                    <button
+                        key={`sold-${label}`}
+                        className={`${styles.filter__btn} ${filters.soldSizeFilter[idx] === true
+                            ? styles.filter__selected
+                            : filters.soldSizeFilter[idx] === false
+                                ? styles.filter__strike
+                                : ""
+                            }`}
+                        onClick={() =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                soldSizeFilter: prev.soldSizeFilter.map(
+                                    (v, i) =>
+                                        i === idx
+                                            ? v === null
+                                                ? true
+                                                : v === true
+                                                    ? false
+                                                    : null
+                                            : v
+                                ),
+                            }))
+                        }
+                    >
+                        {label}
+                        {filters.soldSizeFilter[idx] === true
+                            ? " ✅"
+                            : filters.soldSizeFilter[idx] === false
+                                ? " ❌"
+                                : ""}
+                    </button>
+                ))}
+            </div>
+
             {/* Set filter */}
             <div className={styles.paints__filter__group}>
                 <button
@@ -310,9 +366,8 @@ export default function PaintsFilter({
                     Sets {showSetDropdown ? "▼" : "▶"}
                     {filters.selectedSets.filter((val) => val === 1).length >
                         0 &&
-                        ` (${
-                            filters.selectedSets.filter((val) => val === 1)
-                                .length
+                        ` (${filters.selectedSets.filter((val) => val === 1)
+                            .length
                         })`}
                 </button>
 
@@ -321,11 +376,10 @@ export default function PaintsFilter({
                         {setNames.map((setName, index) => (
                             <button
                                 key={setName}
-                                className={`${styles.filter__btn} ${
-                                    filters.selectedSets[index]
-                                        ? styles.filter__selected
-                                        : ""
-                                }`}
+                                className={`${styles.filter__btn} ${filters.selectedSets[index]
+                                    ? styles.filter__selected
+                                    : ""
+                                    }`}
                                 onClick={() => toggleSet(index)}
                             >
                                 {setName}
