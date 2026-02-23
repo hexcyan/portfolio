@@ -79,6 +79,12 @@ export const tools: IIcon[] = [
             route: "/paints",
             type: "paints",
             // descr: "The Holbein Watercolor Paints catalogue is readily availiable in print and pdf form. However, these are not interactive and cannot be easily filtered or searched. Find the exact (Holbein) color you're looking for :D\nView the database here → (Currently not deployed lol)",
-            descr: "The Holbein Watercolor Paints catalogue is readily availiable in print and pdf form. However, these catalogues are not interactive and cannot be easily filtered or searched. Find the exact (Holbein) color you're looking for :D\nView the database here → (Currently not deployed lol)",
+            descr: "The Holbein Watercolor Paints catalogue is readily availiable in print and pdf form. However, these catalogues are not interactive and cannot be easily filtered or searched. Find the exact (Holbein) color you're looking for :D\nView the database here",
+        },
+        {
+            title: "Palette Builder",
+            route: "/palette",
+            type: "Bitmap",
+            descr: "Build your custom watercolor palette — featuring Holbein, Van Gogh, and handmade paints, pick a layout, and order → (Currently WIP)",
         },
     ];
