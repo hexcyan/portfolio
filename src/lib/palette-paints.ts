@@ -140,27 +140,27 @@ export function buildHolbeinPaints(): PalettePaint[] {
 }
 
 export const vanGoghPaints: PalettePaint[] = [
-    { id: "vg-1", brand: "vangogh", code: "VG-001", name: "Yellow Ochre", colorHex: "#D8B050", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-2", brand: "vangogh", code: "VG-002", name: "Raw Sienna", colorHex: "#C89848", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-3", brand: "vangogh", code: "VG-003", name: "Burnt Sienna", colorHex: "#C05828", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-4", brand: "vangogh", code: "VG-004", name: "Burnt Umber", colorHex: "#503020", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-5", brand: "vangogh", code: "VG-005", name: "Cadmium Yellow Light", colorHex: "#F8D818", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-6", brand: "vangogh", code: "VG-006", name: "Cadmium Red Light", colorHex: "#E05040", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-7", brand: "vangogh", code: "VG-007", name: "Alizarin Crimson", colorHex: "#B0203A", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-8", brand: "vangogh", code: "VG-008", name: "Ultramarine Deep", colorHex: "#2828A8", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-9", brand: "vangogh", code: "VG-009", name: "Cerulean Blue", colorHex: "#1878B0", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-10", brand: "vangogh", code: "VG-010", name: "Prussian Blue", colorHex: "#102848", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-11", brand: "vangogh", code: "VG-011", name: "Viridian", colorHex: "#1A8050", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-12", brand: "vangogh", code: "VG-012", name: "Sap Green", colorHex: "#487020", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-13", brand: "vangogh", code: "VG-013", name: "Payne's Grey", colorHex: "#404858", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-14", brand: "vangogh", code: "VG-014", name: "Ivory Black", colorHex: "#181818", stockSizes: [1, 1, 1, 1] },
-    { id: "vg-15", brand: "vangogh", code: "VG-015", name: "Chinese White", colorHex: "#F0F0F0", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-1", brand: "vangogh", code: "VG-001", name: "Yellow Ochre", colorHex: "#D8B050", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-2", brand: "vangogh", code: "VG-002", name: "Raw Sienna", colorHex: "#C89848", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-3", brand: "vangogh", code: "VG-003", name: "Burnt Sienna", colorHex: "#C05828", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-4", brand: "vangogh", code: "VG-004", name: "Burnt Umber", colorHex: "#503020", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-5", brand: "vangogh", code: "VG-005", name: "Cadmium Yellow Light", colorHex: "#F8D818", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-6", brand: "vangogh", code: "VG-006", name: "Cadmium Red Light", colorHex: "#E05040", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-7", brand: "vangogh", code: "VG-007", name: "Alizarin Crimson", colorHex: "#B0203A", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-8", brand: "vangogh", code: "VG-008", name: "Ultramarine Deep", colorHex: "#2828A8", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-9", brand: "vangogh", code: "VG-009", name: "Cerulean Blue", colorHex: "#1878B0", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-10", brand: "vangogh", code: "VG-010", name: "Prussian Blue", colorHex: "#102848", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-11", brand: "vangogh", code: "VG-011", name: "Viridian", colorHex: "#1A8050", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-12", brand: "vangogh", code: "VG-012", name: "Sap Green", colorHex: "#487020", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-13", brand: "vangogh", code: "VG-013", name: "Payne's Grey", colorHex: "#404858", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-14", brand: "vangogh", code: "VG-014", name: "Ivory Black", colorHex: "#181818", stockSizes: [1, 1, 1, 1] },
+    // { id: "vg-15", brand: "vangogh", code: "VG-015", name: "Chinese White", colorHex: "#F0F0F0", stockSizes: [1, 1, 1, 1] },
 ];
 
 export const handmadePaints: PalettePaint[] = [
-    { id: "hm-lavender", brand: "handmade", code: "HM-001", name: "Lavender", colorHex: "#9878C0", stockSizes: [0, 0, 0, 0] },
-    { id: "hm-moss", brand: "handmade", code: "HM-002", name: "Moss Green", colorHex: "#6B8040", stockSizes: [0, 0, 0, 0] },
-    { id: "hm-coral", brand: "handmade", code: "HM-003", name: "Coral Pink", colorHex: "#F08080", stockSizes: [0, 0, 0, 0] },
+    // { id: "hm-lavender", brand: "handmade", code: "HM-001", name: "Lavender", colorHex: "#9878C0", stockSizes: [0, 0, 0, 0] },
+    // { id: "hm-moss", brand: "handmade", code: "HM-002", name: "Moss Green", colorHex: "#6B8040", stockSizes: [0, 0, 0, 0] },
+    // { id: "hm-coral", brand: "handmade", code: "HM-003", name: "Coral Pink", colorHex: "#F08080", stockSizes: [0, 0, 0, 0] },
 ];
 
 export function getAllPaints(): PalettePaint[] {
