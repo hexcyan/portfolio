@@ -119,6 +119,7 @@ export default function PaletteBuilderPage() {
             ...s,
             layoutId,
             slots: Array(count).fill(null),
+            showBackground: !!newLayout.backgroundImage,
         }));
         // Clear undo when switching layouts
         undoStack.current = [];
@@ -132,6 +133,7 @@ export default function PaletteBuilderPage() {
             ...s,
             layoutId: template.layoutId,
             slots: [...template.paints],
+            showBackground: !!tLayout.backgroundImage,
         }));
     }
 
