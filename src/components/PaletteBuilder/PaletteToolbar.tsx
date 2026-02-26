@@ -1,10 +1,12 @@
 "use client";
 
-import { PaletteLayout, CuratedPalette, PanSizeId, PanSize, paletteLayouts, curatedPalettes, panSizes } from "@/lib/palettes";
+import { PaletteLayout, CuratedPalette, PanSizeId, PanSize, panSizes } from "@/lib/palettes";
 import styles from "./PaletteBuilder.module.css";
 
 interface PaletteToolbarProps {
     currentLayout: PaletteLayout;
+    layouts: PaletteLayout[];
+    curatedPalettes: CuratedPalette[];
     showBackground: boolean;
     showLabels: boolean;
     compact: boolean;
@@ -25,6 +27,8 @@ interface PaletteToolbarProps {
 
 export default function PaletteToolbar({
     currentLayout,
+    layouts: paletteLayouts,
+    curatedPalettes,
     showBackground,
     showLabels,
     compact,

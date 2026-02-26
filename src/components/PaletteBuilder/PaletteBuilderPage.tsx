@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { getAllPaints } from "@/lib/palette-paints";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { PalettePaint } from "@/lib/palette-paints";
 import {
     PaletteState,
+    PaletteLayout,
     CuratedPalette,
     PanSizeId,
-    paletteLayouts,
     panSizes,
-    getLayout,
     getDefaultState,
     savePaletteState,
     loadPaletteState,
@@ -19,12 +18,22 @@ import PaletteToolbar from "./PaletteToolbar";
 import PaletteActions from "./PaletteActions";
 import styles from "./PaletteBuilder.module.css";
 
-export default function PaletteBuilderPage() {
-    const allPaints = useMemo(() => getAllPaints(), []);
+interface PaletteBuilderPageProps {
+    allPaints: PalettePaint[];
+    layouts: PaletteLayout[];
+    curatedPalettes: CuratedPalette[];
+}
+
+export default function PaletteBuilderPage({ allPaints, layouts, curatedPalettes }: PaletteBuilderPageProps) {
+
+    const getLayout = useCallback(
+        (id: string) => layouts.find((l) => l.id === id),
+        [layouts],
+    );
 
     const [state, setState] = useState<PaletteState>(() => {
-        if (typeof window === "undefined") return getDefaultState();
-        return loadPaletteState() ?? getDefaultState();
+        if (typeof window === "undefined") return getDefaultState(layouts);
+        return loadPaletteState(layouts) ?? getDefaultState(layouts);
     });
 
     // Persist on every change
@@ -32,7 +41,7 @@ export default function PaletteBuilderPage() {
         savePaletteState(state);
     }, [state]);
 
-    const baseLayout = getLayout(state.layoutId) ?? paletteLayouts[0];
+    const baseLayout = getLayout(state.layoutId) ?? layouts[0];
     const layout = state.layoutId === "custom" && state.customPanSize
         ? { ...baseLayout, panSize: state.customPanSize }
         : baseLayout;
@@ -67,7 +76,7 @@ export default function PaletteBuilderPage() {
     const addToNextEmpty = useCallback((paintId: string) => {
         setState((s) => {
             const blocked = new Set(
-                paletteLayouts.find((l) => l.id === s.layoutId)?.blockedSlots ?? []
+                layouts.find((l) => l.id === s.layoutId)?.blockedSlots ?? []
             );
             const idx = s.slots.findIndex((slot, i) => slot === null && !blocked.has(i));
             if (idx === -1) return s;
@@ -75,7 +84,7 @@ export default function PaletteBuilderPage() {
             slots[idx] = paintId;
             return { ...s, slots };
         });
-    }, []);
+    }, [layouts]);
 
     const clearAll = useCallback(() => {
         setState((s) => ({ ...s, slots: s.slots.map(() => null) }));
@@ -287,6 +296,8 @@ export default function PaletteBuilderPage() {
                     <div className={styles.widgetBody}>
                         <PaletteToolbar
                             currentLayout={layout}
+                            layouts={layouts}
+                            curatedPalettes={curatedPalettes}
                             showBackground={state.showBackground}
                             showLabels={showLabels}
                             compact={compact}
@@ -334,6 +345,8 @@ export default function PaletteBuilderPage() {
                 <h1 className={styles.mobilePaletteTitle}>{layout.name} Palette</h1>
                 <PaletteToolbar
                     currentLayout={layout}
+                    layouts={layouts}
+                    curatedPalettes={curatedPalettes}
                     showBackground={state.showBackground}
                     showLabels={showLabels}
                     compact={compact}

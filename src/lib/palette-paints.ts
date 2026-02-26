@@ -1,4 +1,4 @@
-import { Bit, hbPaints, myStock } from "./paints";
+import { Bit, Paint, hbPaints, myStock } from "./paints";
 
 export interface PalettePaint {
     id: string;
@@ -123,8 +123,13 @@ const holbeinHexMap: Record<number, string> = {
     191: "#C0C0C0",  // Silver
 };
 
-export function buildHolbeinPaints(): PalettePaint[] {
-    return hbPaints.map((p) => {
+export function buildHolbeinPaints(
+    paints?: Paint[],
+    stock?: Record<number, [Bit, Bit, Bit, Bit]>,
+): PalettePaint[] {
+    const paintList = paints ?? hbPaints;
+    const stockMap = stock ?? myStock;
+    return paintList.map((p) => {
         const code = p.code.toString().padStart(3, "0");
         return {
             id: `hb-${p.code}`,
@@ -134,7 +139,7 @@ export function buildHolbeinPaints(): PalettePaint[] {
             colorHex: holbeinHexMap[p.code] ?? "#CCCCCC",
             imageUrl: `https://x65535.b-cdn.net/paints/hb/${p.code}.jpg?quality=45`,
             pigments: p.pigments,
-            stockSizes: myStock[p.code] ?? [0, 0, 0, 0],
+            stockSizes: stockMap[p.code] ?? [0, 0, 0, 0],
         };
     });
 }
@@ -163,8 +168,11 @@ export const handmadePaints: PalettePaint[] = [
     // { id: "hm-coral", brand: "handmade", code: "HM-003", name: "Coral Pink", colorHex: "#F08080", stockSizes: [0, 0, 0, 0] },
 ];
 
-export function getAllPaints(): PalettePaint[] {
-    return [...buildHolbeinPaints(), ...vanGoghPaints, ...handmadePaints];
+export function getAllPaints(
+    paints?: Paint[],
+    stock?: Record<number, [Bit, Bit, Bit, Bit]>,
+): PalettePaint[] {
+    return [...buildHolbeinPaints(paints, stock), ...vanGoghPaints, ...handmadePaints];
 }
 
 /** Check if a paint has any of the required sizes in stock */

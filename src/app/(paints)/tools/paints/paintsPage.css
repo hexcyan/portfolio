@@ -3,6 +3,21 @@
     gap: 24px;
 }
 
+.offlineBanner {
+    /* background: ; */
+    color: white;
+    border-bottom: 2px solid #ffca2c;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+
 h1,
 h3 {
     margin: 0;

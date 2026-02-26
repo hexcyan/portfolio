@@ -76,7 +76,7 @@ export const paletteLayouts: PaletteLayout[] = [
     },
     {
         id: "15-pan",
-        name: "15-Pan (4×4)",
+        name: "15-Pan Wood Palette",
         cols: 4,
         rows: 4,
         xGap: 32,
@@ -121,10 +121,10 @@ export const curatedPalettes: CuratedPalette[] = [
         description: "A well-rounded 15-color set with Van Gogh paints",
         layoutId: "15-pan",
         paints: [
-            "vg-5", "vg-1", "vg-6", null,
-            "vg-7", "vg-3", "vg-2", "vg-4",
-            "vg-8", "vg-9", "vg-10", "vg-11",
-            "vg-12", "vg-13", "vg-14", "vg-15",
+            "hb-34", "hb-132", "hb-131", null,
+            "hb-75", "hb-61", "hb-62", "hb-65",
+            "hb-66", "hb-77", "hb-74", "hb-79",
+            "hb-133", "hb-134", "hb-92", "hb-94",
         ],
     },
     {
@@ -157,8 +157,8 @@ export const curatedPalettes: CuratedPalette[] = [
 
 const STORAGE_KEY = "palette-builder-state";
 
-export function getDefaultState(): PaletteState {
-    const layout = paletteLayouts[0];
+export function getDefaultState(layouts?: PaletteLayout[]): PaletteState {
+    const layout = (layouts ?? paletteLayouts)[0];
     return {
         layoutId: layout.id,
         slots: Array(layout.cols * layout.rows).fill(null),
@@ -176,13 +176,14 @@ export function savePaletteState(state: PaletteState): void {
     }
 }
 
-export function loadPaletteState(): PaletteState | null {
+export function loadPaletteState(layouts?: PaletteLayout[]): PaletteState | null {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return null;
         const state = JSON.parse(raw) as PaletteState;
         // Validate layout still exists
-        const layout = paletteLayouts.find((l) => l.id === state.layoutId);
+        const layoutList = layouts ?? paletteLayouts;
+        const layout = layoutList.find((l) => l.id === state.layoutId);
         if (!layout) return null;
         // Validate slot count
         const expectedSlots =

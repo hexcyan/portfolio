@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import PaintCard from "./PaintCard";
-import { hbPaints, Paint, myStock } from "@/lib/paints";
+import { Paint } from "@/lib/paints";
+import type { Bit } from "@/lib/paints";
 import styles from "./Paints.module.css";
 import PaintsFilter from "./PaintsFilter";
-import { paintFamily } from "@/lib/paints";
 
 type SeriesType = Paint["series"]; // This extracts "A" | "B" | "C" | "D" | "E" | "F"
 
@@ -31,7 +31,11 @@ export interface Filters {
     searchTerm: string;
 }
 
-const stockSet = new Set(Object.keys(myStock).map(Number));
+interface PaintsGalleryProps {
+    paints: Paint[];
+    stock: Record<number, [Bit, Bit, Bit, Bit]>;
+    paintFamily: Record<string, number[]>;
+}
 
 const initialFilters: Filters = {
     inStock: null,
@@ -47,8 +51,9 @@ const initialFilters: Filters = {
     searchTerm: "",
 };
 
-export default function PaintsGallery() {
+export default function PaintsGallery({ paints: hbPaints, stock: myStock, paintFamily }: PaintsGalleryProps) {
     const [filters, setFilters] = useState<Filters>(initialFilters);
+    const stockSet = useMemo(() => new Set(Object.keys(myStock).map(Number)), [myStock]);
 
     const matchesRangeFilter = (
         paintValue: number,
@@ -150,11 +155,10 @@ export default function PaintsGallery() {
 
             const matchesSearch =
                 filters.searchTerm === "" ||
-                `w${paintCode} w${
-                    paint.code === 2 ? "201" : paint.code + 200
-                } ${paint.size[2] !== 0 && `ww${paintCode}`}`.includes(
-                    searchLower
-                ) ||
+                `w${paintCode} w${paint.code === 2 ? "201" : paint.code + 200
+                    } ${paint.size[2] !== 0 && `ww${paintCode}`}`.includes(
+                        searchLower
+                    ) ||
                 paint.en_name.toLowerCase().includes(searchLower) ||
                 paint.fr_name.toLowerCase().includes(searchLower) ||
                 paint.jp_name.toLowerCase().includes(searchLower) ||
