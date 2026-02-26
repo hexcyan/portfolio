@@ -1,5 +1,28 @@
 import { PalettePaint, isInStockForLayout } from "./palette-paints";
 
+// ─── Pan Sizes ──────────────────────────────────────────────
+
+export type PanSizeId = "mini" | "half" | "full";
+
+export interface PanSize {
+    id: PanSizeId;
+    label: string;
+    mmWidth: number;
+    mmHeight: number;
+    pxWidth: number;
+    pxHeight: number;
+}
+
+export const panSizes: Record<PanSizeId, PanSize> = {
+    mini: { id: "mini", label: "Mini Pan", mmWidth: 10, mmHeight: 10, pxWidth: 64, pxHeight: 64 },
+    half: { id: "half", label: "Half Pan", mmWidth: 16, mmHeight: 19, pxWidth: 60, pxHeight: 72 },
+    full: { id: "full", label: "Full Pan", mmWidth: 30, mmHeight: 19, pxWidth: 108, pxHeight: 72 },
+};
+
+export function getPanSize(layout: PaletteLayout): PanSize {
+    return panSizes[layout.panSize];
+}
+
 // ─── Types ──────────────────────────────────────────────────
 
 export interface PaletteLayout {
@@ -9,12 +32,13 @@ export interface PaletteLayout {
     rows: number;
     xGap: number;
     yGap: number;
-    panWidth: number;       // px width of each pan slot
-    panHeight: number;      // px height of each pan slot
+    panSize: PanSizeId;
     validStockSizes: number[];  // myStock indices that work for this palette: 0=5ml, 1=15ml, 2=60ml, 3=mini
     blockedSlots?: number[];
     backgroundImage?: string;
     etsyUrl?: string;
+    padding?: number[];
+    imgWidth?: number;
 }
 
 export interface CuratedPalette {
@@ -33,6 +57,7 @@ export interface PaletteState {
     position: { x: number; y: number };
     customCols?: number;
     customRows?: number;
+    customPanSize?: PanSizeId;
 }
 
 // ─── Preset Layouts ─────────────────────────────────────────
@@ -41,12 +66,11 @@ export const paletteLayouts: PaletteLayout[] = [
     {
         id: "12-pan",
         name: "12-Pan (3×4)",
-        cols: 3,
-        rows: 4,
+        cols: 4,
+        rows: 3,
         xGap: 4,
         yGap: 4,
-        panWidth: 56,
-        panHeight: 56,
+        panSize: "mini",
         validStockSizes: [0, 1, 2, 3],   // 5ml, 15ml, 60ml, mini — all sizes work
         etsyUrl: "https://www.etsy.com/listing/12pan",
     },
@@ -55,23 +79,24 @@ export const paletteLayouts: PaletteLayout[] = [
         name: "15-Pan (4×4)",
         cols: 4,
         rows: 4,
-        xGap: 4,
-        yGap: 4,
-        panWidth: 56,
-        panHeight: 56,
+        xGap: 32,
+        yGap: 28,
+        panSize: "mini",
         validStockSizes: [0, 1, 2, 3],   // 5ml, 15ml, 60ml, mini — uses minipan
         blockedSlots: [3],
+        backgroundImage: "/15-pan-mini.png",
         etsyUrl: "https://www.etsy.com/listing/15pan",
+        padding: [71, 64],
+        imgWidth: 480
     },
     {
         id: "24-pan",
         name: "24-Pan (3×8)",
-        cols: 3,
-        rows: 8,
+        cols: 8,
+        rows: 3,
         xGap: 4,
         yGap: 4,
-        panWidth: 48,
-        panHeight: 36,
+        panSize: "half",
         validStockSizes: [0, 1, 2],      // 5ml, 15ml, 60ml — half pans, no mini
         etsyUrl: "https://www.etsy.com/listing/24pan",
     },
@@ -82,8 +107,7 @@ export const paletteLayouts: PaletteLayout[] = [
         rows: 4,
         xGap: 4,
         yGap: 4,
-        panWidth: 56,
-        panHeight: 56,
+        panSize: "half",
         validStockSizes: [0, 1, 2, 3],   // all sizes
     },
 ];

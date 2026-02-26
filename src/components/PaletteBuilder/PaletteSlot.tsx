@@ -7,6 +7,7 @@ interface PaletteSlotProps {
     index: number;
     paint: PalettePaint | null;
     blocked?: boolean;
+    showLabels?: boolean;
     onDrop: (index: number, paintId: string) => void;
     onSwap: (fromIndex: number, toIndex: number) => void;
     onClear: (index: number) => void;
@@ -16,6 +17,7 @@ export default function PaletteSlot({
     index,
     paint,
     blocked,
+    showLabels = true,
     onDrop,
     onSwap,
     onClear,
@@ -72,18 +74,22 @@ export default function PaletteSlot({
                             style={{ backgroundColor: paint.colorHex }}
                         />
                     )}
-                    <span
-                        className={styles.slotName}
-                        style={{ color: isLight ? "#333" : "#fff" }}
-                    >
-                        {paint.name}
-                    </span>
-                    <span
-                        className={styles.slotLabel}
-                        style={{ color: isLight ? "#333" : "#fff" }}
-                    >
-                        {paint.code ?? ""}
-                    </span>
+                    {showLabels && (
+                        <>
+                            <span
+                                className={styles.slotName}
+                                style={{ color: isLight ? "#333" : "#fff" }}
+                            >
+                                {paint.name}
+                            </span>
+                            <span
+                                className={styles.slotLabel}
+                                style={{ color: isLight ? "#333" : "#fff" }}
+                            >
+                                {paint.code ?? ""}
+                            </span>
+                        </>
+                    )}
                 </>
             )}
         </div>

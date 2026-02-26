@@ -169,6 +169,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 0.5rem;
+    /* grid-auto-rows: 1fr */
 }
 
 .pickerSwatch {
@@ -246,7 +247,7 @@
     max-width: 84px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     font-weight: 500;
 }
 
@@ -272,7 +273,7 @@
 .widget {
     position: fixed;
     z-index: 100;
-    width: 380px;
+    /* width: 380px; */
     background: var(--pb-surface);
     border-radius: 16px;
     overflow: hidden;
@@ -306,31 +307,18 @@
 
 .widgetMinimized {
     width: auto;
-    min-width: 200px;
+    min-width: 160px;
 }
 
 .widgetTitleBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.65rem 1rem;
+    padding: 0.4rem 0.7rem;
     background: var(--pb-rose);
     color: #fff;
     cursor: grab;
     user-select: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    position: relative;
-}
-
-/* subtle noise texture on title bar */
-.widgetTitleBar::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    border-radius: 16px 16px 0 0;
-    mix-blend-mode: overlay;
 }
 
 .widgetTitleBar:active {
@@ -342,37 +330,31 @@
     font-size: 1rem;
     font-weight: 400;
     letter-spacing: 0.01em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    position: relative;
 }
 
 .widgetControls {
     display: flex;
-    gap: 0.3rem;
-    position: relative;
+    gap: 0.2rem;
 }
 
 .widgetBtn {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     border: none;
     background: rgba(255, 255, 255, 0.15);
     color: #fff;
-    border-radius: 7px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.85rem;
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.15s, transform 0.1s;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(4px);
+    transition: background 0.15s;
 }
 
 .widgetBtn:hover {
     background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.05);
 }
 
 .widgetBtn:active {
@@ -380,24 +362,24 @@
 }
 
 .widgetBody {
-    padding: 0.85rem;
+    padding: 0.6rem;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 0.5rem;
 }
 
 /* ─── Toolbar ───────────────────────────────────────────── */
 .toolbar {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding-bottom: 0.5rem;
+    gap: 0.35rem;
+    padding-bottom: 0.4rem;
     border-bottom: 1px solid var(--pb-border-light);
 }
 
 .toolbarRow {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.35rem;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -405,37 +387,68 @@
 .toolbarLabel {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.7rem;
+    gap: 0.3rem;
+    font-size: 0.65rem;
     color: var(--pb-ink-soft);
     font-weight: 500;
     letter-spacing: 0.01em;
 }
 
-.toolbarSelect {
-    padding: 0.28rem 0.5rem;
+.toolbarToggles {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: auto;
+}
+
+.toolbarPill {
+    padding: 0.2rem 0.5rem;
     border: 1.5px solid var(--pb-border);
-    border-radius: 7px;
+    border-radius: 5px;
+    background: none;
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-family: var(--pb-font-body);
+    color: var(--pb-ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.toolbarPill:hover {
+    border-color: var(--pb-salmon);
+    color: var(--pb-ink-soft);
+}
+
+.toolbarPillActive {
+    background: var(--pb-blush-light);
+    border-color: var(--pb-salmon);
+    color: var(--pb-rose);
+}
+
+.toolbarSelect {
+    padding: 0.22rem 0.4rem;
+    border: 1.5px solid var(--pb-border);
+    border-radius: 5px;
     font-size: 0.7rem;
     font-family: var(--pb-font-body);
     background: var(--pb-surface);
     color: var(--pb-ink);
     outline: none;
     cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s;
 }
 
 .toolbarSelect:focus {
     border-color: var(--pb-salmon);
-    box-shadow: 0 0 0 2px rgba(235, 101, 101, 0.08);
 }
 
 .toolbarInput {
-    width: 48px;
-    padding: 0.25rem 0.4rem;
+    width: 40px;
+    padding: 0.2rem 0.3rem;
     border: 1.5px solid var(--pb-border);
-    border-radius: 7px;
-    font-size: 0.7rem;
+    border-radius: 5px;
+    font-size: 0.65rem;
     font-family: var(--pb-font-body);
     text-align: center;
     background: var(--pb-surface);
@@ -451,24 +464,26 @@
 /* ─── Palette Grid ──────────────────────────────────────── */
 .gridWrapper {
     position: relative;
-    background:
-        linear-gradient(145deg, rgba(255, 223, 225, 0.15) 0%, transparent 50%, rgba(255, 255, 255, 0.5) 100%),
-        var(--pb-blush-light);
+    background: var(--pb-blush-light);
     border-radius: 12px;
-    padding: 0.6rem;
     box-shadow:
         inset 0 1px 3px rgba(235, 101, 101, 0.06),
         inset 0 0 0 1px rgba(235, 101, 101, 0.04);
+    display: inline-flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+.gridWrapperCompact {
+    /* keeps bg, shadow, radius — just tighter fit */
 }
 
 .gridBg {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 12px;
-    opacity: 0.25;
+    top: 0;
+    left: 0;
     pointer-events: none;
 }
 
@@ -515,8 +530,8 @@
 }
 
 .slotBlocked {
-    background: var(--pb-border);
-    border: 1.5px solid rgba(240, 216, 216, 0.6);
+    /* background: var(--pb-border); */
+    /* border: 1.5px solid rgba(240, 216, 216, 0.6); */
     cursor: not-allowed;
     opacity: 0.5;
 }
@@ -542,7 +557,7 @@
     left: 2px;
     right: 2px;
     text-align: center;
-    font-size: 0.48rem;
+    font-size: 0.7rem;
     font-weight: 500;
     font-family: var(--pb-font-body);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -550,7 +565,7 @@
     letter-spacing: 0.01em;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     line-height: 1;
 }
 
@@ -560,7 +575,8 @@
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 0.52rem;
+    font-size: 0.6rem;
+    opacity: 0.7;
     font-weight: 600;
     font-family: var(--pb-font-body);
     font-variant-numeric: tabular-nums;
@@ -573,61 +589,48 @@
 .actions {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 0.5rem;
+    gap: 0.35rem;
+    padding-top: 0.4rem;
     border-top: 1px solid var(--pb-border-light);
 }
 
 .actionsWarning {
-    font-size: 0.7rem;
+    font-size: 0.62rem;
     color: var(--pb-red-warn);
     background: var(--pb-red-bg);
-    padding: 0.45rem 0.7rem;
-    border-radius: 8px;
-    line-height: 1.4;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    line-height: 1.3;
     border: 1px solid rgba(192, 64, 64, 0.1);
 }
 
-.actionsButtons {
+.actionsRow {
     display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.3rem;
 }
 
 .actionsPrimary {
-    padding: 0.55rem 1rem;
+    flex: 1;
+    padding: 0.35rem 0.6rem;
     background: var(--pb-rose);
     color: #fff;
     border: none;
-    border-radius: 10px;
-    font-size: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.68rem;
     font-weight: 600;
     font-family: var(--pb-font-body);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background 0.15s;
     letter-spacing: 0.01em;
-    box-shadow: 0 1px 3px rgba(235, 101, 101, 0.25);
-    position: relative;
-    overflow: hidden;
-}
-
-.actionsPrimary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    /* background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%); */
-    pointer-events: none;
+    white-space: nowrap;
 }
 
 .actionsPrimary:hover:not(:disabled) {
     background: var(--pb-rose-hover);
-    box-shadow: 0 3px 12px rgba(235, 101, 101, 0.3);
-    transform: translateY(-1px);
 }
 
 .actionsPrimary:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(235, 101, 101, 0.2);
+    transform: scale(0.98);
 }
 
 .actionsPrimary:disabled {
@@ -636,15 +639,19 @@
 }
 
 .actionsSecondary {
-    padding: 0.38rem 0.75rem;
+    padding: 0.35rem 0.6rem;
     background: none;
     border: 1.5px solid var(--pb-border);
-    border-radius: 8px;
-    font-size: 0.7rem;
+    border-radius: 6px;
+    font-size: 0.65rem;
     font-family: var(--pb-font-body);
     color: var(--pb-ink-muted);
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s, transform 0.1s;
+    transition: border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 .actionsSecondary:hover:not(:disabled) {
@@ -662,11 +669,458 @@
 }
 
 .actionsNote {
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     color: var(--pb-ink-muted);
     margin: 0;
     text-align: center;
     font-style: italic;
+}
+
+/* ─── Swatch Card Modal ────────────────────────────────── */
+.swatchCardOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(58, 32, 32, 0.45);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: swatchFadeIn 0.2s ease-out;
+}
+
+@keyframes swatchFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.swatchCardModal {
+    background: var(--pb-surface);
+    border-radius: 16px;
+    width: 920px;
+    max-width: 92vw;
+    height: 680px;
+    max-height: 85vh;
+    overflow: hidden;
+    box-shadow:
+        0 8px 32px rgba(58, 32, 32, 0.15),
+        0 2px 8px rgba(235, 101, 101, 0.08);
+    display: flex;
+    flex-direction: column;
+    animation: swatchSlideUp 0.25s ease-out;
+}
+
+@keyframes swatchSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ── Header ── */
+.scHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--pb-border-light);
+    flex-shrink: 0;
+}
+
+.scTitle {
+    font-family: var(--pb-font-display);
+    font-size: 1.05rem;
+    color: var(--pb-ink);
+    letter-spacing: -0.01em;
+}
+
+.scSubtitle {
+    font-size: 0.68rem;
+    color: var(--pb-ink-muted);
+    font-family: var(--pb-font-body);
+    font-variant-numeric: tabular-nums;
+}
+
+.scClose {
+    margin-left: auto;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    color: var(--pb-ink-muted);
+    cursor: pointer;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+.scClose:hover {
+    background: var(--pb-blush-light);
+    color: var(--pb-rose);
+}
+
+/* ── Canvas area ── */
+.swatchCardCanvasWrap {
+    overflow: auto;
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    background:
+        repeating-conic-gradient(var(--pb-border-light) 0% 25%,
+            transparent 0% 50%) 0 0 / 16px 16px;
+}
+
+.swatchCardCanvas {
+    border-radius: 4px;
+    display: block;
+    margin: auto;
+    box-shadow: 0 2px 12px rgba(58, 32, 32, 0.08);
+}
+
+/* ── Edit bar (above canvas) ── */
+.scEditBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-bottom: 1px solid var(--pb-border-light);
+    flex-shrink: 0;
+    background: var(--pb-surface-tint);
+}
+
+.scDivider {
+    width: 1px;
+    height: 18px;
+    background: var(--pb-border);
+    flex-shrink: 0;
+}
+
+/* ── Color pickers ── */
+.scColorField {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: default;
+}
+
+.scColorInput {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--pb-border);
+    border-radius: 4px;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.scColorInput::-webkit-color-swatch-wrapper {
+    padding: 1px;
+}
+
+.scColorInput::-webkit-color-swatch {
+    border: none;
+    border-radius: 2px;
+}
+
+.scColorInput::-moz-color-swatch {
+    border: none;
+    border-radius: 2px;
+}
+
+/* ── Position toggle ── */
+.scPositionGroup {
+    display: flex;
+    border: 1.5px solid var(--pb-border);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.scPositionBtn {
+    width: 24px;
+    height: 22px;
+    border: none;
+    background: none;
+    color: var(--pb-ink-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.12s, color 0.12s;
+    padding: 0;
+}
+
+.scPositionBtn+.scPositionBtn {
+    border-left: 1px solid var(--pb-border-light);
+}
+
+.scPositionBtn:hover {
+    background: var(--pb-blush-light);
+}
+
+.scPositionBtnActive {
+    background: var(--pb-blush-light);
+    color: var(--pb-rose);
+}
+
+/* ── Radius slider ── */
+.scRadiusField {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: default;
+}
+
+.scRadiusSlider {
+    width: 72px;
+    height: 4px;
+    accent-color: var(--pb-rose);
+    cursor: pointer;
+}
+
+.scRadiusValue {
+    font-size: 0.62rem;
+    font-weight: 600;
+    font-family: var(--pb-font-body);
+    font-variant-numeric: tabular-nums;
+    color: var(--pb-ink-muted);
+    min-width: 28px;
+}
+
+/* ── Export bar (below canvas) ── */
+.scExportBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-top: 1px solid var(--pb-border-light);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.scGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* ── Pill toggle buttons ── */
+.scPill {
+    padding: 0.3rem 0.65rem;
+    border: 1.5px solid var(--pb-border);
+    border-radius: 6px;
+    background: none;
+    font-size: 0.68rem;
+    font-weight: 600;
+    font-family: var(--pb-font-body);
+    color: var(--pb-ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+}
+
+.scPill:hover {
+    border-color: var(--pb-salmon);
+    color: var(--pb-ink-soft);
+}
+
+.scPillActive {
+    background: var(--pb-blush-light);
+    border-color: var(--pb-salmon);
+    color: var(--pb-rose);
+}
+
+/* ── Zoom control ── */
+.swatchCardZoom {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid var(--pb-border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.swatchCardZoomBtn {
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: var(--pb-font-body);
+    color: var(--pb-ink-soft);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+.swatchCardZoomBtn:hover {
+    background: var(--pb-blush-light);
+    color: var(--pb-rose);
+}
+
+.swatchCardZoomLabel {
+    min-width: 38px;
+    height: 26px;
+    border: none;
+    border-left: 1px solid var(--pb-border-light);
+    border-right: 1px solid var(--pb-border-light);
+    background: none;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: var(--pb-font-body);
+    font-variant-numeric: tabular-nums;
+    color: var(--pb-ink-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+.swatchCardZoomLabel:hover {
+    background: var(--pb-blush-light);
+    color: var(--pb-rose);
+}
+
+/* ── Dimension controls ── */
+.scDimRow {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    animation: scDimSlideIn 0.15s ease-out;
+}
+
+@keyframes scDimSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.scDimField {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.scDimKey {
+    font-size: 0.62rem;
+    font-weight: 600;
+    font-family: var(--pb-font-body);
+    color: var(--pb-ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.swatchCardDimInput {
+    width: 48px;
+    padding: 0.22rem 0.3rem;
+    border: 1.5px solid var(--pb-border);
+    border-radius: 5px;
+    font-size: 0.68rem;
+    font-family: var(--pb-font-body);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    background: var(--pb-surface);
+    color: var(--pb-ink);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.swatchCardDimInput:focus {
+    border-color: var(--pb-salmon);
+}
+
+.scDimUnit {
+    font-size: 0.6rem;
+    color: var(--pb-ink-muted);
+    font-family: var(--pb-font-body);
+    font-weight: 500;
+}
+
+.scLinkIcon {
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: none;
+    color: var(--pb-ink-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+    opacity: 0.6;
+}
+
+.scLinkIcon:hover {
+    opacity: 1;
+    background: var(--pb-blush-light);
+}
+
+.scLinkIconActive {
+    color: var(--pb-rose);
+    opacity: 1;
+}
+
+/* ── Export buttons ── */
+.scExportBtn {
+    padding: 0.32rem 0.7rem;
+    border: 1.5px solid var(--pb-border);
+    border-radius: 6px;
+    background: none;
+    font-size: 0.68rem;
+    font-weight: 600;
+    font-family: var(--pb-font-body);
+    color: var(--pb-ink-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.scExportBtn:hover {
+    border-color: var(--pb-salmon);
+    color: var(--pb-rose);
+}
+
+.scExportBtn:active {
+    transform: scale(0.97);
+}
+
+.scExportBtnPrimary {
+    background: var(--pb-rose);
+    border-color: var(--pb-rose);
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(235, 101, 101, 0.2);
+}
+
+.scExportBtnPrimary:hover {
+    background: var(--pb-rose-hover);
+    border-color: var(--pb-rose-hover);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(235, 101, 101, 0.3);
 }
 
 /* ─── Mobile Drawer Layout ─────────────────────────────── */
@@ -858,5 +1312,139 @@
 
     .drawer .picker {
         padding: 0;
+    }
+
+    /* ── Swatch Card Modal — mobile ── */
+    .swatchCardModal {
+        width: 100vw;
+        max-width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100vh;
+        max-height: 100dvh;
+        border-radius: 0;
+    }
+
+    .scHeader {
+        padding: 0.6rem 0.75rem;
+    }
+
+    .scEditBar {
+        padding: 0.4rem 0.75rem;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+
+    .scDivider {
+        display: none;
+    }
+
+    .scRadiusSlider {
+        width: 56px;
+    }
+
+    .scDimRow {
+        animation: none;
+    }
+
+    .swatchCardDimInput {
+        width: 42px;
+    }
+
+    .scExportBar {
+        padding: 0.5rem 0.75rem;
+        gap: 0.4rem;
+    }
+
+    /* Swatch card — larger touch targets */
+    .scPill {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.75rem;
+        min-height: 36px;
+    }
+
+    .scExportBtn {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.75rem;
+        min-height: 36px;
+    }
+
+    .scClose {
+        width: 36px;
+        height: 36px;
+    }
+
+    .swatchCardZoomBtn {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .swatchCardZoomLabel {
+        min-width: 48px;
+        height: 36px;
+        font-size: 0.72rem;
+    }
+
+    .scPositionBtn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .scColorInput {
+        width: 28px;
+        height: 28px;
+    }
+
+    .scDimKey {
+        font-size: 0.68rem;
+    }
+
+    .swatchCardDimInput {
+        height: 32px;
+        font-size: 0.75rem;
+    }
+
+    .scLinkIcon {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Widget / mobile palette — larger touch targets */
+    .toolbarSelect {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        min-height: 36px;
+    }
+
+    .toolbarPill {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.78rem;
+        min-height: 36px;
+    }
+
+    .toolbarInput {
+        width: 48px;
+        padding: 0.35rem 0.4rem;
+        font-size: 0.78rem;
+        min-height: 36px;
+    }
+
+    .toolbarLabel {
+        font-size: 0.75rem;
+    }
+
+    .actionsPrimary {
+        padding: 0.6rem 1rem;
+        font-size: 0.82rem;
+        min-height: 42px;
+        border-radius: 8px;
+    }
+
+    .actionsSecondary {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.78rem;
+        min-height: 42px;
+        border-radius: 8px;
     }
 }

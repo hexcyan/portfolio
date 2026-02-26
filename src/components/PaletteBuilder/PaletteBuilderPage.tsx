@@ -5,7 +5,9 @@ import { getAllPaints } from "@/lib/palette-paints";
 import {
     PaletteState,
     CuratedPalette,
+    PanSizeId,
     paletteLayouts,
+    panSizes,
     getLayout,
     getDefaultState,
     savePaletteState,
@@ -30,7 +32,10 @@ export default function PaletteBuilderPage() {
         savePaletteState(state);
     }, [state]);
 
-    const layout = getLayout(state.layoutId) ?? paletteLayouts[0];
+    const baseLayout = getLayout(state.layoutId) ?? paletteLayouts[0];
+    const layout = state.layoutId === "custom" && state.customPanSize
+        ? { ...baseLayout, panSize: state.customPanSize }
+        : baseLayout;
     const cols = state.layoutId === "custom" ? (state.customCols ?? layout.cols) : layout.cols;
     const rows = state.layoutId === "custom" ? (state.customRows ?? layout.rows) : layout.rows;
 
@@ -76,6 +81,33 @@ export default function PaletteBuilderPage() {
         setState((s) => ({ ...s, slots: s.slots.map(() => null) }));
     }, []);
 
+    // ─── Undo history (dimension changes only) ────────────────
+    type SlotSnapshot = { slots: (string | null)[]; customCols: number; customRows: number };
+    const undoStack = useRef<SlotSnapshot[]>([]);
+    const [canUndo, setCanUndo] = useState(false);
+
+    function pushUndo(s: PaletteState) {
+        undoStack.current.push({
+            slots: [...s.slots],
+            customCols: s.customCols ?? 4,
+            customRows: s.customRows ?? 4,
+        });
+        if (undoStack.current.length > 20) undoStack.current.shift();
+        setCanUndo(true);
+    }
+
+    const undo = useCallback(() => {
+        const snap = undoStack.current.pop();
+        if (!snap) return;
+        setCanUndo(undoStack.current.length > 0);
+        setState((s) => ({
+            ...s,
+            customCols: snap.customCols,
+            customRows: snap.customRows,
+            slots: snap.slots,
+        }));
+    }, []);
+
     // ─── Layout changes ─────────────────────────────────────
     function changeLayout(layoutId: string) {
         const newLayout = getLayout(layoutId);
@@ -88,6 +120,9 @@ export default function PaletteBuilderPage() {
             layoutId,
             slots: Array(count).fill(null),
         }));
+        // Clear undo when switching layouts
+        undoStack.current = [];
+        setCanUndo(false);
     }
 
     function loadTemplate(template: CuratedPalette) {
@@ -100,18 +135,47 @@ export default function PaletteBuilderPage() {
         }));
     }
 
+    function changeCustomPanSize(panSize: PanSizeId) {
+        setState((s) => ({ ...s, customPanSize: panSize }));
+    }
+
     function changeCustomDimension(key: "customCols" | "customRows", value: number) {
         const v = Math.max(1, Math.min(12, value));
         setState((s) => {
-            const newCols = key === "customCols" ? v : (s.customCols ?? 4);
-            const newRows = key === "customRows" ? v : (s.customRows ?? 4);
+            const oldCols = s.customCols ?? 4;
+            const oldRows = s.customRows ?? 4;
+            const newCols = key === "customCols" ? v : oldCols;
+            const newRows = key === "customRows" ? v : oldRows;
+            if (newCols === oldCols && newRows === oldRows) return s;
+
+            // Snapshot before reshape
+            pushUndo(s);
+
+            // Reshape: preserve paints that fit within the new grid bounds
+            const newSlots: (string | null)[] = Array(newCols * newRows).fill(null);
+            const minCols = Math.min(oldCols, newCols);
+            const minRows = Math.min(oldRows, newRows);
+            for (let r = 0; r < minRows; r++) {
+                for (let c = 0; c < minCols; c++) {
+                    newSlots[r * newCols + c] = s.slots[r * oldCols + c];
+                }
+            }
+
             return {
                 ...s,
                 [key]: v,
-                slots: Array(newCols * newRows).fill(null),
+                slots: newSlots,
             };
         });
     }
+
+    // ─── Labels toggle ────────────────────────────────────────
+    const [showLabels, setShowLabels] = useState(true);
+    const toggleLabels = useCallback(() => setShowLabels((v) => !v), []);
+
+    // ─── Compact toggle ────────────────────────────────────────
+    const [compact, setCompact] = useState(false);
+    const toggleCompact = useCallback(() => setCompact((v) => !v), []);
 
     // ─── Mobile drawer ────────────────────────────────────────
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -222,19 +286,29 @@ export default function PaletteBuilderPage() {
                         <PaletteToolbar
                             currentLayout={layout}
                             showBackground={state.showBackground}
+                            showLabels={showLabels}
+                            compact={compact}
                             customCols={state.customCols ?? 4}
                             customRows={state.customRows ?? 4}
                             onChangeLayout={changeLayout}
                             onLoadTemplate={loadTemplate}
                             onToggleBackground={() => setState((s) => ({ ...s, showBackground: !s.showBackground }))}
+                            onToggleLabels={toggleLabels}
+                            onToggleCompact={toggleCompact}
                             onChangeCustomCols={(v) => changeCustomDimension("customCols", v)}
                             onChangeCustomRows={(v) => changeCustomDimension("customRows", v)}
+                            customPanSize={state.customPanSize}
+                            onChangeCustomPanSize={changeCustomPanSize}
+                            canUndo={canUndo}
+                            onUndo={undo}
                         />
                         <PaletteGrid
                             layout={layout}
                             slots={state.slots}
                             allPaints={allPaints}
                             showBackground={state.showBackground}
+                            showLabels={showLabels}
+                            compact={compact}
                             cols={cols}
                             rows={rows}
                             onDropPaint={dropPaint}
@@ -245,6 +319,8 @@ export default function PaletteBuilderPage() {
                             layout={layout}
                             slots={state.slots}
                             allPaints={allPaints}
+                            cols={cols}
+                            rows={rows}
                             onClearAll={clearAll}
                         />
                     </div>
@@ -257,19 +333,27 @@ export default function PaletteBuilderPage() {
                 <PaletteToolbar
                     currentLayout={layout}
                     showBackground={state.showBackground}
+                    showLabels={showLabels}
+                    compact={compact}
                     customCols={state.customCols ?? 4}
                     customRows={state.customRows ?? 4}
                     onChangeLayout={changeLayout}
                     onLoadTemplate={loadTemplate}
                     onToggleBackground={() => setState((s) => ({ ...s, showBackground: !s.showBackground }))}
+                    onToggleLabels={toggleLabels}
+                    onToggleCompact={toggleCompact}
                     onChangeCustomCols={(v) => changeCustomDimension("customCols", v)}
                     onChangeCustomRows={(v) => changeCustomDimension("customRows", v)}
+                    canUndo={canUndo}
+                    onUndo={undo}
                 />
                 <PaletteGrid
                     layout={layout}
                     slots={state.slots}
                     allPaints={allPaints}
                     showBackground={state.showBackground}
+                    showLabels={showLabels}
+                    compact={compact}
                     cols={cols}
                     rows={rows}
                     onDropPaint={dropPaint}
@@ -280,6 +364,8 @@ export default function PaletteBuilderPage() {
                     layout={layout}
                     slots={state.slots}
                     allPaints={allPaints}
+                    cols={cols}
+                    rows={rows}
                     onClearAll={clearAll}
                 />
             </div>
