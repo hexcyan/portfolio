@@ -1,9 +1,14 @@
 import PaintsGallery from "@/components/Paints/PaintsGallery";
 import "./paintsPage.css";
 
+export const metadata = {
+    title: "Holbein WC Viewer",
+    description: "search and filter holbein watercolor paints",
+};
+
 export default function Paints() {
     return (
-        <>
+        <div className="paints-page">
             <header>
                 <div className="paints__subtitle">
                     <h3>ホルベイン透明水彩絵具</h3>
@@ -16,6 +21,6 @@ export default function Paints() {
             <main>
                 <PaintsGallery />
             </main>
-        </>
+        </div>
     );
 }
