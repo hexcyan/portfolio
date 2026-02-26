@@ -735,12 +735,13 @@
     padding: 0.85rem 1rem;
     border-bottom: 1px solid var(--pb-border-light);
     flex-shrink: 0;
+    background: var(--pb-blush);
 }
 
 .scTitle {
     font-family: var(--pb-font-display);
     font-size: 1.05rem;
-    color: var(--pb-ink);
+    color: var(--pb-rose);
     letter-spacing: -0.01em;
 }
 
@@ -797,7 +798,7 @@
     padding: 0.45rem 1rem;
     border-bottom: 1px solid var(--pb-border-light);
     flex-shrink: 0;
-    background: var(--pb-surface-tint);
+
 }
 
 .scDivider {

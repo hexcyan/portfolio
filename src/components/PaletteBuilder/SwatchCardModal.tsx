@@ -47,7 +47,7 @@ export default function SwatchCardModal({
     const [nameColor, setNameColor] = useState("#222222");
     const [codeColor, setCodeColor] = useState("#666666");
     const [textSize, setTextSize] = useState(100);  // percentage, 100 = default
-    const [textPosition, setTextPosition] = useState<"top" | "center" | "bottom">("center");
+    const [textPosition, setTextPosition] = useState<"top" | "center" | "bottom" | "outside-top" | "outside-bottom">("center");
     const paintMap = useRef(new Map(allPaints.map((p) => [p.id, p]))).current;
     const blockedSet = useRef(new Set(layout.blockedSlots ?? [])).current;
 
@@ -81,11 +81,19 @@ export default function SwatchCardModal({
     const canvasW = Math.round(widthMm * MM_TO_PX);
     const canvasH = Math.round(heightMm * MM_TO_PX);
 
+    // Outside text mode: reserve space for labels below/above each cell
+    const isOutside = textPosition === "outside-top" || textPosition === "outside-bottom";
+
     // Pan pixel size within the full-res canvas
     const availW = canvasW - PAD_PX * 2 - (cols - 1) * GAP_PX;
     const availH = canvasH - PAD_PX * 2 - (rows - 1) * GAP_PX;
+    // When outside, estimate label height as fraction of row height, then subtract
+    const rawRowH = Math.max(1, Math.floor(availH / rows));
+    const labelH = (isOutside && showLabels)
+        ? Math.max(16, Math.round(rawRowH * 0.28 * (textSize / 100)))
+        : 0;
     const panW = Math.max(1, Math.floor(availW / cols));
-    const panH = Math.max(1, Math.floor(availH / rows));
+    const panH = Math.max(1, rawRowH - labelH);
 
     // Compute fit scale when container or canvas size changes
     const updateFitScale = useCallback(() => {
@@ -138,24 +146,31 @@ export default function SwatchCardModal({
         ctx.fillRect(0, 0, canvasW, canvasH);
 
         const gridW = cols * panW + (cols - 1) * GAP_PX;
-        const gridH = rows * panH + (rows - 1) * GAP_PX;
+        const gridH = rows * (panH + labelH) + (rows - 1) * GAP_PX;
         const offsetX = Math.round((canvasW - gridW) / 2);
         const offsetY = Math.round((canvasH - gridH) / 2);
 
         // Corner radius scaled to canvas pixels (user value is in % of smaller pan dim)
         const r = cornerRadius > 0 ? Math.round(Math.min(panW, panH) * (cornerRadius / 100)) : 0;
 
+        const rowStride = panH + labelH + GAP_PX;
+
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
                 const idx = row * cols + col;
                 const x = offsetX + col * (panW + GAP_PX);
-                const y = offsetY + row * (panH + GAP_PX);
+                // When outside-top, label comes first then cell; otherwise cell first
+                const rowY = offsetY + row * rowStride;
+                const y = textPosition === "outside-top" ? rowY + labelH : rowY;
 
                 // Per-corner radii: [topLeft, topRight, bottomRight, bottomLeft]
-                const tl = (row === 0 && col === 0) ? r : 0;
-                const tr = (row === 0 && col === cols - 1) ? r : 0;
-                const br = (row === rows - 1 && col === cols - 1) ? r : 0;
-                const bl = (row === rows - 1 && col === 0) ? r : 0;
+                // Outside text occupies the outer edge, so suppress rounding on that side
+                const isTopEdge = row === 0 && textPosition !== "outside-top";
+                const isBottomEdge = row === rows - 1 && textPosition !== "outside-bottom";
+                const tl = (isTopEdge && col === 0) ? r : 0;
+                const tr = (isTopEdge && col === cols - 1) ? r : 0;
+                const br = (isBottomEdge && col === cols - 1) ? r : 0;
+                const bl = (isBottomEdge && col === 0) ? r : 0;
 
                 if (blockedSet.has(idx)) {
                     ctx.fillStyle = "#e8e8e8";
@@ -198,11 +213,18 @@ export default function SwatchCardModal({
                         ctx.textBaseline = "middle";
 
                         const scale = textSize / 100;
-                        const nameFontSize = Math.max(8, Math.round(panH * 0.14 * scale));
+                        const refH = isOutside ? labelH : panH;
+                        const nameFontSize = Math.max(8, Math.round(
+                            (isOutside ? labelH * 0.36 : panH * 0.14) * scale
+                        ));
                         ctx.font = `600 ${nameFontSize}px 'Plus Jakarta Sans', system-ui, sans-serif`;
-                        ctx.shadowColor = "rgba(255,255,255,0.6)";
-                        ctx.shadowBlur = 3;
                         ctx.fillStyle = nameColor;
+
+                        // Only add text shadow when inside the cell
+                        if (!isOutside) {
+                            ctx.shadowColor = "rgba(255,255,255,0.6)";
+                            ctx.shadowBlur = 3;
+                        }
 
                         const centerX = x + panW / 2;
                         const maxTextW = panW - 12;
@@ -224,20 +246,31 @@ export default function SwatchCardModal({
                         nameLines.push(currentLine);
 
                         // Total block height: name lines + optional code line
-                        const codeFontSize = paint.code ? Math.max(6, Math.round(panH * 0.11 * scale)) : 0;
+                        const codeFontSize = paint.code ? Math.max(6, Math.round(
+                            (isOutside ? labelH * 0.28 : panH * 0.11) * scale
+                        )) : 0;
                         const codeLineHeight = codeFontSize * 1.2;
                         const totalH = nameLines.length * lineHeight
                             + (paint.code ? codeLineHeight * 0.8 : 0);
 
-                        // Vertical position
-                        const pad = Math.round(panH * 0.08);
                         let startY: number;
-                        if (textPosition === "top") {
-                            startY = y + pad + lineHeight / 2;
-                        } else if (textPosition === "bottom") {
-                            startY = y + panH - pad - totalH + lineHeight / 2;
+                        if (isOutside) {
+                            // Draw text in the label area outside the cell
+                            const labelTop = textPosition === "outside-top"
+                                ? y - labelH   // label area is above cell
+                                : y + panH;    // label area is below cell
+                            // Center text block vertically within labelH
+                            startY = labelTop + labelH / 2 - totalH / 2 + lineHeight / 2;
                         } else {
-                            startY = y + panH / 2 - totalH / 2 + lineHeight / 2;
+                            // Inside cell positioning
+                            const pad = Math.round(panH * 0.08);
+                            if (textPosition === "top") {
+                                startY = y + pad + lineHeight / 2;
+                            } else if (textPosition === "bottom") {
+                                startY = y + panH - pad - totalH + lineHeight / 2;
+                            } else {
+                                startY = y + panH / 2 - totalH / 2 + lineHeight / 2;
+                            }
                         }
 
                         for (let li = 0; li < nameLines.length; li++) {
@@ -278,7 +311,7 @@ export default function SwatchCardModal({
                 }
             }
         }
-    }, [canvasW, canvasH, cols, rows, slots, showLabels, cornerRadius, borderColor, nameColor, codeColor, textSize, textPosition, panW, panH, blockedSet, paintMap]);
+    }, [canvasW, canvasH, cols, rows, slots, showLabels, cornerRadius, borderColor, nameColor, codeColor, textSize, textPosition, panW, panH, labelH, isOutside, blockedSet, paintMap]);
 
     useEffect(() => {
         drawCard();
@@ -445,31 +478,55 @@ export default function SwatchCardModal({
                     </label>
 
                     <div className={styles.scPositionGroup}>
-                        {(["top", "center", "bottom"] as const).map((pos) => (
+                        {(["outside-top", "top", "center", "bottom", "outside-bottom"] as const).map((pos) => (
                             <button
                                 key={pos}
                                 className={`${styles.scPositionBtn} ${textPosition === pos ? styles.scPositionBtnActive : ""}`}
                                 onClick={() => setTextPosition(pos)}
-                                title={`Align text ${pos}`}
+                                title={
+                                    pos === "outside-top" ? "Text above cell"
+                                    : pos === "outside-bottom" ? "Text below cell"
+                                    : `Align text ${pos}`
+                                }
                             >
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                                    {pos === "outside-top" && (
+                                        <>
+                                            {/* text lines above */}
+                                            <rect x="3" y="0.5" width="8" height="1.5" rx="0.5" />
+                                            <rect x="4.5" y="3" width="5" height="1" rx="0.5" opacity="0.5" />
+                                            {/* box below */}
+                                            <rect x="2" y="5.5" width="10" height="8" rx="1" fill="none" stroke="currentColor" strokeWidth="1.2" />
+                                        </>
+                                    )}
                                     {pos === "top" && (
                                         <>
-                                            <rect x="1" y="1" width="10" height="2" rx="0.5" />
-                                            <rect x="3" y="4.5" width="6" height="1.5" rx="0.5" opacity="0.4" />
+                                            <rect x="2" y="0.5" width="10" height="13" rx="1" fill="none" stroke="currentColor" strokeWidth="1.2" />
+                                            <rect x="4" y="3" width="6" height="1.5" rx="0.5" />
+                                            <rect x="5" y="5.5" width="4" height="1" rx="0.5" opacity="0.5" />
                                         </>
                                     )}
                                     {pos === "center" && (
                                         <>
-                                            <rect x="1" y="5" width="10" height="2" rx="0.5" />
-                                            <rect x="3" y="2" width="6" height="1.5" rx="0.5" opacity="0.4" />
-                                            <rect x="3" y="8.5" width="6" height="1.5" rx="0.5" opacity="0.4" />
+                                            <rect x="2" y="0.5" width="10" height="13" rx="1" fill="none" stroke="currentColor" strokeWidth="1.2" />
+                                            <rect x="4" y="5" width="6" height="1.5" rx="0.5" />
+                                            <rect x="5" y="7.5" width="4" height="1" rx="0.5" opacity="0.5" />
                                         </>
                                     )}
                                     {pos === "bottom" && (
                                         <>
-                                            <rect x="1" y="9" width="10" height="2" rx="0.5" />
-                                            <rect x="3" y="6" width="6" height="1.5" rx="0.5" opacity="0.4" />
+                                            <rect x="2" y="0.5" width="10" height="13" rx="1" fill="none" stroke="currentColor" strokeWidth="1.2" />
+                                            <rect x="4" y="9" width="6" height="1.5" rx="0.5" />
+                                            <rect x="5" y="11" width="4" height="1" rx="0.5" opacity="0.5" />
+                                        </>
+                                    )}
+                                    {pos === "outside-bottom" && (
+                                        <>
+                                            {/* box above */}
+                                            <rect x="2" y="0.5" width="10" height="8" rx="1" fill="none" stroke="currentColor" strokeWidth="1.2" />
+                                            {/* text lines below */}
+                                            <rect x="3" y="10" width="8" height="1.5" rx="0.5" />
+                                            <rect x="4.5" y="12.5" width="5" height="1" rx="0.5" opacity="0.5" />
                                         </>
                                     )}
                                 </svg>
