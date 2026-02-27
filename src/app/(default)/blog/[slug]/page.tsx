@@ -1,4 +1,9 @@
-import { getPostBySlug } from "@/lib/blog";
+import { getPostBySlug, getAllPosts } from "@/lib/blog";
+
+export function generateStaticParams() {
+    const posts = getAllPosts();
+    return posts.map((post) => ({ slug: post.slug }));
+}
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import styles from "../../../blog.module.css";
@@ -8,7 +13,7 @@ import { ComponentProps } from "react";
 
 const CustomImage = (props: ComponentProps<"img">) => {
     const { src, alt } = props;
-    if (!src) return null;
+    if (!src || typeof src !== "string") return null;
     return (
         <div className={styles.imgContainer}>
             <Image
@@ -34,8 +39,8 @@ const options: MDXRemoteProps["options"] = {
     },
 };
 
-export default async function Blog({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default async function Blog({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
 
     try {
         const post = getPostBySlug(slug);

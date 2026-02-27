@@ -3,13 +3,13 @@ import GalleryGrid from "@/components/Gallery/GalleryGrid";
 import styles from "../../blog/page.module.css";
 
 interface GalleryPageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 export default async function GalleryPage({ params }: GalleryPageProps) {
-    const { slug } = params;
+    const { slug } = await params;
 
     try {
         const images = await getImagesFromFolder(`gallery/${slug}`);

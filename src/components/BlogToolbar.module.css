@@ -1,0 +1,478 @@
+/* ═══════════════════════════════════════════════════════
+   BlogToolbar — Windows Explorer Detail View
+   Authentic retro file explorer chrome
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Explorer Shell (fills contentBox) ── */
+.explorerShell {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+/* ── Toolbar Strip ── */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+    padding-top: 6px;
+    background: var(--statusbar-bg);
+    border: 1px solid var(--cyan);
+    border-bottom: none;
+    border-top: none;
+    user-select: none;
+}
+
+.toolbarLabel {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.75em;
+    color: var(--cyan);
+    padding: 0 4px;
+    white-space: nowrap;
+    opacity: 0.7;
+    letter-spacing: 0.02em;
+}
+
+.searchWrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cyan);
+    background: var(--statusbar-bg);
+    padding: 0 2px;
+}
+
+.searchIcon {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.7em;
+    color: var(--cyan);
+    padding: 0px 6px;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.8em;
+    min-width: 0;
+}
+
+.searchInput::placeholder {
+    color: rgba(0, 255, 255, 0.35);
+    font-style: italic;
+}
+
+.searchClear {
+    background: none;
+    border: none;
+    color: var(--cyan);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.85em;
+    cursor: pointer;
+    padding: 2px 6px;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+}
+
+.searchClear:hover {
+    opacity: 1;
+}
+
+.viewToggle {
+    display: flex;
+    gap: 2px;
+}
+
+.viewBtn {
+    background: var(--statusbar-bg);
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.75em;
+    padding: 3px 6px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s, background 0.15s;
+    line-height: 1;
+}
+
+.viewBtn:hover {
+    opacity: 0.8;
+}
+
+.viewBtnActive {
+    opacity: 1;
+    background: var(--titlebar-bg);
+}
+
+/* ── Tag Filter Bar ── */
+.tagBar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    padding-bottom: 6px;
+    background: var(--statusbar-bg);
+    border: 1px solid var(--cyan);
+    border-top: none;
+    border-bottom: none;
+    overflow-x: auto;
+    flex-wrap: wrap;
+}
+
+.tagBarLabel {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.7em;
+    color: var(--cyan);
+    padding: 0 4px;
+    opacity: 0.6;
+    white-space: nowrap;
+}
+
+.tagBtn {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.72em;
+    padding: 1px 8px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+}
+
+.tagBtn:hover {
+    border-color: var(--cyan);
+    color: white;
+    background: rgba(0, 255, 255, 0.08);
+}
+
+.tagBtnActive {
+    border-color: var(--cyan);
+    background: var(--titlebar-bg);
+    color: white;
+}
+
+.tagClearAll {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.65em;
+    padding: 1px 6px;
+    border: 1px dashed rgba(0, 255, 255, 0.3);
+    background: transparent;
+    color: rgba(0, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.tagClearAll:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+
+/* ── View wrappers (flex-fill) ── */
+.detailWrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.gridWrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--cyan);
+    min-height: 0;
+}
+
+/* ── Column Headers (Explorer Detail View) ── */
+.columnHeaders {
+    display: grid;
+    grid-template-columns: 3fr 4fr 2fr 120px;
+    border: 1px solid var(--cyan);
+    border-bottom: none;
+    background: rgba(0, 255, 255, 0.15);
+    user-select: none;
+}
+
+.columnHeader {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.78em;
+    font-weight: 500;
+    color: white;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.1s;
+    border-right: 1px solid rgba(0, 255, 255, 0.25);
+    white-space: nowrap;
+    position: relative;
+}
+
+.columnHeader:last-child {
+    border-right: none;
+}
+
+.columnHeader:hover {
+    background: rgba(0, 255, 255, 0.12);
+}
+
+.columnHeaderActive {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.sortArrow {
+    font-size: 0.7em;
+    opacity: 0.7;
+    color: var(--cyan);
+    margin-left: 2px;
+}
+
+/* ── Detail List View ── */
+.detailList {
+    border: 1px solid var(--cyan);
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.detailRow {
+    display: grid;
+    grid-template-columns: 3fr 4fr 2fr 120px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.12);
+    color: white;
+    text-decoration: none;
+    transition: background 0.1s;
+}
+
+.detailRow:last-child {
+    border-bottom: none;
+}
+
+.detailRow:hover {
+    background: rgba(0, 255, 255, 0.08);
+}
+
+.detailRow:nth-child(even) {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.detailRow:nth-child(even):hover {
+    background: rgba(0, 255, 255, 0.08);
+}
+
+.detailCell {
+    padding: 6px 10px;
+    font-size: 0.82em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    border-right: 1px solid rgba(0, 255, 255, 0.06);
+}
+
+.detailCell:last-child {
+    border-right: none;
+}
+
+.cellName {
+    font-family: "RedHatMono", monospace;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fileIcon {
+    color: var(--cyan);
+    font-size: 0.9em;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.cellDesc {
+    font-family: "RedHatDisplay", sans-serif;
+    color: #c8c8c8;
+}
+
+.cellTags {
+    display: flex;
+    gap: 4px;
+    overflow: hidden;
+    flex-wrap: nowrap;
+}
+
+.miniTag {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.7em;
+    padding: 0px 5px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+    white-space: nowrap;
+    flex-shrink: 0;
+    height: fit-content;
+}
+
+.cellDate {
+    font-family: "RedHatMono", monospace;
+    color: var(--cyan);
+    font-size: 0.78em;
+}
+
+/* ── Card Grid View ── */
+.cardGrid {
+    display: grid;
+    gap: 1.5rem;
+    grid-auto-flow: dense;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 1rem;
+}
+
+.cardLink {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+}
+
+.cardLink:hover {
+    transform: translateY(-2px);
+}
+
+.cardPost {
+    padding: 0.5rem;
+}
+
+.cardTitle {
+    font-family: "RedHatMono", monospace;
+    font-size: 1.2em;
+    margin: 0;
+    color: white;
+}
+
+.cardDate {
+    display: block;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.9em;
+    color: var(--cyan);
+    margin: 0.5rem 0;
+}
+
+.cardDescription {
+    font-family: "RedHatDisplay", sans-serif;
+    font-size: 0.95em;
+    color: #e0e0e0;
+    margin: 0.5rem 0;
+    line-height: 1.4;
+}
+
+.cardTagList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.cardTag {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.8em;
+    padding: 0.2rem 0.5rem;
+    background-color: var(--titlebar-bg);
+    border: 1px solid var(--cyan);
+    color: white;
+}
+
+/* ── Status Bar (bottom) ── */
+.statusBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 10px;
+    background: var(--statusbar-bg);
+    border: 1px solid var(--cyan);
+    border-top: none;
+    border-bottom: none;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.72em;
+    color: rgba(255, 255, 255, 0.6);
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.statusLeft {
+    display: flex;
+    gap: 16px;
+}
+
+.statusRight {
+    opacity: 0.5;
+}
+
+/* ── Empty State ── */
+.emptyState {
+    padding: 32px 16px;
+    text-align: center;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid var(--cyan);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Highlight matches ── */
+.highlight {
+    background: rgba(0, 255, 255, 0.2);
+    color: var(--cyan);
+}
+
+/* ── Responsive ── */
+@media only screen and (max-width: 768px) {
+
+    .columnHeaders,
+    .detailRow {
+        grid-template-columns: 2fr 2fr 120px;
+    }
+
+    /* Hide tags column on mobile */
+    .columnHeader:nth-child(3),
+    .detailCell:nth-child(3) {
+        display: none;
+    }
+
+    .toolbar {
+        flex-wrap: wrap;
+    }
+
+    .tagBar {
+        flex-wrap: wrap;
+    }
+
+    .searchWrap {
+        min-width: 140px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+
+    .columnHeaders,
+    .detailRow {
+        grid-template-columns: 1fr 120px;
+    }
+}
