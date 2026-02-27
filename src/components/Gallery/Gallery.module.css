@@ -1,134 +1,490 @@
-.thumbnailWrapper {
-    position: relative;
+/* ── Masonry Grid ── */
+.galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-auto-rows: 4px;
+    gap: 0 12px;
+    margin-top: 12px;
+    width: 100%;
+    padding: 0 4px;
+}
+
+.gridItem {
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    overflow: hidden;
+    border-radius: 3px;
+    padding: 4px;
+    transition: filter 0.2s ease, box-shadow 0.2s ease, opacity 0.4s ease;
+}
+
+.gridItemPending {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.gridItemReady {
+    opacity: 1;
+}
+
+.gridItem:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 8px var(--cyan);
+}
+
+.gridImageWrapper {
+    position: relative;
     width: 100%;
-    height: fit-content;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.gridImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    padding: 10px;
 }
 
-.thumbnailWrapper:hover {
-    opacity: 0.9;
+.gridPlaceholder {
+    filter: blur(12px);
+    transform: scale(1.1);
 }
 
-.thumbnail {
-    width: 100%;
-    height: auto !important;
-    object-fit: contain;
-    border-radius: 4px;
+.gridThumb {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
-.modal {
+.gridThumbLoaded {
+    opacity: 1;
+}
+
+/* ── Filmstrip Viewer Overlay ── */
+.viewerOverlay {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+.viewerTitleBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 10px;
+    background: var(--titlebar-bg);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.78em;
+    color: white;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.viewerTitleText {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.viewerTitleClose {
+    background: none;
+    border: 1px solid transparent;
+    color: white;
+    font-family: "RedHatMono", monospace;
+    font-size: 1em;
+    cursor: pointer;
+    padding: 1px 8px;
+    line-height: 1;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.viewerTitleClose:hover {
+    background: rgba(255, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Main Preview Area ── */
+.viewerPreview {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(4px);
-}
-
-.modalContent {
+    overflow: hidden;
     position: relative;
-    max-width: 90vw;
-    max-height: 90vh;
-    padding: 1rem;
+    min-height: 0;
 }
 
-.modalImage {
-    width: auto;
-    height: auto !important;
+.previewImage {
     max-width: 100%;
-    max-height: 85vh;
+    max-height: 100%;
     object-fit: contain;
-    border-radius: 8px;
-}
-
-.closeButton {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 10;
-    background: none;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    color: white;
     transition: opacity 0.2s ease;
 }
 
-.closeButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    opacity: 0.8;
+.previewLoading {
+    opacity: 0.3;
 }
 
-.closeIcon {
-    width: 24px;
-    height: 24px;
+.previewNav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 12px 8px;
+    transition: background 0.15s ease;
+    z-index: 2;
+    line-height: 1;
 }
 
-.galleryGrid {
-    /* display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem; */
-
-    /* TODO: make proper masonry grid so it doesn't break proper ordering */
-    column-count: auto;
-    column-width: 300px;
-    /* padding: 1rem; */
-    margin-top: 24px;
-    width: 100%;
-    /* background-color: white; */
+.previewNav:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: var(--cyan);
 }
 
-.modalLoadingPlaceholder {
-    position: fixed;
+.previewNavLeft {
+    left: 8px;
+}
+
+.previewNavRight {
+    right: 8px;
+}
+
+/* ── Filmstrip Thumbnail Strip ── */
+.filmstrip {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: var(--titlebar-bg);
+    overflow: hidden;
+}
+
+.filmstripArrow {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    padding: 4px 6px;
+    font-size: 0.85em;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    line-height: 1;
+}
+
+.filmstripArrow:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.filmstripTrack {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    min-width: 0;
+    padding: 2px 0;
+}
+
+.filmstripTrack::-webkit-scrollbar {
+    height: 3px;
+}
+
+.filmstripTrack::-webkit-scrollbar-thumb {
+    background: var(--cyan);
+    border-radius: 2px;
+}
+
+.filmstripTrack::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.filmstripThumb {
+    flex-shrink: 0;
+    width: 72px;
+    height: 54px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    opacity: 0.6;
+    transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.filmstripThumb:hover {
+    opacity: 0.85;
+    border-color: rgba(0, 255, 255, 0.4);
+}
+
+.filmstripThumbActive {
+    border-color: var(--cyan);
+    opacity: 1;
+}
+
+/* ── Toolbar (bottom) ── */
+.viewerToolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 10px;
+    background: var(--statusbar-bg);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.72em;
+    color: rgba(255, 255, 255, 0.7);
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.toolbarGroup {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toolbarBtn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    font-family: "RedHatMono", monospace;
+    font-size: 1em;
+    cursor: pointer;
+    padding: 1px 8px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+    line-height: 1.4;
+}
+
+.toolbarBtn:hover {
+    border-color: var(--cyan);
+    color: white;
+}
+
+.toolbarDivider {
+    width: 1px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 4px;
+}
+
+.toolbarCounter {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Gallery Header / Toolbar Bar ── */
+.galleryHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 10px;
+    background: var(--statusbar-bg);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.78em;
+    color: rgba(255, 255, 255, 0.7);
+    user-select: none;
+    margin-bottom: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    transition: padding 0.2s ease, margin 0.2s ease;
+}
+
+/* applied by StickyHeader when stuck */
+.stuck {
+    padding: 4px 48px;
+    margin-left: -48px;
+    margin-right: -48px;
+}
+
+.galleryHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.backLink {
+    color: var(--cyan);
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+}
+
+.backLink:hover {
+    opacity: 0.7;
+}
+
+.galleryTitle {
+    color: white;
+}
+
+.galleryCount {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.spinnerCenter {
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 55;
 }
 
-/* wave loader thing */
-.waveSpinner {
+.gridLoading {
     display: flex;
-    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 0;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.78em;
+    color: rgba(255, 255, 255, 0.5);
 }
 
-.waveSpinner div {
-    width: 3px;
-    height: 24px;
-    background-color: var(--cyan);
-    animation: wave 1s ease-in-out infinite;
+/* ── Folder Cards (Gallery Index) ── */
+.folderGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+    padding: 0 4px;
 }
 
-.waveSpinner div:nth-child(2) {
-    animation-delay: 0.1s;
-}
-.waveSpinner div:nth-child(3) {
-    animation-delay: 0.2s;
-}
-.waveSpinner div:nth-child(4) {
-    animation-delay: 0.3s;
-}
-.waveSpinner div:nth-child(5) {
-    animation-delay: 0.4s;
+.folderCard {
+    display: block;
+    background: var(--box-bg);
+    border: 1px solid transparent;
+    border-radius: 3px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: white;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
+.folderCard:hover {
+    border-color: var(--cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 255, 255, 0.12);
+}
+
+.folderPreview {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--statusbar-bg);
+}
+
+.folderPreviewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.folderCard:hover .folderPreviewImage {
+    transform: scale(1.04);
+}
+
+.folderPreviewEmpty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    opacity: 0.3;
+}
+
+.folderPreviewCount {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.68em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.folderInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.82em;
+    border-top: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.folderIcon {
+    font-size: 1.1em;
+    flex-shrink: 0;
+}
+
+.folderName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.indexHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 10px;
+    background: var(--statusbar-bg);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.78em;
+    color: rgba(255, 255, 255, 0.7);
+    user-select: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    transition: padding 0.2s ease, margin 0.2s ease;
+}
+
+.indexHeaderTitle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+}
+
+.indexHeaderCount {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .galleryGrid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0 6px;
     }
-}
 
-@keyframes wave {
-    0%,
-    100% {
-        transform: scaleY(0.3);
+    .filmstripThumb {
+        width: 52px;
+        height: 40px;
     }
-    50% {
-        transform: scaleY(1);
+
+    .previewNav {
+        padding: 8px 6px;
+        font-size: 1.1rem;
+    }
+
+    .folderGrid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 10px;
     }
 }
