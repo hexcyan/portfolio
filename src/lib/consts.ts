@@ -44,7 +44,7 @@ export const files: IIcon[] = [
     {
         title: "this site",
         type: "file",
-        route: "/blog/0",
+        route: "/blog/this-site",
     },
     {
         title: "404",
