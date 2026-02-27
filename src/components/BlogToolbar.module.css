@@ -19,7 +19,6 @@
     padding: 4px;
     padding-top: 6px;
     background: var(--statusbar-bg);
-    border: 1px solid var(--cyan);
     border-bottom: none;
     border-top: none;
     user-select: none;
@@ -40,7 +39,8 @@
     display: flex;
     align-items: center;
     border: 1px solid var(--cyan);
-    background: var(--statusbar-bg);
+    /* border: 1px solid var(--box-bg); */
+    /* background: var(--box-bg); */
     padding: 0 2px;
 }
 
@@ -121,7 +121,6 @@
     padding: 4px;
     padding-bottom: 6px;
     background: var(--statusbar-bg);
-    border: 1px solid var(--cyan);
     border-top: none;
     border-bottom: none;
     overflow-x: auto;
@@ -200,7 +199,8 @@
     display: grid;
     grid-template-columns: 3fr 4fr 2fr 120px;
     border: 1px solid var(--cyan);
-    border-bottom: none;
+    border-left: none;
+    border-right: none;
     background: rgba(0, 255, 255, 0.15);
     user-select: none;
 }
@@ -242,7 +242,6 @@
 
 /* ── Detail List View ── */
 .detailList {
-    border: 1px solid var(--cyan);
     flex: 1;
     overflow-y: auto;
     min-height: 0;
@@ -403,9 +402,6 @@
     justify-content: space-between;
     padding: 2px 10px;
     background: var(--statusbar-bg);
-    border: 1px solid var(--cyan);
-    border-top: none;
-    border-bottom: none;
     font-family: "RedHatMono", monospace;
     font-size: 0.72em;
     color: rgba(255, 255, 255, 0.6);
