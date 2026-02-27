@@ -15,7 +15,10 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
     const folderName = slug.charAt(0).toUpperCase() + slug.slice(1);
 
     try {
-        const images = await getImagesFromFolder(`gallery/${slug}`);
+        const allImages = await getImagesFromFolder(`gallery/${slug}`);
+        const images = allImages.filter(
+            (img) => img.id.replace(/\.[^.]+$/, "").toLowerCase() !== "_cover"
+        );
 
         return (
             <div className="explorer">

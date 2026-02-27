@@ -20,12 +20,15 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
                 const images = await getImagesFromFolder(
                     `gallery/${folder.title}`
                 );
-                const firstImage = images[0];
+                const cover = images.find((img) =>
+                    img.id.replace(/\.[^.]+$/, "").toLowerCase() === "_cover"
+                );
+                const previewImage = cover ?? images[0];
                 return {
                     name: folder.title,
                     route: `/gallery/${folder.title}`,
-                    previewUrl: firstImage
-                        ? `${pullZone}/${firstImage.path}?width=500&quality=50`
+                    previewUrl: previewImage
+                        ? `${pullZone}/${previewImage.path}?width=500&quality=50`
                         : null,
                     imageCount: images.length,
                 };
