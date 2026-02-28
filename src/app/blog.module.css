@@ -3,13 +3,42 @@
     max-width: 65ch;
     margin: 0 auto;
     font-family: "RedHatDisplay", sans-serif;
-    line-height: 1.75;
-    padding: 0 48px;
+    line-height: 1.8;
+    padding: 0.5rem 48px 3rem;
 }
 
 .prose p {
     font-family: "RedHatText", sans-serif;
-    font-size: 1rem;
+    font-size: 1.0625rem;
+    letter-spacing: 0.01em;
+    font-weight: 400;
+}
+
+.prose h1 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+    color: white;
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+}
+
+.prose h1 + p,
+.prose h1 + * {
+    margin-top: 1.75rem;
+}
+
+/* Prose links */
+.prose a {
+    color: var(--cyan);
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 255, 255, 0.4);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 0.2s, text-shadow 0.2s;
+}
+
+.prose a:hover {
+    text-decoration-color: var(--cyan);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
 }
 
 /* Images */
@@ -25,7 +54,8 @@
     width: 100%;
     height: auto !important;
     max-height: 360px;
-    margin: 1.5rem auto;
+    margin: 1.75rem auto;
+    border: 1px solid rgba(0, 255, 255, 0.1);
 }
 
 .imgContainer {
@@ -36,20 +66,30 @@
     width: auto;
 }
 
-.prose a {
-    color: var(--cyan);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    transition: opacity 0.2s;
-}
-
+/* Splash hero */
 .splash {
     width: 100%;
     height: 360px;
     position: relative;
     overflow: hidden;
-    margin-bottom: 48px;
+    margin-bottom: 2.5rem;
 }
+
+.splash::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(
+        to top,
+        var(--box-bg) 0%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
 .splash img {
     width: 100%;
     height: 100%;
@@ -62,9 +102,11 @@
 
 @media only screen and (max-width: 960px) {
     .prose {
-        padding: 0 24px;
+        padding: 0.5rem 24px 2rem;
     }
-    .blogSplash {
-        margin-bottom: 24px;
+
+    .splash {
+        height: 240px;
+        margin-bottom: 1.5rem;
     }
 }

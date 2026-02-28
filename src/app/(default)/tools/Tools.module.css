@@ -1,4 +1,75 @@
-.hoverLabel {
+/* Toolbar */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--cyan-border);
+}
+
+.toolbarTitle {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.searchInput {
+    flex: 1;
+    max-width: 260px;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--cyan-border);
+    color: #fff;
+    font-family: "RedHatMono", "Courier New", Courier, monospace;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.searchInput::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.searchInput:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan-glow);
+}
+
+.itemCount {
+    margin-left: auto;
+    font-family: "TahomaXP", "Courier New", Courier, monospace;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+    white-space: nowrap;
+}
+
+/* Section titles */
+.sectionTitle {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Project rows */
+.projectRow {
+    display: flex;
+    gap: 1.5rem;
+    align-items: stretch;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: background-color 0.12s;
+}
+
+.projectRow:last-child {
+    border-bottom: none;
+}
+
+.projectRow:hover {
+    background-color: var(--cyan-subtle);
+}
+
+/* Description box */
+.description {
     background-color: #ffffe1;
     color: black;
     padding: 8px;
@@ -9,16 +80,41 @@
     font-size: 20px;
 }
 
-.hoverLabel p {
-    margin-bottom: 0.5rem;
+.description p {
+    margin-bottom: 0.4rem;
 }
 
-.hoverLabel p:last-child {
+.description p:last-child {
     margin-bottom: 0;
 }
 
-.projectRow {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 1rem;
+/* No results */
+.noResults {
+    color: rgba(255, 255, 255, 0.4);
+    font-family: "TahomaXP", "Courier New", Courier, monospace;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .searchInput {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .itemCount {
+        margin-left: 0;
+    }
+
+    .projectRow {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
 }

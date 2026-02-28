@@ -27,6 +27,7 @@ export async function getImagesFromFolder(folderPath: string) {
                 AccessKey: apiKey,
                 Accept: "application/json",
             },
+            next: { tags: ["gallery", `gallery-${folderPath}`] },
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -63,6 +64,7 @@ export async function getFolders(folderPath: string): Promise<IIcon[]> {
                 AccessKey: apiKey,
                 Accept: "application/json",
             },
+            next: { tags: ["gallery"] },
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

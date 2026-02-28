@@ -5,11 +5,13 @@ import Image from "next/image";
 import styles from "./Gallery.module.css";
 import Spinner from "@/components/Spinner";
 import { getCDNConfig } from "@/lib/cdn";
+import type { AlbumMetadata } from "@/lib/gallery-metadata";
 
 interface GalleryViewerProps {
     images: { id: string; path: string }[];
     initialIndex: number;
     folderName: string;
+    metadata?: AlbumMetadata | null;
     onClose: () => void;
 }
 
@@ -17,6 +19,7 @@ export default function GalleryViewer({
     images,
     initialIndex,
     folderName,
+    metadata,
     onClose,
 }: GalleryViewerProps) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -27,6 +30,10 @@ export default function GalleryViewer({
     const current = images[currentIndex];
     const previewUrl = `${pullZone}/${current.path}?width=1400&quality=90`;
     const total = images.length;
+
+    const imgMeta = metadata?.images?.[current.id];
+    const caption = imgMeta?.caption;
+    const imageTags = imgMeta?.tags;
 
     const goTo = useCallback(
         (index: number) => {
@@ -124,7 +131,7 @@ export default function GalleryViewer({
                 <Image
                     key={current.path}
                     src={previewUrl}
-                    alt={current.id}
+                    alt={caption || current.id}
                     width={1400}
                     height={1000}
                     className={`${styles.previewImage} ${!imageLoaded ? styles.previewLoading : ""}`}
@@ -142,6 +149,25 @@ export default function GalleryViewer({
                     </button>
                 )}
             </div>
+
+            {/* Caption + Tags Info Bar */}
+            {(caption || (imageTags && imageTags.length > 0)) && (
+                <div className={styles.viewerInfoBar}>
+                    {caption && (
+                        <span className={styles.viewerInfoCaption}>{caption}</span>
+                    )}
+                    {imageTags && imageTags.length > 0 && (
+                        <>
+                            {caption && <span className={styles.viewerInfoDivider} />}
+                            {imageTags.map((tag) => (
+                                <span key={tag} className={styles.viewerInfoTag}>
+                                    {tag}
+                                </span>
+                            ))}
+                        </>
+                    )}
+                </div>
+            )}
 
             {/* Filmstrip */}
             <div className={styles.filmstrip}>

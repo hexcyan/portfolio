@@ -1,13 +1,21 @@
 import Link from "next/link";
 import { getFolders, getImagesFromFolder, getCDNConfig } from "@/lib/cdn";
+import { getAlbumMetadata } from "@/lib/gallery-metadata";
 import StickyHeader from "@/components/Gallery/StickyHeader";
+import FolderPreviewImage from "@/components/Gallery/FolderPreviewImage";
 import styles from "@/components/Gallery/Gallery.module.css";
+
+// ISR: serve static, revalidate in background every hour as fallback
+export const revalidate = 3600;
 
 interface FolderWithPreview {
     name: string;
     route: string;
     previewUrl: string | null;
+    microUrl: string | null;
     imageCount: number;
+    description: string | null;
+    tags: string[];
 }
 
 async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
@@ -17,27 +25,39 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
     const results = await Promise.all(
         folders.map(async (folder) => {
             try {
-                const images = await getImagesFromFolder(
-                    `gallery/${folder.title}`
-                );
+                const [images, metadata] = await Promise.all([
+                    getImagesFromFolder(`gallery/${folder.title}`),
+                    getAlbumMetadata(folder.title),
+                ]);
                 const cover = images.find((img) =>
                     img.id.replace(/\.[^.]+$/, "").toLowerCase() === "_cover"
                 );
                 const previewImage = cover ?? images[0];
+                const displayImages = images.filter(
+                    (img) => img.id.replace(/\.[^.]+$/, "").toLowerCase() !== "_cover"
+                );
                 return {
                     name: folder.title,
                     route: `/gallery/${folder.title}`,
                     previewUrl: previewImage
                         ? `${pullZone}/${previewImage.path}?width=500&quality=50`
                         : null,
-                    imageCount: images.length,
+                    microUrl: previewImage
+                        ? `${pullZone}/${previewImage.path}?width=30&quality=10`
+                        : null,
+                    imageCount: displayImages.length,
+                    description: metadata?.description || null,
+                    tags: metadata?.tags || [],
                 };
             } catch {
                 return {
                     name: folder.title,
                     route: `/gallery/${folder.title}`,
                     previewUrl: null,
+                    microUrl: null,
                     imageCount: 0,
+                    description: null,
+                    tags: [],
                 };
             }
         })
@@ -73,12 +93,11 @@ export default async function GalleryPage() {
                         className={styles.folderCard}
                     >
                         <div className={styles.folderPreview}>
-                            {folder.previewUrl ? (
-                                <img
+                            {folder.previewUrl && folder.microUrl ? (
+                                <FolderPreviewImage
                                     src={folder.previewUrl}
+                                    microSrc={folder.microUrl}
                                     alt={folder.name}
-                                    className={styles.folderPreviewImage}
-                                    loading="lazy"
                                 />
                             ) : (
                                 <div className={styles.folderPreviewEmpty}>
@@ -98,6 +117,27 @@ export default async function GalleryPage() {
                                 {folder.name}
                             </span>
                         </div>
+                        {(folder.description || folder.tags.length > 0) && (
+                            <div className={styles.folderMeta}>
+                                {folder.description && (
+                                    <p className={styles.folderDescription}>
+                                        {folder.description}
+                                    </p>
+                                )}
+                                {folder.tags.length > 0 && (
+                                    <div className={styles.folderTags}>
+                                        {folder.tags.map((tag) => (
+                                            <span
+                                                key={tag}
+                                                className={styles.folderTag}
+                                            >
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </Link>
                 ))}
             </div>

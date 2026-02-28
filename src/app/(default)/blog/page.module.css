@@ -43,7 +43,7 @@
 .postDescription {
     font-family: "RedHatDisplay", sans-serif;
     font-size: 0.95em;
-    color: #e0e0e0;
+    color: var(--text-secondary);
     margin: 0.5rem 0;
     line-height: 1.4;
 }

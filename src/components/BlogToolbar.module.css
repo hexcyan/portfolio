@@ -305,7 +305,7 @@
 
 .cellDesc {
     font-family: "RedHatDisplay", sans-serif;
-    color: #c8c8c8;
+    color: var(--text-secondary);
 }
 
 .cellTags {
@@ -374,7 +374,7 @@
 .cardDescription {
     font-family: "RedHatDisplay", sans-serif;
     font-size: 0.95em;
-    color: #e0e0e0;
+    color: var(--text-secondary);
     margin: 0.5rem 0;
     line-height: 1.4;
 }

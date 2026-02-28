@@ -41,3 +41,6 @@ next-env.d.ts
 .gitignore
 .claude
 /data
+
+# gallery admin (local-only)
+/src/app/(default)/gallery/admin/
