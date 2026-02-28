@@ -110,6 +110,27 @@ export default async function GalleryPage() {
                                     {folder.imageCount !== 1 ? "s" : ""}
                                 </span>
                             )}
+                            {(folder.description || folder.tags.length > 0) && (
+                                <div className={styles.folderMeta}>
+                                    {folder.description && (
+                                        <span className={styles.folderDescription}>
+                                            {folder.description}
+                                        </span>
+                                    )}
+                                    {folder.tags.length > 0 && (
+                                        <span className={styles.folderTags}>
+                                            {folder.tags.map((tag) => (
+                                                <span
+                                                    key={tag}
+                                                    className={styles.folderTag}
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
                         </div>
                         <div className={styles.folderInfo}>
                             <span className={styles.folderIcon}>📁</span>
@@ -117,27 +138,6 @@ export default async function GalleryPage() {
                                 {folder.name}
                             </span>
                         </div>
-                        {(folder.description || folder.tags.length > 0) && (
-                            <div className={styles.folderMeta}>
-                                {folder.description && (
-                                    <p className={styles.folderDescription}>
-                                        {folder.description}
-                                    </p>
-                                )}
-                                {folder.tags.length > 0 && (
-                                    <div className={styles.folderTags}>
-                                        {folder.tags.map((tag) => (
-                                            <span
-                                                key={tag}
-                                                className={styles.folderTag}
-                                            >
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
                     </Link>
                 ))}
             </div>
