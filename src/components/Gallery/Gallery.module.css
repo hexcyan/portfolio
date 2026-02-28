@@ -741,4 +741,8 @@
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 10px;
     }
+
+    .folderMeta {
+        opacity: 1 !important
+    }
 }

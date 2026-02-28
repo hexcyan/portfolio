@@ -14,6 +14,9 @@ interface PaletteGridProps {
     compact?: boolean;
     cols: number;
     rows: number;
+    selectedSlot?: number | null;
+    selectedPaint?: string | null;
+    onSelectSlot?: (index: number) => void;
     onDropPaint: (index: number, paintId: string) => void;
     onSwapSlots: (from: number, to: number) => void;
     onClearSlot: (index: number) => void;
@@ -28,6 +31,9 @@ export default function PaletteGrid({
     compact = false,
     cols,
     rows,
+    selectedSlot,
+    selectedPaint,
+    onSelectSlot,
     onDropPaint,
     onSwapSlots,
     onClearSlot,
@@ -61,18 +67,30 @@ export default function PaletteGrid({
                     padding: compact ? "6px" : layout.padding ? `${pt}px ${pr}px ${pb}px ${pl}px` : `18px`,
                 }}
             >
-                {slots.map((paintId, i) => (
-                    <PaletteSlot
-                        key={i}
-                        index={i}
-                        paint={paintId ? paintMap.get(paintId) ?? null : null}
-                        blocked={blocked.has(i)}
-                        showLabels={showLabels}
-                        onDrop={onDropPaint}
-                        onSwap={onSwapSlots}
-                        onClear={onClearSlot}
-                    />
-                ))}
+                {slots.map((paintId, i) => {
+                    const isSelected = selectedSlot === i;
+                    // Show target highlight when: paint is selected (all slots are targets),
+                    // or a slot is selected (other slots are swap targets)
+                    const isTarget = onSelectSlot && !isSelected && (
+                        selectedPaint != null ||
+                        (selectedSlot != null && selectedSlot !== i)
+                    );
+                    return (
+                        <PaletteSlot
+                            key={i}
+                            index={i}
+                            paint={paintId ? paintMap.get(paintId) ?? null : null}
+                            blocked={blocked.has(i)}
+                            showLabels={showLabels}
+                            selected={isSelected}
+                            targetHighlight={!!isTarget}
+                            onSelect={onSelectSlot}
+                            onDrop={onDropPaint}
+                            onSwap={onSwapSlots}
+                            onClear={onClearSlot}
+                        />
+                    );
+                })}
             </div>
         </div>
     );

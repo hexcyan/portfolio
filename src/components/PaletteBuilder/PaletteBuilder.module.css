@@ -1408,6 +1408,105 @@
         height: 30px;
     }
 
+    /* ── Mobile selection states ── */
+    .slotSelected {
+        outline: 2.5px solid var(--pb-rose);
+        outline-offset: -2.5px;
+        animation: slotPulse 1.5s ease-in-out infinite;
+        z-index: 2;
+    }
+
+    @keyframes slotPulse {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 rgba(235, 101, 101, 0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 8px 2px rgba(235, 101, 101, 0.25);
+        }
+    }
+
+    .slotTarget {
+        outline: 1.5px dashed var(--pb-salmon);
+        outline-offset: -1.5px;
+        background: white;
+    }
+
+    .pickerSwatchSelected {
+        outline: 2.5px solid var(--pb-rose);
+        outline-offset: -1px;
+        transform: scale(1.04);
+        background: rgba(255, 223, 225, 0.5);
+        border-radius: 10px;
+    }
+
+    .mobileActionBar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0.75rem;
+        background: var(--pb-surface);
+        border: 1.5px solid var(--pb-border);
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(58, 32, 32, 0.1);
+        animation: actionBarIn 0.15s ease-out;
+    }
+
+    @keyframes actionBarIn {
+        from {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .mobileActionBtn {
+        padding: 0.4rem 0.8rem;
+        border: 1.5px solid var(--pb-border);
+        border-radius: 6px;
+        background: none;
+        font-size: 0.75rem;
+        font-weight: 600;
+        font-family: var(--pb-font-body);
+        color: var(--pb-ink-soft);
+        cursor: pointer;
+        transition: all 0.15s;
+        min-height: 36px;
+    }
+
+    .mobileActionBtn:hover {
+        border-color: var(--pb-salmon);
+        color: var(--pb-rose);
+    }
+
+    .mobileActionBtnDanger {
+        color: var(--pb-red-warn);
+        border-color: rgba(192, 64, 64, 0.25);
+    }
+
+    .mobileActionBtnDanger:hover {
+        background: var(--pb-red-bg);
+        border-color: var(--pb-red-warn);
+        color: var(--pb-red-warn);
+    }
+
+    .selectionHint {
+        text-align: center;
+        font-size: 0.72rem;
+        color: var(--pb-ink-muted);
+        font-family: var(--pb-font-body);
+        font-style: italic;
+        padding: 0.25rem 0;
+        animation: actionBarIn 0.15s ease-out;
+    }
+
     /* Widget / mobile palette — larger touch targets */
     .toolbarSelect {
         padding: 0.4rem 0.6rem;

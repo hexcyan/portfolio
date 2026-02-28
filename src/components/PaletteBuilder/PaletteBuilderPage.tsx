@@ -188,6 +188,75 @@ export default function PaletteBuilderPage({ allPaints, layouts, curatedPalettes
     const [compact, setCompact] = useState(false);
     const toggleCompact = useCallback(() => setCompact((v) => !v), []);
 
+    // ─── Mobile detection ──────────────────────────────────────
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 768px)");
+        setIsMobile(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+        mq.addEventListener("change", handler);
+        return () => mq.removeEventListener("change", handler);
+    }, []);
+
+    // ─── Mobile selection state ──────────────────────────────
+    const [selectedPaint, setSelectedPaint] = useState<string | null>(null);
+    const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
+
+    const clearSelection = useCallback(() => {
+        setSelectedPaint(null);
+        setSelectedSlot(null);
+    }, []);
+
+    const onPaintTap = useCallback((paintId: string) => {
+        // If a slot is selected, place this paint directly into that slot
+        if (selectedSlot !== null) {
+            dropPaint(selectedSlot, paintId);
+            clearSelection();
+            return;
+        }
+        // If a paint is already selected, switch selection (or deselect)
+        if (selectedPaint) {
+            setSelectedPaint((prev) => prev === paintId ? null : paintId);
+            setSelectedSlot(null);
+            return;
+        }
+        // Nothing selected — quick-add to next empty slot
+        addToNextEmpty(paintId);
+    }, [selectedPaint, selectedSlot, addToNextEmpty, dropPaint, clearSelection]);
+
+    const onSlotTap = useCallback((index: number) => {
+        setState((s) => {
+            const slots = [...s.slots];
+            // If a paint is selected from the picker, place it in this slot
+            if (selectedPaint) {
+                slots[index] = selectedPaint;
+                // Clear selection after state update
+                setTimeout(clearSelection, 0);
+                return { ...s, slots };
+            }
+            // If a slot is selected, swap or deselect
+            if (selectedSlot !== null) {
+                if (selectedSlot === index) {
+                    // Deselect
+                    setTimeout(clearSelection, 0);
+                    return s;
+                }
+                // Swap
+                [slots[selectedSlot], slots[index]] = [slots[index], slots[selectedSlot]];
+                setTimeout(clearSelection, 0);
+                return { ...s, slots };
+            }
+            // Nothing selected — select this slot if it has paint
+            if (slots[index] !== null) {
+                setTimeout(() => {
+                    setSelectedSlot(index);
+                    setSelectedPaint(null);
+                }, 0);
+            }
+            return s;
+        });
+    }, [selectedPaint, selectedSlot, clearSelection]);
+
     // ─── Mobile drawer ────────────────────────────────────────
     const [drawerOpen, setDrawerOpen] = useState(false);
     const toggleDrawer = useCallback(() => setDrawerOpen((o) => !o), []);
@@ -362,6 +431,8 @@ export default function PaletteBuilderPage({ allPaints, layouts, curatedPalettes
                     canUndo={canUndo}
                     onUndo={undo}
                 />
+
+
                 <PaletteGrid
                     layout={layout}
                     slots={state.slots}
@@ -371,10 +442,40 @@ export default function PaletteBuilderPage({ allPaints, layouts, curatedPalettes
                     compact={compact}
                     cols={cols}
                     rows={rows}
+                    selectedSlot={selectedSlot}
+                    selectedPaint={selectedPaint}
+                    onSelectSlot={isMobile ? onSlotTap : undefined}
                     onDropPaint={dropPaint}
                     onSwapSlots={swapSlots}
                     onClearSlot={clearSlot}
                 />
+
+                {/* Selection hint */}
+                {selectedPaint && (
+                    <p className={styles.selectionHint}>Tap a slot to place the paint</p>
+                )}
+                {selectedSlot !== null && (
+                    <p className={styles.selectionHint}>Tap another slot to swap, or use actions below</p>
+                )}
+
+                {/* Mobile action bar for selected slot */}
+                {selectedSlot !== null && (
+                    <div className={styles.mobileActionBar}>
+                        <button
+                            className={`${styles.mobileActionBtn} ${styles.mobileActionBtnDanger}`}
+                            onClick={() => { clearSlot(selectedSlot); clearSelection(); }}
+                        >
+                            Remove
+                        </button>
+                        <button
+                            className={styles.mobileActionBtn}
+                            onClick={clearSelection}
+                        >
+                            Deselect
+                        </button>
+                    </div>
+                )}
+
                 <PaletteActions
                     layout={layout}
                     slots={state.slots}
@@ -394,7 +495,13 @@ export default function PaletteBuilderPage({ allPaints, layouts, curatedPalettes
             {/* ── Mobile: paint picker drawer ── */}
             <div className={`${styles.drawer} ${drawerOpen ? styles.drawerOpen : ""}`}>
                 <div className={styles.drawerInner}>
-                    <PaintPicker allPaints={allPaints} layout={layout} onAddPaint={addToNextEmpty} />
+                    <PaintPicker
+                        allPaints={allPaints}
+                        layout={layout}
+                        onAddPaint={addToNextEmpty}
+                        selectedPaintId={selectedPaint}
+                        onSelectPaint={isMobile ? onPaintTap : undefined}
+                    />
                 </div>
             </div>
 

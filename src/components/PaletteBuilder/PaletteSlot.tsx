@@ -8,6 +8,9 @@ interface PaletteSlotProps {
     paint: PalettePaint | null;
     blocked?: boolean;
     showLabels?: boolean;
+    selected?: boolean;
+    targetHighlight?: boolean;
+    onSelect?: (index: number) => void;
     onDrop: (index: number, paintId: string) => void;
     onSwap: (fromIndex: number, toIndex: number) => void;
     onClear: (index: number) => void;
@@ -18,6 +21,9 @@ export default function PaletteSlot({
     paint,
     blocked,
     showLabels = true,
+    selected,
+    targetHighlight,
+    onSelect,
     onDrop,
     onSwap,
     onClear,
@@ -54,15 +60,30 @@ export default function PaletteSlot({
         ? isLightColor(paint.colorHex)
         : false;
 
+    const slotClasses = [
+        styles.slot,
+        paint ? styles.slotFilled : styles.slotEmpty,
+        selected ? styles.slotSelected : "",
+        targetHighlight ? styles.slotTarget : "",
+    ].filter(Boolean).join(" ");
+
+    function handleClick() {
+        if (onSelect) {
+            onSelect(index);
+        } else if (paint) {
+            onClear(index);
+        }
+    }
+
     return (
         <div
-            className={`${styles.slot} ${paint ? styles.slotFilled : styles.slotEmpty}`}
-            draggable={!!paint}
-            onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            onClick={() => paint && onClear(index)}
-            title={paint ? `${paint.name} — click to remove` : "Drop a paint here"}
+            className={slotClasses}
+            draggable={!onSelect && !!paint}
+            onDragStart={onSelect ? undefined : handleDragStart}
+            onDragOver={onSelect ? undefined : handleDragOver}
+            onDrop={onSelect ? undefined : handleDrop}
+            onClick={handleClick}
+            title={paint ? `${paint.name}` : onSelect ? "Tap to place paint" : "Drop a paint here"}
         >
             {paint && (
                 <>

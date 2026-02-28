@@ -13,9 +13,11 @@ interface PaintPickerProps {
     allPaints: PalettePaint[];
     layout: PaletteLayout;
     onAddPaint: (paintId: string) => void;
+    selectedPaintId?: string | null;
+    onSelectPaint?: (paintId: string) => void;
 }
 
-export default function PaintPicker({ allPaints, layout, onAddPaint }: PaintPickerProps) {
+export default function PaintPicker({ allPaints, layout, onAddPaint, selectedPaintId, onSelectPaint }: PaintPickerProps) {
     const [brand, setBrand] = useState<BrandFilter>("all");
     const [search, setSearch] = useState("");
     const [stockFilter, setStockFilter] = useState(true);
@@ -94,10 +96,10 @@ export default function PaintPicker({ allPaints, layout, onAddPaint }: PaintPick
                     return (
                         <div
                             key={paint.id}
-                            className={styles.pickerSwatch}
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, paint.id)}
-                            onClick={() => onAddPaint(paint.id)}
+                            className={`${styles.pickerSwatch} ${selectedPaintId === paint.id ? styles.pickerSwatchSelected : ""}`}
+                            draggable={!onSelectPaint}
+                            onDragStart={onSelectPaint ? undefined : (e) => handleDragStart(e, paint.id)}
+                            onClick={() => onSelectPaint ? onSelectPaint(paint.id) : onAddPaint(paint.id)}
                             title={`${paint.name}${paint.code ? ` (${paint.code})` : ""}${!inStock ? " — Out of stock for this palette" : ""}`}
                         >
                             <div
