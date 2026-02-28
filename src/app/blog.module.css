@@ -21,8 +21,8 @@
     text-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
 }
 
-.prose h1 + p,
-.prose h1 + * {
+.prose h1+p,
+.prose h1+* {
     margin-top: 1.75rem;
 }
 
@@ -55,7 +55,6 @@
     height: auto !important;
     max-height: 360px;
     margin: 1.75rem auto;
-    border: 1px solid rgba(0, 255, 255, 0.1);
 }
 
 .imgContainer {
@@ -82,11 +81,9 @@
     left: 0;
     right: 0;
     height: 40%;
-    background: linear-gradient(
-        to top,
-        var(--box-bg) 0%,
-        transparent 100%
-    );
+    background: linear-gradient(to top,
+            var(--box-bg) 0%,
+            transparent 100%);
     pointer-events: none;
 }
 

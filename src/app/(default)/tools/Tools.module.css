@@ -65,7 +65,9 @@
 }
 
 .projectRow:hover {
-    background-color: var(--cyan-subtle);
+    background: linear-gradient(to right,
+            var(--cyan-subtle),
+            #ffffff00 150px);
 }
 
 /* Description box */
