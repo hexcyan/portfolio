@@ -74,19 +74,6 @@
     margin-bottom: 2.5rem;
 }
 
-.splash::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 40%;
-    background: linear-gradient(to top,
-            var(--box-bg) 0%,
-            transparent 100%);
-    pointer-events: none;
-}
-
 .splash img {
     width: 100%;
     height: 100%;
