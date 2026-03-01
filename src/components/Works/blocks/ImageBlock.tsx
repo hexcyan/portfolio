@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
+import { computeBlockCols } from "./grid-utils";
 import { thumbUrl } from "@/lib/cdn";
 import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
 
@@ -24,16 +25,24 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
     const microSrc = thumbUrl(imagePath, "micro");
     const thumbSrc = thumbUrl(imagePath, "thumb");
 
-    const cols = block.cols ?? 1;
+    const baseCols = block.cols ?? 1;
+    const [cols, setCols] = useState(baseCols);
 
     const computeSpan = useCallback(() => {
         const grid = cellRef.current?.parentElement;
         if (!grid) return;
+
+        // Smart column expansion for multi-col images
+        const effectiveCols = baseCols > 1
+            ? computeBlockCols(grid, baseCols, 0, block.maxCols)
+            : baseCols;
+        setCols(effectiveCols);
+
         const gridStyles = window.getComputedStyle(grid);
         const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
         const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
         const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
-        const totalWidth = columnWidth * cols + colGap * (cols - 1);
+        const totalWidth = columnWidth * effectiveCols + colGap * (effectiveCols - 1);
         const img = new window.Image();
         img.src = microSrc;
         img.onload = () => {
@@ -41,7 +50,7 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
             const imageHeight = totalWidth * aspectRatio;
             setSpan(Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap);
         };
-    }, [microSrc, cols]);
+    }, [microSrc, baseCols, block.maxCols]);
 
     useEffect(() => {
         computeSpan();

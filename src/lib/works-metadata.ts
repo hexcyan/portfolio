@@ -31,6 +31,7 @@ export interface ContentBlock {
     tags?: string[];      // per-block tags (youtube/tweet)
     span?: number;        // grid row span override (each unit = 4px)
     cols?: number;        // grid column span (1 or 2, default varies by type)
+    maxCols?: number;     // max columns this block can span
 }
 
 export interface WorksSubsectionMeta {
@@ -40,6 +41,8 @@ export interface WorksSubsectionMeta {
     dateRange?: string;
     date?: string;
     columnMinWidth?: number;
+    maxColumns?: number;
+    align?: "left" | "center" | "right";
     tags?: string[];
     blocks: ContentBlock[];
 }
@@ -50,6 +53,8 @@ export interface WorksFolderMeta {
     dateRange?: string;
     order?: number;
     columnMinWidth?: number;
+    maxColumns?: number;
+    align?: "left" | "center" | "right";
     tags?: string[];
     subsections?: WorksSubsectionMeta[];
     images: Record<string, WorksImageMeta>;
@@ -84,6 +89,7 @@ export interface WorksBlock {
     // Layout
     span?: number;        // grid row span override (each unit = 4px)
     cols?: number;        // grid column span (1 or 2)
+    maxCols?: number;     // max columns this block can span
 }
 
 export interface WorksSubsection {
@@ -93,6 +99,8 @@ export interface WorksSubsection {
     dateRange?: string;
     date?: string;
     columnMinWidth?: number;
+    maxColumns?: number;
+    align?: "left" | "center" | "right";
     sectionId: string;
     sectionTitle: string;
     blocks: WorksBlock[];
@@ -104,6 +112,8 @@ export interface WorksSection {
     description?: string;
     dateRange?: string;
     columnMinWidth?: number;
+    maxColumns?: number;
+    align?: "left" | "center" | "right";
     order: number;
     images: WorksImage[];
     subsections: WorksSubsection[];

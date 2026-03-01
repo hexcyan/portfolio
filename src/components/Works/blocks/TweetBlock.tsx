@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
+import { computeBlockCols } from "./grid-utils";
 import type { WorksBlock } from "@/lib/works-metadata";
 
 interface TweetBlockProps {
@@ -19,8 +20,6 @@ declare global {
     }
 }
 
-const TWEET_MIN_WIDTH = 250;
-
 export default function TweetBlock({ block }: TweetBlockProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const baseCols = block.cols ?? MASONRY.defaultEmbedCols;
@@ -30,18 +29,10 @@ export default function TweetBlock({ block }: TweetBlockProps) {
     const computeCols = useCallback(() => {
         const grid = containerRef.current?.closest(`.${styles.masonryGrid}`) as HTMLElement | null;
         if (!grid) return;
-        const gridStyles = window.getComputedStyle(grid);
-        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
-        const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
-        const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
-        const totalGridCols = colWidths.length;
 
-        let needed = baseCols;
-        while (needed < totalGridCols && columnWidth * needed + colGap * (needed - 1) < TWEET_MIN_WIDTH) {
-            needed++;
-        }
+        const needed = computeBlockCols(grid, baseCols, MASONRY.tweetMinWidth, block.maxCols);
         setCols(needed);
-    }, [baseCols]);
+    }, [baseCols, block.maxCols]);
 
     const measureSpan = useCallback(() => {
         if (block.span) return;

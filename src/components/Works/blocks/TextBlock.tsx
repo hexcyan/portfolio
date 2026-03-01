@@ -3,9 +3,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
+import { computeBlockCols } from "./grid-utils";
 import type { WorksBlock } from "@/lib/works-metadata";
-
-const TEXT_MIN_WIDTH = 280;
 
 interface TextBlockProps {
     block: WorksBlock;
@@ -21,17 +20,8 @@ export default function TextBlock({ block }: TextBlockProps) {
     const computeLayout = useCallback(() => {
         const grid = cellRef.current?.parentElement;
         if (!grid) return;
-        const gridStyles = window.getComputedStyle(grid);
-        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
-        const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
-        const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
-        const totalGridCols = colWidths.length;
 
-        // Expand columns if needed to meet minimum width
-        let needed = baseCols;
-        while (needed < totalGridCols && columnWidth * needed + colGap * (needed - 1) < TEXT_MIN_WIDTH) {
-            needed++;
-        }
+        const needed = computeBlockCols(grid, baseCols, MASONRY.textMinWidth, block.maxCols);
         setCols(needed);
 
         // Measure span after layout settles
@@ -45,7 +35,7 @@ export default function TextBlock({ block }: TextBlockProps) {
                 setSpan(Math.ceil((contentHeight + extra) / MASONRY.rowHeight));
             }
         });
-    }, [block.span, block.content, baseCols]);
+    }, [block.span, block.content, block.maxCols, baseCols]);
 
     useEffect(() => {
         computeLayout();

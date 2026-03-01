@@ -236,6 +236,8 @@
     grid-auto-flow: dense;
     margin-top: 12px;
     width: 100%;
+    max-width: var(--masonry-max-width, none);
+    justify-self: var(--masonry-align, start);
 }
 
 /* ── Image Cell ── */
@@ -572,7 +574,7 @@
     }
 
     .masonryGrid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min-mobile, 220px), 1fr));
     }
 
     .imageOverlay {

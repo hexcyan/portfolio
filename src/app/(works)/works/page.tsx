@@ -71,7 +71,7 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
             const subsections: WorksSubsection[] = (meta.subsections ?? []).map((sub) => {
                 const subTags = sub.tags ?? [];
                 const blocks: WorksBlock[] = sub.blocks.map((block) => {
-                    const layout = { span: block.span, cols: block.cols };
+                    const layout = { span: block.span, cols: block.cols, maxCols: block.maxCols };
                     if (block.type === "image" && block.filename) {
                         assignedFilenames.add(block.filename);
                         const imgMeta = meta.images[block.filename];
@@ -121,6 +121,8 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                     dateRange: sub.dateRange,
                     date: sub.date,
                     columnMinWidth: sub.columnMinWidth,
+                    maxColumns: sub.maxColumns,
+                    align: sub.align,
                     sectionId: folder,
                     sectionTitle: meta.title || folder,
                     blocks,
@@ -138,6 +140,8 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                 description: meta.description,
                 dateRange: meta.dateRange,
                 columnMinWidth: meta.columnMinWidth,
+                maxColumns: meta.maxColumns,
+                align: meta.align,
                 order: meta.order ?? 0,
                 images: unassignedImages,
                 subsections,

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
+import { computeBlockCols } from "./grid-utils";
 import type { WorksBlock } from "@/lib/works-metadata";
 
 const ASPECT_RATIO = 9 / 16;
@@ -12,23 +13,28 @@ interface YouTubeBlockProps {
 }
 
 export default function YouTubeBlock({ block }: YouTubeBlockProps) {
-    const cols = block.cols ?? MASONRY.defaultEmbedCols;
+    const baseCols = block.cols ?? MASONRY.defaultEmbedCols;
     const cellRef = useRef<HTMLDivElement>(null);
     const [span, setSpan] = useState<number | null>(block.span ?? null);
+    const [cols, setCols] = useState(baseCols);
 
     const computeSpan = useCallback(() => {
         if (block.span) return;
         const grid = cellRef.current?.parentElement;
         if (!grid) return;
+
+        const effectiveCols = computeBlockCols(grid, baseCols, 0, block.maxCols);
+        setCols(effectiveCols);
+
         const gridStyles = window.getComputedStyle(grid);
         const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
         const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
         const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
-        const totalWidth = columnWidth * cols + colGap * (cols - 1);
+        const totalWidth = columnWidth * effectiveCols + colGap * (effectiveCols - 1);
         const embedHeight = totalWidth * ASPECT_RATIO;
         const captionHeight = block.caption ? 24 : 0;
         setSpan(Math.ceil((embedHeight + captionHeight) / MASONRY.rowHeight) + MASONRY.gap);
-    }, [block.span, block.caption, cols]);
+    }, [block.span, block.caption, block.maxCols, baseCols]);
 
     useEffect(() => {
         computeSpan();

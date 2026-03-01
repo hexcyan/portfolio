@@ -12,17 +12,29 @@ import type { WorksBlock, WorksSubsection, WorksTagDef } from "@/lib/works-metad
 interface WorksSubsectionProps {
     subsection: WorksSubsection;
     sectionColumnMinWidth?: number;
+    sectionMaxColumns?: number;
+    sectionAlign?: "left" | "center" | "right";
     tagDefs: WorksTagDef[];
     onImageClick: (block: WorksBlock) => void;
 }
 
+const ALIGN_MAP = { left: "start", center: "center", right: "end" } as const;
+
 export default function WorksSubsectionComponent({
     subsection,
     sectionColumnMinWidth,
+    sectionMaxColumns,
+    sectionAlign,
     tagDefs,
     onImageClick,
 }: WorksSubsectionProps) {
     const gridRef = useRef<HTMLDivElement>(null);
+
+    const colMin = subsection.columnMinWidth ?? sectionColumnMinWidth ?? MASONRY.columnMinWidth;
+    const colMinMobile = MASONRY.columnMinWidthMobile;
+    const maxColumns = subsection.maxColumns ?? sectionMaxColumns ?? MASONRY.maxColumns;
+    const align = subsection.align ?? sectionAlign;
+    const maxWidth = maxColumns * colMin;
 
     return (
         <div className={styles.subsectionBlock}>
@@ -45,8 +57,11 @@ export default function WorksSubsectionComponent({
                 className={styles.masonryGrid}
                 ref={gridRef}
                 style={{
-                    "--masonry-col-min": `${subsection.columnMinWidth ?? sectionColumnMinWidth ?? MASONRY.columnMinWidth}px`,
+                    "--masonry-col-min": `${colMin}px`,
+                    "--masonry-col-min-mobile": `${colMinMobile}px`,
                     "--masonry-row-height": `${MASONRY.rowHeight}px`,
+                    "--masonry-max-width": `${maxWidth}px`,
+                    "--masonry-align": align ? ALIGN_MAP[align] : "start",
                 } as React.CSSProperties}
             >
                 {subsection.blocks.map((block, i) => {

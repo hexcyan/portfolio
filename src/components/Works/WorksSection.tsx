@@ -108,6 +108,8 @@ export default function WorksSectionComponent({
                         key={sub.id}
                         subsection={sub}
                         sectionColumnMinWidth={section.columnMinWidth}
+                        sectionMaxColumns={section.maxColumns}
+                        sectionAlign={section.align}
                         tagDefs={tagDefs}
                         onImageClick={onBlockClick}
                     />
