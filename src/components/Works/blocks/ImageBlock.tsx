@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import styles from "../Works.module.css";
-import { getCDNConfig } from "@/lib/cdn";
+import { thumbUrl } from "@/lib/cdn";
 import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
 
 interface ImageBlockProps {
@@ -16,14 +16,15 @@ const GAP = 3;
 
 export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps) {
     const [span, setSpan] = useState<number | null>(null);
+    const [thumbLoaded, setThumbLoaded] = useState(false);
     const cellRef = useRef<HTMLDivElement>(null);
-    const { pullZone } = getCDNConfig();
 
     const imagePath = block.folder
         ? `works/${block.folder}/${block.filename}`
         : `works/${block.filename}`;
 
-    const imageUrl = `${pullZone}/${imagePath}`;
+    const microSrc = thumbUrl(imagePath, "micro");
+    const thumbSrc = thumbUrl(imagePath, "thumb");
 
     const computeSpan = useCallback(() => {
         const grid = cellRef.current?.parentElement;
@@ -34,13 +35,13 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
                 gridStyles.getPropertyValue("grid-template-columns").split(" ")[0]
             ) || 260;
         const img = new window.Image();
-        img.src = imageUrl;
+        img.src = microSrc;
         img.onload = () => {
             const aspectRatio = img.naturalHeight / img.naturalWidth;
             const imageHeight = columnWidth * aspectRatio;
             setSpan(Math.ceil(imageHeight / ROW_HEIGHT) + GAP);
         };
-    }, [imageUrl]);
+    }, [microSrc]);
 
     useEffect(() => {
         computeSpan();
@@ -74,11 +75,23 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
             onClick={handleClick}
         >
             <div className={styles.imageCellInner}>
+                {/* Blur-up micro placeholder */}
                 <img
-                    src={imageUrl}
+                    src={microSrc}
+                    alt=""
+                    aria-hidden="true"
+                    className={`${styles.blurPlaceholder} ${thumbLoaded ? styles.blurHidden : ""}`}
+                />
+                {/* Thumb image */}
+                <img
+                    src={thumbSrc}
                     alt={block.caption || block.filename || ""}
-                    className={styles.imageCellImg}
+                    className={`${styles.imageCellImg} ${thumbLoaded ? styles.imageCellImgLoaded : ""}`}
                     loading="lazy"
+                    ref={(el) => {
+                        if (el?.complete && el.naturalWidth > 0 && !thumbLoaded) setThumbLoaded(true);
+                    }}
+                    onLoad={() => { if (!thumbLoaded) setThumbLoaded(true); }}
                 />
                 {isLink && <span className={styles.linkBadge}>&#x2197;</span>}
                 {hasOverlay && (

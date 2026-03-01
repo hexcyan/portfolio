@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 // import Image from "next/image";
 import styles from "./Gallery.module.css";
 import Spinner from "@/components/Spinner";
-import { getCDNConfig } from "@/lib/cdn";
+import { getCDNConfig, thumbUrl as cdnThumbUrl } from "@/lib/cdn";
 import type { AlbumMetadata } from "@/lib/gallery-metadata";
 
 interface GalleryViewerProps {
@@ -89,8 +89,8 @@ export default function GalleryViewer({
         trackRef.current.scrollLeft += direction * 200;
     }
 
-    function thumbUrl(path: string) {
-        return `${pullZone}/${path}`;
+    function filmstripThumbUrl(path: string) {
+        return cdnThumbUrl(path, "thumb");
     }
 
     return (
@@ -180,7 +180,7 @@ export default function GalleryViewer({
                     {images.map((img, i) => (
                         <img
                             key={img.id}
-                            src={thumbUrl(img.path)}
+                            src={filmstripThumbUrl(img.path)}
                             alt={img.id}
                             className={`${styles.filmstripThumb} ${i === currentIndex ? styles.filmstripThumbActive : ""}`}
                             onClick={() => goTo(i)}

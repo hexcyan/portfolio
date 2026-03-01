@@ -47,6 +47,37 @@
     display: block;
 }
 
+/* ── Blur-up: Grid placeholder + thumb ── */
+.gridPlaceholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(12px);
+    transform: scale(1.1);
+    z-index: 1;
+    transition: opacity 0.4s ease;
+}
+
+.gridPlaceholderHidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.gridThumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.gridThumbLoaded {
+    opacity: 1;
+}
+
 /* ── Filmstrip Viewer Overlay ── */
 .viewerOverlay {
     position: fixed;
@@ -376,6 +407,41 @@
 }
 
 .folderCard:hover .folderPreviewImage {
+    transform: scale(1.04);
+}
+
+/* ── Blur-up: Folder preview placeholder + thumb ── */
+.folderPreviewPlaceholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(12px);
+    transform: scale(1.1);
+    z-index: 1;
+    transition: opacity 0.4s ease;
+}
+
+.folderPreviewPlaceholderHidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.folderPreviewThumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.3s ease;
+}
+
+.folderPreviewLoaded {
+    opacity: 1;
+}
+
+.folderCard:hover .folderPreviewThumb {
     transform: scale(1.04);
 }
 

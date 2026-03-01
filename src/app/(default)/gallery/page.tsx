@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { getFolders, getImagesFromFolder, getCDNConfig } from "@/lib/cdn";
+import { getFolders, getImagesFromFolder, getCDNConfig, thumbUrl } from "@/lib/cdn";
 import { getAlbumMetadata } from "@/lib/gallery-metadata";
 import StickyHeader from "@/components/Gallery/StickyHeader";
+import FolderPreviewImage from "@/components/Gallery/FolderPreviewImage";
 
 import styles from "@/components/Gallery/Gallery.module.css";
 
@@ -11,7 +12,7 @@ export const revalidate = 3600;
 interface FolderWithPreview {
     name: string;
     route: string;
-    previewUrl: string | null;
+    previewPath: string | null;
     imageCount: number;
     description: string | null;
     tags: string[];
@@ -19,7 +20,6 @@ interface FolderWithPreview {
 
 async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
     const folders = await getFolders("gallery");
-    const { pullZone } = getCDNConfig();
 
     const results = await Promise.all(
         folders.map(async (folder) => {
@@ -38,9 +38,7 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
                 return {
                     name: folder.title,
                     route: `/gallery/${folder.title}`,
-                    previewUrl: previewImage
-                        ? `${pullZone}/${previewImage.path}`
-                        : null,
+                    previewPath: previewImage ? previewImage.path : null,
                     imageCount: displayImages.length,
                     description: metadata?.description || null,
                     tags: metadata?.tags || [],
@@ -49,7 +47,7 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
                 return {
                     name: folder.title,
                     route: `/gallery/${folder.title}`,
-                    previewUrl: null,
+                    previewPath: null,
                     imageCount: 0,
                     description: null,
                     tags: [],
@@ -88,12 +86,11 @@ export default async function GalleryPage() {
                         className={styles.folderCard}
                     >
                         <div className={styles.folderPreview}>
-                            {folder.previewUrl ? (
-                                <img
-                                    src={folder.previewUrl}
+                            {folder.previewPath ? (
+                                <FolderPreviewImage
+                                    thumbSrc={thumbUrl(folder.previewPath, "thumb")}
+                                    microSrc={thumbUrl(folder.previewPath, "micro")}
                                     alt={folder.name}
-                                    className={styles.folderPreviewImage}
-                                    loading="lazy"
                                 />
                             ) : (
                                 <div className={styles.folderPreviewEmpty}>

@@ -8,7 +8,8 @@
         "start": "next start",
         "lint": "next lint",
         "seed-local": "npx tsx scripts/seed-local.ts",
-        "update-cdn": "npx tsx --env-file=.env scripts/update-cdn.ts"
+        "update-cdn": "npx tsx --env-file=.env scripts/update-cdn.ts",
+        "generate-thumbs": "npx tsx --env-file=.env scripts/generate-thumbs.ts"
     },
     "dependencies": {
         "@mdx-js/loader": "^3.1.0",
@@ -31,6 +32,7 @@
         "@types/react-dom": "^19.2.3",
         "eslint": "^10.0.1",
         "eslint-config-next": "^0.2.4",
+        "sharp": "^0.34.5",
         "typescript": "^5"
     }
 }

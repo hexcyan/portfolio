@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./Works.module.css";
 import StickyHeader from "@/components/Gallery/StickyHeader";
 import WorksSubsectionComponent from "./WorksSubsection";
-import { getCDNConfig } from "@/lib/cdn";
+import { getCDNConfig, thumbUrl } from "@/lib/cdn";
 import type {
     WorksImage,
     WorksBlock,
@@ -35,6 +35,7 @@ export default function WorksSectionComponent({
     onBlockClick,
 }: WorksSectionProps) {
     const [spans, setSpans] = useState<Record<string, number>>({});
+    const [loadedThumbs, setLoadedThumbs] = useState<Set<string>>(new Set());
     const gridRef = useRef<HTMLDivElement>(null);
     const { pullZone } = getCDNConfig();
 
@@ -58,20 +59,17 @@ export default function WorksSectionComponent({
         []
     );
 
+    // Use micro images for span computation
     useEffect(() => {
         filteredImages.forEach((image) => {
             const key = imageKey(image);
             const img = new window.Image();
-            img.src = `${pullZone}/${key}`;
+            img.src = thumbUrl(key, "micro");
             img.onload = () => {
                 computeSpan(key, img.naturalWidth, img.naturalHeight);
             };
         });
-    }, [filteredImages, pullZone, computeSpan]);
-
-    function imageUrl(path: string) {
-        return `${pullZone}/${path}`;
-    }
+    }, [filteredImages, computeSpan]);
 
     function getTagColor(tagId: string): string | undefined {
         return tagDefs.find((t) => t.id === tagId)?.color;
@@ -129,6 +127,9 @@ export default function WorksSectionComponent({
                             const hasOverlay =
                                 image.caption || image.tags.length > 0 || image.date;
                             const isLink = !!image.url;
+                            const microSrc = thumbUrl(key, "micro");
+                            const thumbSrc = thumbUrl(key, "thumb");
+                            const isThumbLoaded = loadedThumbs.has(key);
 
                             function handleClick() {
                                 if (isLink) {
@@ -154,11 +155,29 @@ export default function WorksSectionComponent({
                                     onClick={handleClick}
                                 >
                                     <div className={styles.imageCellInner}>
+                                        {/* Blur-up micro placeholder */}
                                         <img
-                                            src={imageUrl(key)}
+                                            src={microSrc}
+                                            alt=""
+                                            aria-hidden="true"
+                                            className={`${styles.blurPlaceholder} ${isThumbLoaded ? styles.blurHidden : ""}`}
+                                        />
+                                        {/* Thumb image */}
+                                        <img
+                                            src={thumbSrc}
                                             alt={image.caption || key}
-                                            className={styles.imageCellImg}
+                                            className={`${styles.imageCellImg} ${isThumbLoaded ? styles.imageCellImgLoaded : ""}`}
                                             loading="lazy"
+                                            ref={(el) => {
+                                                if (el?.complete && el.naturalWidth > 0 && !loadedThumbs.has(key))
+                                                    setLoadedThumbs((prev) => new Set(prev).add(key));
+                                            }}
+                                            onLoad={() =>
+                                                setLoadedThumbs((prev) => {
+                                                    if (prev.has(key)) return prev;
+                                                    return new Set(prev).add(key);
+                                                })
+                                            }
                                         />
                                         {isLink && (
                                             <span className={styles.linkBadge}>&#x2197;</span>

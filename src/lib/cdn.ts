@@ -71,11 +71,13 @@ export async function getFolders(folderPath: string): Promise<IIcon[]> {
         }
         const data = (await response.json()) as BunnyStorageObject[];
 
-        const newdata = data.map((item) => ({
-            title: item.ObjectName,
-            type: "mypics",
-            route: `${folderPath}/${item.ObjectName}`,
-        }));
+        const newdata = data
+            .filter((item) => item.ObjectName !== "_thumbs")
+            .map((item) => ({
+                title: item.ObjectName,
+                type: "mypics",
+                route: `${folderPath}/${item.ObjectName}`,
+            }));
 
         // return folders
         return newdata;
@@ -102,7 +104,7 @@ export async function listFolder(folderPath: string) {
     const data = (await response.json()) as BunnyStorageObject[];
 
     const directories = data
-        .filter((item) => item.IsDirectory)
+        .filter((item) => item.IsDirectory && item.ObjectName !== "_thumbs")
         .map((item) => item.ObjectName);
 
     const images = data
@@ -126,4 +128,12 @@ export function getCDNConfig() {
         storageZone: process.env.CDN_STORAGE_ZONE || "",
         apiKey: process.env.CDN_API_KEY || "",
     };
+}
+
+export function thumbUrl(imagePath: string, size: "thumb" | "micro" = "thumb") {
+    const { pullZone } = getCDNConfig();
+    const dir = imagePath.substring(0, imagePath.lastIndexOf("/"));
+    const filename = imagePath.substring(imagePath.lastIndexOf("/") + 1);
+    const baseName = filename.replace(/\.[^.]+$/, "");
+    return `${pullZone}/${dir}/_thumbs/${baseName}.${size}.webp`;
 }

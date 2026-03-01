@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import styles from "./Gallery.module.css";
 import GalleryViewer from "./GalleryViewer";
 import Spinner from "@/components/Spinner";
-import { getCDNConfig } from "@/lib/cdn";
+import { getCDNConfig, thumbUrl } from "@/lib/cdn";
 import type { AlbumMetadata } from "@/lib/gallery-metadata";
 
 interface GalleryGridProps {
@@ -24,6 +24,7 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
     const [viewerOpen, setViewerOpen] = useState(false);
     const [viewerIndex, setViewerIndex] = useState(0);
     const [spans, setSpans] = useState<Record<string, number>>({});
+    const [loadedThumbs, setLoadedThumbs] = useState<Set<string>>(new Set());
     const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
     const gridRef = useRef<HTMLDivElement>(null);
 
@@ -76,25 +77,22 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
         []
     );
 
+    // Use micro images for span computation (tiny, fast to load)
     useEffect(() => {
         images.forEach((image) => {
             const img = new window.Image();
-            img.src = `${pullZone}/${image.path}`;
+            img.src = thumbUrl(image.path, "micro");
             img.onload = () => {
                 computeSpan(image.id, img.naturalWidth, img.naturalHeight);
             };
         });
-    }, [images, pullZone, computeSpan]);
+    }, [images, computeSpan]);
 
     function openViewer(index: number) {
         const image = filteredImages[index];
         const fullIndex = images.indexOf(image);
         setViewerIndex(fullIndex);
         setViewerOpen(true);
-    }
-
-    function imageUrl(path: string) {
-        return `${pullZone}/${path}`;
     }
 
     const hasAnySpan = Object.keys(spans).length > 0;
@@ -136,6 +134,9 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
                     const caption = imgMeta?.caption;
                     const imgTags = imgMeta?.tags;
                     const hasOverlay = caption || (imgTags && imgTags.length > 0);
+                    const microSrc = thumbUrl(image.path, "micro");
+                    const thumbSrc = thumbUrl(image.path, "thumb");
+                    const isThumbLoaded = loadedThumbs.has(image.id);
                     return (
                         <div
                             key={image.id}
@@ -148,11 +149,29 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
                             onClick={() => openViewer(i)}
                         >
                             <div className={styles.gridImageWrapper}>
+                                {/* Blur-up micro placeholder */}
                                 <img
-                                    src={imageUrl(image.path)}
+                                    src={microSrc}
+                                    alt=""
+                                    aria-hidden="true"
+                                    className={`${styles.gridPlaceholder} ${isThumbLoaded ? styles.gridPlaceholderHidden : ""}`}
+                                />
+                                {/* Thumb image */}
+                                <img
+                                    src={thumbSrc}
                                     alt={image.id}
-                                    className={styles.gridImage}
+                                    className={`${styles.gridThumb} ${isThumbLoaded ? styles.gridThumbLoaded : ""}`}
                                     loading="lazy"
+                                    ref={(el) => {
+                                        if (el?.complete && el.naturalWidth > 0 && !loadedThumbs.has(image.id))
+                                            setLoadedThumbs((prev) => new Set(prev).add(image.id));
+                                    }}
+                                    onLoad={() =>
+                                        setLoadedThumbs((prev) => {
+                                            if (prev.has(image.id)) return prev;
+                                            return new Set(prev).add(image.id);
+                                        })
+                                    }
                                 />
                                 {hasOverlay && (
                                     <div className={styles.imageCaption}>
