@@ -21,6 +21,9 @@ export default function FolderPreviewImage({ src, microSrc, alt }: FolderPreview
                 className={`${styles.folderPreviewImage} ${styles.folderPreviewPlaceholder}`}
             />
             <img
+                ref={(el) => {
+                    if (el?.complete && el.naturalWidth > 0) setLoaded(true);
+                }}
                 src={src}
                 alt={alt}
                 className={`${styles.folderPreviewImage} ${styles.folderPreviewThumb} ${loaded ? styles.folderPreviewLoaded : ""}`}

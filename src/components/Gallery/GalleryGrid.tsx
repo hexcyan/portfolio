@@ -105,7 +105,10 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
     }
 
     function markLoaded(id: string) {
-        setLoaded((prev) => ({ ...prev, [id]: true }));
+        setLoaded((prev) => {
+            if (prev[id]) return prev;
+            return { ...prev, [id]: true };
+        });
     }
 
     const hasAnySpan = Object.keys(spans).length > 0;
@@ -170,6 +173,9 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
                                 )}
                                 {/* Real thumbnail — fades in on load */}
                                 <img
+                                    ref={(el) => {
+                                        if (el?.complete && el.naturalWidth > 0) markLoaded(image.id);
+                                    }}
                                     src={thumbUrl(image.path)}
                                     alt={image.id}
                                     className={`${styles.gridImage} ${styles.gridThumb} ${loaded[image.id] ? styles.gridThumbLoaded : ""}`}
