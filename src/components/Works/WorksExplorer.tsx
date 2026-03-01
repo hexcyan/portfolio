@@ -203,26 +203,24 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
         if (viewMode === "sections") {
             for (const { subsections, images } of filteredSections) {
                 for (const sub of subsections) {
-                    blocks.push(...sub.blocks.filter((b) => b.type === "image" && !b.url));
+                    blocks.push(...sub.blocks.filter((b) => b.type === "image"));
                 }
                 // Loose images as blocks
                 for (const img of images) {
-                    if (!img.url) {
-                        blocks.push({
-                            type: "image",
-                            filename: img.filename,
-                            folder: img.folder,
-                            caption: img.caption,
-                            tags: img.tags,
-                            date: img.date,
-                            url: img.url,
-                        });
-                    }
+                    blocks.push({
+                        type: "image",
+                        filename: img.filename,
+                        folder: img.folder,
+                        caption: img.caption,
+                        tags: img.tags,
+                        date: img.date,
+                        url: img.url,
+                    });
                 }
             }
         } else {
             for (const sub of chronoSubsections) {
-                blocks.push(...sub.blocks.filter((b) => b.type === "image" && !b.url));
+                blocks.push(...sub.blocks.filter((b) => b.type === "image"));
             }
         }
         return blocks;
@@ -235,7 +233,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
     }, [viewMode, filteredSections]);
 
     // Total visible count
-    const visibleCount = allVisibleImageBlocks.length + (viewMode === "sections" ? allVisibleLooseImages.filter(i => !!i.url).length : 0);
+    const visibleCount = allVisibleImageBlocks.length;
 
     // Total counts
     const totalImages =
@@ -278,7 +276,6 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
     }, [allVisibleImageBlocks, metadata.tags]);
 
     function handleImageClick(image: WorksImage) {
-        if (image.url) return;
         const idx = allVisibleImageBlocks.findIndex(
             (b) => b.filename === image.filename && b.folder === image.folder
         );
@@ -289,7 +286,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
     }
 
     function handleBlockClick(block: WorksBlock) {
-        if (block.type !== "image" || block.url) return;
+        if (block.type !== "image") return;
         const idx = allVisibleImageBlocks.findIndex(
             (b) => b.filename === block.filename && b.folder === block.folder
         );

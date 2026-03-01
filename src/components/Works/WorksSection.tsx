@@ -131,12 +131,9 @@ export default function WorksSectionComponent({
                             const thumbSrc = thumbUrl(key, "thumb");
                             const isThumbLoaded = loadedThumbs.has(key);
 
-                            function handleClick() {
-                                if (isLink) {
-                                    window.open(image.url, "_blank", "noopener,noreferrer");
-                                } else {
-                                    onImageClick(image);
-                                }
+                            function handleLinkClick(e: React.MouseEvent) {
+                                e.stopPropagation();
+                                window.open(image.url, "_blank", "noopener,noreferrer");
                             }
 
                             return (
@@ -152,7 +149,7 @@ export default function WorksSectionComponent({
                                             ? `span ${spans[key]}`
                                             : "span 1",
                                     }}
-                                    onClick={handleClick}
+                                    onClick={() => onImageClick(image)}
                                 >
                                     <div className={styles.imageCellInner}>
                                         {/* Blur-up micro placeholder */}
@@ -180,7 +177,7 @@ export default function WorksSectionComponent({
                                             }
                                         />
                                         {isLink && (
-                                            <span className={styles.linkBadge}>&#x2197;</span>
+                                            <span className={styles.linkBadge} onClick={handleLinkClick}>&#x2197;</span>
                                         )}
                                         {hasOverlay && (
                                             <div className={styles.imageOverlay}>

@@ -58,12 +58,9 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
     const isLink = !!block.url;
     const hasOverlay = block.caption || block.tags.length > 0 || block.date;
 
-    function handleClick() {
-        if (isLink) {
-            window.open(block.url, "_blank", "noopener,noreferrer");
-        } else {
-            onClick();
-        }
+    function handleLinkClick(e: React.MouseEvent) {
+        e.stopPropagation();
+        window.open(block.url, "_blank", "noopener,noreferrer");
     }
 
     return (
@@ -72,7 +69,7 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
             className={`${styles.imageCell} ${span ? styles.imageCellReady : styles.imageCellPending
                 }`}
             style={{ gridRowEnd: span ? `span ${span}` : "span 1" }}
-            onClick={handleClick}
+            onClick={onClick}
         >
             <div className={styles.imageCellInner}>
                 {/* Blur-up micro placeholder */}
@@ -93,7 +90,7 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
                     }}
                     onLoad={() => { if (!thumbLoaded) setThumbLoaded(true); }}
                 />
-                {isLink && <span className={styles.linkBadge}>&#x2197;</span>}
+                {isLink && <span className={styles.linkBadge} onClick={handleLinkClick}>&#x2197;</span>}
                 {hasOverlay && (
                     <div className={styles.imageOverlay}>
                         {block.caption && (
