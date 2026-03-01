@@ -72,15 +72,12 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
     const filterBlocks = useCallback(
         (blocks: WorksBlock[]): WorksBlock[] => {
             return blocks.filter((block) => {
-                // Tag filter: only applies to image blocks
+                // Tag filter
                 if (activeTags.size > 0) {
-                    if (block.type === "image") {
-                        const hasAllTags = Array.from(activeTags).every((tag) =>
-                            block.tags.includes(tag)
-                        );
-                        if (!hasAllTags) return false;
-                    }
-                    // Non-image blocks pass tag filter (they have no tags)
+                    const hasAllTags = Array.from(activeTags).every((tag) =>
+                        block.tags.includes(tag)
+                    );
+                    if (!hasAllTags) return false;
                 }
 
                 // Search filter

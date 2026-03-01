@@ -2,11 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "../Works.module.css";
+import { MASONRY } from "../masonry.config";
 import type { WorksBlock } from "@/lib/works-metadata";
-
-const ROW_HEIGHT = 4;
-const GAP = 3;
-const DEFAULT_COLS = 2;
 
 interface TweetBlockProps {
     block: WorksBlock;
@@ -24,7 +21,7 @@ declare global {
 
 export default function TweetBlock({ block }: TweetBlockProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const cols = block.cols ?? DEFAULT_COLS;
+    const cols = block.cols ?? MASONRY.defaultEmbedCols;
     const [span, setSpan] = useState<number | null>(block.span ?? null);
 
     const measureSpan = useCallback(() => {
@@ -33,7 +30,7 @@ export default function TweetBlock({ block }: TweetBlockProps) {
         if (!el) return;
         const contentHeight = el.scrollHeight;
         if (contentHeight > 0) {
-            setSpan(Math.ceil(contentHeight / ROW_HEIGHT) + GAP);
+            setSpan(Math.ceil(contentHeight / MASONRY.rowHeight) + MASONRY.gap);
         }
     }, [block.span]);
 

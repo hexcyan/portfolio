@@ -28,6 +28,7 @@ export interface ContentBlock {
     videoId?: string;     // for youtube blocks
     tweetId?: string;     // for tweet blocks
     caption?: string;     // for youtube/tweet blocks
+    tags?: string[];      // per-block tags (youtube/tweet)
     span?: number;        // grid row span override (each unit = 4px)
     cols?: number;        // grid column span (1 or 2, default varies by type)
 }

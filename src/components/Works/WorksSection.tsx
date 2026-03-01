@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./Works.module.css";
+import { MASONRY } from "./masonry.config";
 import StickyHeader from "@/components/Gallery/StickyHeader";
 import WorksSubsectionComponent from "./WorksSubsection";
 import { getCDNConfig, thumbUrl } from "@/lib/cdn";
@@ -23,8 +24,6 @@ interface WorksSectionProps {
     onBlockClick: (block: WorksBlock) => void;
 }
 
-const ROW_HEIGHT = 4;
-const GAP = 3;
 
 export default function WorksSectionComponent({
     section,
@@ -50,10 +49,10 @@ export default function WorksSectionComponent({
                     gridStyles
                         .getPropertyValue("grid-template-columns")
                         .split(" ")[0]
-                ) || 260;
+                ) || MASONRY.columnFallback;
             const aspectRatio = naturalHeight / naturalWidth;
             const imageHeight = columnWidth * aspectRatio;
-            const span = Math.ceil(imageHeight / ROW_HEIGHT) + GAP;
+            const span = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
             setSpans((prev) => ({ ...prev, [key]: span }));
         },
         []

@@ -2,11 +2,9 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "../Works.module.css";
+import { MASONRY } from "../masonry.config";
 import type { WorksBlock } from "@/lib/works-metadata";
 
-const ROW_HEIGHT = 4;
-const GAP = 3;
-const DEFAULT_COLS = 2;
 const ASPECT_RATIO = 9 / 16;
 
 interface YouTubeBlockProps {
@@ -14,7 +12,7 @@ interface YouTubeBlockProps {
 }
 
 export default function YouTubeBlock({ block }: YouTubeBlockProps) {
-    const cols = block.cols ?? DEFAULT_COLS;
+    const cols = block.cols ?? MASONRY.defaultEmbedCols;
     const cellRef = useRef<HTMLDivElement>(null);
     const [span, setSpan] = useState<number | null>(block.span ?? null);
 
@@ -24,11 +22,11 @@ export default function YouTubeBlock({ block }: YouTubeBlockProps) {
         if (!grid) return;
         const gridStyles = window.getComputedStyle(grid);
         const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
-        const columnWidth = parseInt(colWidths[0]) || 260;
+        const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
         const totalWidth = columnWidth * cols + 12 * (cols - 1);
         const embedHeight = totalWidth * ASPECT_RATIO;
         const captionHeight = block.caption ? 24 : 0;
-        setSpan(Math.ceil((embedHeight + captionHeight + 8) / ROW_HEIGHT) + GAP);
+        setSpan(Math.ceil((embedHeight + captionHeight + 8) / MASONRY.rowHeight) + MASONRY.gap);
     }, [block.span, block.caption, cols]);
 
     useEffect(() => {

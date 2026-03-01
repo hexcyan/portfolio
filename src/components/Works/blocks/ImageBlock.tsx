@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import styles from "../Works.module.css";
+import { MASONRY } from "../masonry.config";
 import { thumbUrl } from "@/lib/cdn";
 import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
 
@@ -10,9 +11,6 @@ interface ImageBlockProps {
     tagDefs: WorksTagDef[];
     onClick: () => void;
 }
-
-const ROW_HEIGHT = 4;
-const GAP = 3;
 
 export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps) {
     const [span, setSpan] = useState<number | null>(null);
@@ -33,13 +31,13 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
         const columnWidth =
             parseInt(
                 gridStyles.getPropertyValue("grid-template-columns").split(" ")[0]
-            ) || 260;
+            ) || MASONRY.columnFallback;
         const img = new window.Image();
         img.src = microSrc;
         img.onload = () => {
             const aspectRatio = img.naturalHeight / img.naturalWidth;
             const imageHeight = columnWidth * aspectRatio;
-            setSpan(Math.ceil(imageHeight / ROW_HEIGHT) + GAP);
+            setSpan(Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap);
         };
     }, [microSrc]);
 

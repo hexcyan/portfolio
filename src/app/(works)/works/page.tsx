@@ -86,11 +86,12 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                             ...layout,
                         };
                     }
+                    const inheritedTags = [...new Set([...folderTags, ...subTags, ...(block.tags ?? [])])];
                     if (block.type === "text") {
                         return {
                             type: "text" as const,
                             content: block.content,
-                            tags: [],
+                            tags: inheritedTags,
                             ...layout,
                         };
                     }
@@ -99,7 +100,7 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                             type: "youtube" as const,
                             videoId: block.videoId,
                             caption: block.caption,
-                            tags: [],
+                            tags: inheritedTags,
                             ...layout,
                         };
                     }
@@ -108,7 +109,7 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                         type: "tweet" as const,
                         tweetId: block.tweetId,
                         caption: block.caption,
-                        tags: [],
+                        tags: inheritedTags,
                         ...layout,
                     };
                 });

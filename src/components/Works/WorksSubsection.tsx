@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import styles from "./Works.module.css";
+import { MASONRY } from "./masonry.config";
 import ImageBlock from "./blocks/ImageBlock";
 import TextBlock from "./blocks/TextBlock";
 import YouTubeBlock from "./blocks/YouTubeBlock";
@@ -38,7 +39,14 @@ export default function WorksSubsectionComponent({
                 </p>
             )}
 
-            <div className={styles.masonryGrid} ref={gridRef}>
+            <div
+                className={styles.masonryGrid}
+                ref={gridRef}
+                style={{
+                    "--masonry-col-min": `${MASONRY.columnMinWidth}px`,
+                    "--masonry-row-height": `${MASONRY.rowHeight}px`,
+                } as React.CSSProperties}
+            >
                 {subsection.blocks.map((block, i) => {
                     const key = block.type === "image"
                         ? `img-${block.filename}-${i}`
