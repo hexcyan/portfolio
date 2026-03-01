@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import styles from "./Gallery.module.css";
 import Spinner from "@/components/Spinner";
 import { getCDNConfig } from "@/lib/cdn";
@@ -128,14 +128,11 @@ export default function GalleryViewer({
                     </button>
                 )}
 
-                <Image
+                <img
                     key={current.path}
                     src={previewUrl}
                     alt={caption || current.id}
-                    width={1400}
-                    height={1000}
                     className={`${styles.previewImage} ${!imageLoaded ? styles.previewLoading : ""}`}
-                    priority
                     onLoad={() => setImageLoaded(true)}
                 />
 
