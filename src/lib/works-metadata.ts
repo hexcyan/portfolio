@@ -39,6 +39,7 @@ export interface WorksSubsectionMeta {
     description?: string;
     dateRange?: string;
     date?: string;
+    columnMinWidth?: number;
     tags?: string[];
     blocks: ContentBlock[];
 }
@@ -48,6 +49,7 @@ export interface WorksFolderMeta {
     description?: string;
     dateRange?: string;
     order?: number;
+    columnMinWidth?: number;
     tags?: string[];
     subsections?: WorksSubsectionMeta[];
     images: Record<string, WorksImageMeta>;
@@ -90,6 +92,7 @@ export interface WorksSubsection {
     description?: string;
     dateRange?: string;
     date?: string;
+    columnMinWidth?: number;
     sectionId: string;
     sectionTitle: string;
     blocks: WorksBlock[];
@@ -100,6 +103,7 @@ export interface WorksSection {
     title: string;
     description?: string;
     dateRange?: string;
+    columnMinWidth?: number;
     order: number;
     images: WorksImage[];
     subsections: WorksSubsection[];

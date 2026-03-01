@@ -107,6 +107,7 @@ export default function WorksSectionComponent({
                     <WorksSubsectionComponent
                         key={sub.id}
                         subsection={sub}
+                        sectionColumnMinWidth={section.columnMinWidth}
                         tagDefs={tagDefs}
                         onImageClick={onBlockClick}
                     />
@@ -120,7 +121,13 @@ export default function WorksSectionComponent({
                             <span className={styles.subsectionTitle}>Other</span>
                         </div>
                     )}
-                    <div className={styles.masonryGrid} ref={gridRef}>
+                    <div
+                        className={styles.masonryGrid}
+                        ref={gridRef}
+                        style={{
+                            "--masonry-col-min": `${section.columnMinWidth ?? MASONRY.columnMinWidth}px`,
+                        } as React.CSSProperties}
+                    >
                         {filteredImages.map((image) => {
                             const key = imageKey(image);
                             const hasOverlay =

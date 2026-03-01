@@ -23,10 +23,11 @@ export default function YouTubeBlock({ block }: YouTubeBlockProps) {
         const gridStyles = window.getComputedStyle(grid);
         const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
         const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
-        const totalWidth = columnWidth * cols + 12 * (cols - 1);
+        const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
+        const totalWidth = columnWidth * cols + colGap * (cols - 1);
         const embedHeight = totalWidth * ASPECT_RATIO;
         const captionHeight = block.caption ? 24 : 0;
-        setSpan(Math.ceil((embedHeight + captionHeight + 8) / MASONRY.rowHeight) + MASONRY.gap);
+        setSpan(Math.ceil((embedHeight + captionHeight) / MASONRY.rowHeight) + MASONRY.gap);
     }, [block.span, block.caption, cols]);
 
     useEffect(() => {

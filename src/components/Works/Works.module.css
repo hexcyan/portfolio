@@ -166,7 +166,7 @@
 /* ── Sections Container ── */
 .sectionsContainer {
     flex: 1;
-    padding: 20px 24px 48px;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -233,6 +233,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min, 320px), 1fr));
     grid-auto-rows: var(--masonry-row-height, 1px);
+    grid-auto-flow: dense;
     margin-top: 12px;
     width: 100%;
 }
@@ -456,7 +457,6 @@
 
 /* ── Embed Blocks ── */
 .embedBlock {
-    padding: 4px;
     position: relative;
     overflow: hidden;
 }
@@ -479,12 +479,12 @@
 }
 
 .tweetEmbed {
-    padding: 4px;
     width: 100%;
     overflow: visible;
 }
 
-.tweetEmbed>blockquote {
+.tweetEmbed>blockquote,
+.tweetEmbed>div {
     margin: 0 !important;
 }
 
@@ -563,7 +563,7 @@
     }
 
     .sectionsContainer {
-        padding: 12px 12px 32px;
+        padding: 0;
         gap: 28px;
     }
 
@@ -573,7 +573,6 @@
 
     .masonryGrid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 0 6px;
     }
 
     .imageOverlay {
@@ -584,13 +583,4 @@
         padding: 6px 12px;
     }
 
-    .embedBlock {
-        grid-column: 1 / -1;
-    }
-}
-
-@media only screen and (max-width: 480px) {
-    .masonryGrid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    }
 }

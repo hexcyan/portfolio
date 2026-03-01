@@ -19,10 +19,29 @@ declare global {
     }
 }
 
+const TWEET_MIN_WIDTH = 250;
+
 export default function TweetBlock({ block }: TweetBlockProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const cols = block.cols ?? MASONRY.defaultEmbedCols;
+    const baseCols = block.cols ?? MASONRY.defaultEmbedCols;
     const [span, setSpan] = useState<number | null>(block.span ?? null);
+    const [cols, setCols] = useState(baseCols);
+
+    const computeCols = useCallback(() => {
+        const grid = containerRef.current?.closest(`.${styles.masonryGrid}`) as HTMLElement | null;
+        if (!grid) return;
+        const gridStyles = window.getComputedStyle(grid);
+        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
+        const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
+        const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
+        const totalGridCols = colWidths.length;
+
+        let needed = baseCols;
+        while (needed < totalGridCols && columnWidth * needed + colGap * (needed - 1) < TWEET_MIN_WIDTH) {
+            needed++;
+        }
+        setCols(needed);
+    }, [baseCols]);
 
     const measureSpan = useCallback(() => {
         if (block.span) return;
@@ -33,6 +52,12 @@ export default function TweetBlock({ block }: TweetBlockProps) {
             setSpan(Math.ceil(contentHeight / MASONRY.rowHeight) + MASONRY.gap);
         }
     }, [block.span]);
+
+    useEffect(() => {
+        computeCols();
+        window.addEventListener("resize", computeCols);
+        return () => window.removeEventListener("resize", computeCols);
+    }, [computeCols]);
 
     useEffect(() => {
         if (!document.getElementById("twitter-wjs")) {

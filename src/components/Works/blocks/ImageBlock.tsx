@@ -24,25 +24,29 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
     const microSrc = thumbUrl(imagePath, "micro");
     const thumbSrc = thumbUrl(imagePath, "thumb");
 
+    const cols = block.cols ?? 1;
+
     const computeSpan = useCallback(() => {
         const grid = cellRef.current?.parentElement;
         if (!grid) return;
         const gridStyles = window.getComputedStyle(grid);
-        const columnWidth =
-            parseInt(
-                gridStyles.getPropertyValue("grid-template-columns").split(" ")[0]
-            ) || MASONRY.columnFallback;
+        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
+        const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
+        const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
+        const totalWidth = columnWidth * cols + colGap * (cols - 1);
         const img = new window.Image();
         img.src = microSrc;
         img.onload = () => {
             const aspectRatio = img.naturalHeight / img.naturalWidth;
-            const imageHeight = columnWidth * aspectRatio;
+            const imageHeight = totalWidth * aspectRatio;
             setSpan(Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap);
         };
-    }, [microSrc]);
+    }, [microSrc, cols]);
 
     useEffect(() => {
         computeSpan();
+        window.addEventListener("resize", computeSpan);
+        return () => window.removeEventListener("resize", computeSpan);
     }, [computeSpan]);
 
     function getTagColor(tagId: string): string | undefined {
@@ -66,7 +70,10 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
             ref={cellRef}
             className={`${styles.imageCell} ${span ? styles.imageCellReady : styles.imageCellPending
                 }`}
-            style={{ gridRowEnd: span ? `span ${span}` : "span 1" }}
+            style={{
+                gridRowEnd: span ? `span ${span}` : "span 1",
+                ...(cols > 1 ? { gridColumn: `span ${cols}` } : {}),
+            }}
             onClick={onClick}
         >
             <div className={styles.imageCellInner}>

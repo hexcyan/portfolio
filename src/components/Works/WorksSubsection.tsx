@@ -11,12 +11,14 @@ import type { WorksBlock, WorksSubsection, WorksTagDef } from "@/lib/works-metad
 
 interface WorksSubsectionProps {
     subsection: WorksSubsection;
+    sectionColumnMinWidth?: number;
     tagDefs: WorksTagDef[];
     onImageClick: (block: WorksBlock) => void;
 }
 
 export default function WorksSubsectionComponent({
     subsection,
+    sectionColumnMinWidth,
     tagDefs,
     onImageClick,
 }: WorksSubsectionProps) {
@@ -43,7 +45,7 @@ export default function WorksSubsectionComponent({
                 className={styles.masonryGrid}
                 ref={gridRef}
                 style={{
-                    "--masonry-col-min": `${MASONRY.columnMinWidth}px`,
+                    "--masonry-col-min": `${subsection.columnMinWidth ?? sectionColumnMinWidth ?? MASONRY.columnMinWidth}px`,
                     "--masonry-row-height": `${MASONRY.rowHeight}px`,
                 } as React.CSSProperties}
             >

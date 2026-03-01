@@ -1,5 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { getCDNConfig } from "@/lib/cdn";
+
+async function purgeCDNUrl(url: string) {
+    const accountKey = process.env.BUNNY_ACCOUNT_KEY;
+    if (!accountKey) return;
+    await fetch(
+        `https://api.bunny.net/purge?url=${encodeURIComponent(url)}`,
+        { method: "POST", headers: { AccessKey: accountKey } }
+    ).catch(() => {});
+}
 
 export async function POST(request: NextRequest) {
     const { folder, type } = (await request.json()) as {
@@ -9,6 +19,16 @@ export async function POST(request: NextRequest) {
 
     if (type === "works") {
         revalidatePath("/works");
+
+        // Purge metadata.json files from BunnyCDN edge cache
+        const { pullZone } = getCDNConfig();
+        if (pullZone) {
+            await purgeCDNUrl(`${pullZone}/works/metadata.json`);
+            if (folder) {
+                await purgeCDNUrl(`${pullZone}/works/${folder}/metadata.json`);
+            }
+        }
+
         return NextResponse.json({ revalidated: true, type: "works" });
     }
 
