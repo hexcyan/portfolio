@@ -153,15 +153,30 @@ async function processFolder(folder: string, force: boolean): Promise<{ processe
             continue;
         }
 
-        // Generate and upload each size
+        // Step 1: Explicitly orient based on EXIF, then output a clean buffer.
+        // We apply a specific rotation angle so sharp cannot reorder the operation.
+        const meta = await sharp(originalBuffer).metadata();
+        const orientation = meta.orientation || 1;
+
+        let orientPipeline = sharp(originalBuffer);
+        if (orientation === 2) orientPipeline = orientPipeline.flop();
+        else if (orientation === 3) orientPipeline = orientPipeline.rotate(180);
+        else if (orientation === 4) orientPipeline = orientPipeline.flip();
+        else if (orientation === 5) orientPipeline = orientPipeline.rotate(90).flop();
+        else if (orientation === 6) orientPipeline = orientPipeline.rotate(90);
+        else if (orientation === 7) orientPipeline = orientPipeline.rotate(270).flop();
+        else if (orientation === 8) orientPipeline = orientPipeline.rotate(270);
+
+        const orientedBuffer = await orientPipeline.withMetadata({ orientation: 1 }).toBuffer();
+
+        // Step 2: Resize the correctly-oriented image (no EXIF ambiguity)
         let allOk = true;
         for (const size of SIZES) {
             const outName = `${base}.${size.suffix}.webp`;
             const outPath = `${folder}/_thumbs/${outName}`;
 
             try {
-                const resized = await sharp(originalBuffer)
-                    .rotate() // auto-apply EXIF orientation
+                const resized = await sharp(orientedBuffer)
                     .resize({ width: size.width, withoutEnlargement: true })
                     .webp({ quality: size.quality })
                     .toBuffer();
