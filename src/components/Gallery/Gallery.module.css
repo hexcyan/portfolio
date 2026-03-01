@@ -47,22 +47,6 @@
     display: block;
 }
 
-.gridPlaceholder {
-    filter: blur(12px);
-    transform: scale(1.1);
-}
-
-.gridThumb {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.gridThumbLoaded {
-    opacity: 1;
-}
-
 /* ── Filmstrip Viewer Overlay ── */
 .viewerOverlay {
     position: fixed;
@@ -393,22 +377,6 @@
 
 .folderCard:hover .folderPreviewImage {
     transform: scale(1.04);
-}
-
-.folderPreviewPlaceholder {
-    filter: blur(12px);
-    transform: scale(1.1);
-}
-
-.folderPreviewThumb {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.folderPreviewLoaded {
-    opacity: 1;
 }
 
 .folderPreviewEmpty {

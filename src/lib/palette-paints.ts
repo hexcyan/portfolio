@@ -137,7 +137,7 @@ export function buildHolbeinPaints(
             code: `W${code}`,
             name: p.en_name,
             colorHex: holbeinHexMap[p.code] ?? "#CCCCCC",
-            imageUrl: `https://x65535.b-cdn.net/paints/hb/${p.code}.jpg?quality=45`,
+            imageUrl: `https://x65535.b-cdn.net/paints/hb/${p.code}.jpg`,
             pigments: p.pigments,
             stockSizes: stockMap[p.code] ?? [0, 0, 0, 0],
         };

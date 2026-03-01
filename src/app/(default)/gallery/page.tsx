@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getFolders, getImagesFromFolder, getCDNConfig } from "@/lib/cdn";
 import { getAlbumMetadata } from "@/lib/gallery-metadata";
 import StickyHeader from "@/components/Gallery/StickyHeader";
-import FolderPreviewImage from "@/components/Gallery/FolderPreviewImage";
+
 import styles from "@/components/Gallery/Gallery.module.css";
 
 // ISR: serve static, revalidate in background every hour as fallback
@@ -12,7 +12,6 @@ interface FolderWithPreview {
     name: string;
     route: string;
     previewUrl: string | null;
-    microUrl: string | null;
     imageCount: number;
     description: string | null;
     tags: string[];
@@ -40,10 +39,7 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
                     name: folder.title,
                     route: `/gallery/${folder.title}`,
                     previewUrl: previewImage
-                        ? `${pullZone}/${previewImage.path}?width=500&quality=50`
-                        : null,
-                    microUrl: previewImage
-                        ? `${pullZone}/${previewImage.path}?width=30&quality=10`
+                        ? `${pullZone}/${previewImage.path}`
                         : null,
                     imageCount: displayImages.length,
                     description: metadata?.description || null,
@@ -54,7 +50,6 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
                     name: folder.title,
                     route: `/gallery/${folder.title}`,
                     previewUrl: null,
-                    microUrl: null,
                     imageCount: 0,
                     description: null,
                     tags: [],
@@ -93,11 +88,12 @@ export default async function GalleryPage() {
                         className={styles.folderCard}
                     >
                         <div className={styles.folderPreview}>
-                            {folder.previewUrl && folder.microUrl ? (
-                                <FolderPreviewImage
+                            {folder.previewUrl ? (
+                                <img
                                     src={folder.previewUrl}
-                                    microSrc={folder.microUrl}
                                     alt={folder.name}
+                                    className={styles.folderPreviewImage}
+                                    loading="lazy"
                                 />
                             ) : (
                                 <div className={styles.folderPreviewEmpty}>

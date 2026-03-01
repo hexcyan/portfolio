@@ -4,6 +4,7 @@ export const links = [
     // "projects",
     "blog",
     "gallery",
+    "works",
     "tools",
 ];
 
@@ -40,6 +41,11 @@ export const files: IIcon[] = [
         title: "gallery",
         type: "folder",
         route: "/gallery",
+    },
+    {
+        title: "works",
+        type: "folder",
+        route: "/works",
     },
     {
         title: "this site",

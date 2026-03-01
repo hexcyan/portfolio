@@ -44,3 +44,6 @@ next-env.d.ts
 
 # gallery admin (local-only)
 /src/app/(default)/gallery/admin/
+
+# works admin (local-only)
+/src/app/(works)/works/admin/

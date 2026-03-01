@@ -17,7 +17,7 @@ export default function PaintCard({ paint, inStock, stockSizes }: PaintCardProps
     const stainingSymbol = paintSymbols.staining[paint.staining];
     const paintCode = paint.code.toString().padStart(3, "0");
 
-    const imgUrl = `https://x65535.b-cdn.net/paints/hb/${paint.code}.jpg?quality=45`;
+    const imgUrl = `https://x65535.b-cdn.net/paints/hb/${paint.code}.jpg`;
 
     return (
         <div className={styles.paint__card}>

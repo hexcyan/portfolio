@@ -24,7 +24,6 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
     const [viewerOpen, setViewerOpen] = useState(false);
     const [viewerIndex, setViewerIndex] = useState(0);
     const [spans, setSpans] = useState<Record<string, number>>({});
-    const [loaded, setLoaded] = useState<Record<string, boolean>>({});
     const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
     const gridRef = useRef<HTMLDivElement>(null);
 
@@ -77,11 +76,10 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
         []
     );
 
-    // Load micro-thumbnails for instant aspect ratio + blur placeholder
     useEffect(() => {
         images.forEach((image) => {
             const img = new window.Image();
-            img.src = `${pullZone}/${image.path}?width=30&quality=10`;
+            img.src = `${pullZone}/${image.path}`;
             img.onload = () => {
                 computeSpan(image.id, img.naturalWidth, img.naturalHeight);
             };
@@ -89,26 +87,14 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
     }, [images, pullZone, computeSpan]);
 
     function openViewer(index: number) {
-        // Map filtered index to full images index for the viewer
         const image = filteredImages[index];
         const fullIndex = images.indexOf(image);
         setViewerIndex(fullIndex);
         setViewerOpen(true);
     }
 
-    function microUrl(path: string) {
-        return `${pullZone}/${path}?width=30&quality=10`;
-    }
-
-    function thumbUrl(path: string) {
-        return `${pullZone}/${path}?width=400&quality=45`;
-    }
-
-    function markLoaded(id: string) {
-        setLoaded((prev) => {
-            if (prev[id]) return prev;
-            return { ...prev, [id]: true };
-        });
+    function imageUrl(path: string) {
+        return `${pullZone}/${path}`;
     }
 
     const hasAnySpan = Object.keys(spans).length > 0;
@@ -162,25 +148,11 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
                             onClick={() => openViewer(i)}
                         >
                             <div className={styles.gridImageWrapper}>
-                                {/* Blurred micro placeholder */}
-                                {spans[image.id] && (
-                                    <img
-                                        src={microUrl(image.path)}
-                                        alt=""
-                                        aria-hidden="true"
-                                        className={`${styles.gridImage} ${styles.gridPlaceholder}`}
-                                    />
-                                )}
-                                {/* Real thumbnail — fades in on load */}
                                 <img
-                                    ref={(el) => {
-                                        if (el?.complete && el.naturalWidth > 0) markLoaded(image.id);
-                                    }}
-                                    src={thumbUrl(image.path)}
+                                    src={imageUrl(image.path)}
                                     alt={image.id}
-                                    className={`${styles.gridImage} ${styles.gridThumb} ${loaded[image.id] ? styles.gridThumbLoaded : ""}`}
+                                    className={styles.gridImage}
                                     loading="lazy"
-                                    onLoad={() => markLoaded(image.id)}
                                 />
                                 {hasOverlay && (
                                     <div className={styles.imageCaption}>

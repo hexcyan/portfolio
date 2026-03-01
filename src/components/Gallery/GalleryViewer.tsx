@@ -28,7 +28,7 @@ export default function GalleryViewer({
     const { pullZone } = getCDNConfig();
 
     const current = images[currentIndex];
-    const previewUrl = `${pullZone}/${current.path}?width=1400&quality=90`;
+    const previewUrl = `${pullZone}/${current.path}`;
     const total = images.length;
 
     const imgMeta = metadata?.images?.[current.id];
@@ -90,7 +90,7 @@ export default function GalleryViewer({
     }
 
     function thumbUrl(path: string) {
-        return `${pullZone}/${path}?width=120&quality=40`;
+        return `${pullZone}/${path}`;
     }
 
     return (
