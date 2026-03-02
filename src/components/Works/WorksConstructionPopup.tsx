@@ -15,6 +15,9 @@ export default function WorksConstructionPopup() {
                 position: "fixed",
                 inset: 0,
                 zIndex: 1000,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 backgroundColor: "rgba(0, 0, 0, 0.6)",
             }}
         >
