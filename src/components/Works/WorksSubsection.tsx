@@ -7,6 +7,7 @@ import ImageBlock from "./blocks/ImageBlock";
 import TextBlock from "./blocks/TextBlock";
 import YouTubeBlock from "./blocks/YouTubeBlock";
 import TweetBlock from "./blocks/TweetBlock";
+import GridBlock from "./blocks/GridBlock";
 import type { WorksBlock, WorksSubsection, WorksTagDef } from "@/lib/works-metadata";
 
 interface WorksSubsectionProps {
@@ -18,7 +19,11 @@ interface WorksSubsectionProps {
     onImageClick: (block: WorksBlock) => void;
 }
 
-const ALIGN_MAP = { left: "start", center: "center", right: "end" } as const;
+const JUSTIFY_MAP = {
+    left: "start",
+    center: "center",
+    right: "end",
+} as const;
 
 export default function WorksSubsectionComponent({
     subsection,
@@ -32,9 +37,9 @@ export default function WorksSubsectionComponent({
 
     const colMin = subsection.columnMinWidth ?? sectionColumnMinWidth ?? MASONRY.columnMinWidth;
     const colMinMobile = MASONRY.columnMinWidthMobile;
-    const maxColumns = subsection.maxColumns ?? sectionMaxColumns ?? MASONRY.maxColumns;
+    const maxColumns = subsection.maxColumns ?? sectionMaxColumns;
     const align = subsection.align ?? sectionAlign;
-    const maxWidth = maxColumns * colMin;
+    const maxWidth = maxColumns ? maxColumns * colMin : undefined;
 
     return (
         <div className={styles.subsectionBlock}>
@@ -60,8 +65,16 @@ export default function WorksSubsectionComponent({
                     "--masonry-col-min": `${colMin}px`,
                     "--masonry-col-min-mobile": `${colMinMobile}px`,
                     "--masonry-row-height": `${MASONRY.rowHeight}px`,
-                    "--masonry-max-width": `${maxWidth}px`,
-                    "--masonry-align": align ? ALIGN_MAP[align] : "start",
+                    ...(maxWidth ? { "--masonry-max-width": `${maxWidth}px` } : {}),
+                    ...(align ? {
+                        "--masonry-justify": JUSTIFY_MAP[align],
+                        "--masonry-col-max": `${colMin}px`,
+                        ...(maxWidth ? {
+                            marginInlineStart: align === "right" ? "auto" : undefined,
+                            marginInlineEnd: align === "left" ? "auto" : undefined,
+                            ...(align === "center" ? { marginInline: "auto" } : {}),
+                        } : {}),
+                    } : {}),
                 } as React.CSSProperties}
             >
                 {subsection.blocks.map((block, i) => {
@@ -85,6 +98,14 @@ export default function WorksSubsectionComponent({
                             return <YouTubeBlock key={key} block={block} />;
                         case "tweet":
                             return <TweetBlock key={key} block={block} />;
+                        case "grid":
+                            return (
+                                <GridBlock
+                                    key={key}
+                                    block={block}
+                                    onImageClick={onImageClick}
+                                />
+                            );
                         default:
                             return null;
                     }

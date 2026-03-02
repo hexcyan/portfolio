@@ -104,6 +104,27 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                             ...layout,
                         };
                     }
+                    if (block.type === "grid" && block.blocks) {
+                        const children = block.blocks.map((child) => {
+                            assignedFilenames.add(child.filename);
+                            const imgMeta = meta.images[child.filename];
+                            return {
+                                filename: child.filename,
+                                folder,
+                                caption: child.caption ?? imgMeta?.caption,
+                                tags: [...new Set([...folderTags, ...subTags, ...(child.tags ?? []), ...(imgMeta?.tags ?? [])])],
+                                date: imgMeta?.date,
+                                url: imgMeta?.url,
+                            };
+                        });
+                        return {
+                            type: "grid" as const,
+                            layout: block.layout,
+                            children,
+                            tags: inheritedTags,
+                            ...layout,
+                        };
+                    }
                     // tweet
                     return {
                         type: "tweet" as const,

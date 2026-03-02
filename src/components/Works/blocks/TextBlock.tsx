@@ -39,8 +39,16 @@ export default function TextBlock({ block }: TextBlockProps) {
 
     useEffect(() => {
         computeLayout();
-        window.addEventListener("resize", computeLayout);
-        return () => window.removeEventListener("resize", computeLayout);
+
+        const grid = cellRef.current?.parentElement;
+        if (!grid) return;
+
+        const observer = new ResizeObserver(() => {
+            requestAnimationFrame(computeLayout);
+        });
+        observer.observe(grid);
+
+        return () => observer.disconnect();
     }, [computeLayout]);
 
     return (

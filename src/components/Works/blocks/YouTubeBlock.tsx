@@ -27,9 +27,9 @@ export default function YouTubeBlock({ block }: YouTubeBlockProps) {
         setCols(effectiveCols);
 
         const gridStyles = window.getComputedStyle(grid);
-        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
-        const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
-        const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
+        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
+        const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
+        const colGap = parseFloat(gridStyles.getPropertyValue("column-gap")) || 0;
         const totalWidth = columnWidth * effectiveCols + colGap * (effectiveCols - 1);
         const embedHeight = totalWidth * ASPECT_RATIO;
         const captionHeight = block.caption ? 24 : 0;
@@ -38,8 +38,16 @@ export default function YouTubeBlock({ block }: YouTubeBlockProps) {
 
     useEffect(() => {
         computeSpan();
-        window.addEventListener("resize", computeSpan);
-        return () => window.removeEventListener("resize", computeSpan);
+
+        const grid = cellRef.current?.parentElement;
+        if (!grid) return;
+
+        const observer = new ResizeObserver(() => {
+            requestAnimationFrame(computeSpan);
+        });
+        observer.observe(grid);
+
+        return () => observer.disconnect();
     }, [computeSpan]);
 
     return (

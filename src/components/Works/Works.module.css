@@ -231,13 +231,13 @@
 /* Keep in sync with masonry.config.ts */
 .masonryGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min, 320px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min, 320px), var(--masonry-col-max, 1fr)));
     grid-auto-rows: var(--masonry-row-height, 1px);
     grid-auto-flow: dense;
+    justify-content: var(--masonry-justify, start);
     margin-top: 12px;
     width: 100%;
     max-width: var(--masonry-max-width, none);
-    justify-self: var(--masonry-align, start);
 }
 
 /* ── Image Cell ── */
@@ -457,6 +457,55 @@
     overflow: visible;
 }
 
+/* ── Grid Block ── */
+.gridBlock {
+    overflow: hidden;
+    position: relative;
+    transition: opacity 0.4s ease;
+}
+
+.gridBlockPending {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.gridBlockReady {
+    opacity: 1;
+}
+
+/* Inner grid — columns, rows, and gaps are set via inline style
+   to mirror the parent masonry grid's track sizing. */
+.gridBlockInner {
+    display: grid;
+    width: 100%;
+    height: 100%;
+}
+
+.gridChildCell {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.gridChildCell:hover {
+    filter: brightness(1.08);
+}
+
+.gridChildImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.gridChildImgLoaded {
+    opacity: 1;
+}
+
 /* ── Embed Blocks ── */
 .embedBlock {
     position: relative;
@@ -574,7 +623,7 @@
     }
 
     .masonryGrid {
-        grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min-mobile, 220px), 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min-mobile, 220px), var(--masonry-col-max, 1fr)));
     }
 
     .imageOverlay {

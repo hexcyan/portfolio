@@ -15,9 +15,9 @@ export function computeBlockCols(
     maxCols?: number,
 ): number {
     const gridStyles = window.getComputedStyle(grid);
-    const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
-    const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
-    const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
+    const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
+    const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
+    const colGap = parseFloat(gridStyles.getPropertyValue("column-gap")) || 0;
     const totalGridCols = colWidths.length;
 
     let needed = baseCols;

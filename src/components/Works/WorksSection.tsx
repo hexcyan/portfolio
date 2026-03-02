@@ -40,35 +40,51 @@ export default function WorksSectionComponent({
 
     const imageKey = (img: WorksImage) => getWorksImagePath(img);
 
-    const computeSpan = useCallback(
-        (key: string, naturalWidth: number, naturalHeight: number) => {
-            if (!gridRef.current) return;
-            const gridStyles = window.getComputedStyle(gridRef.current);
-            const columnWidth =
-                parseInt(
-                    gridStyles
-                        .getPropertyValue("grid-template-columns")
-                        .split(" ")[0]
-                ) || MASONRY.columnFallback;
-            const aspectRatio = naturalHeight / naturalWidth;
-            const imageHeight = columnWidth * aspectRatio;
-            const span = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
-            setSpans((prev) => ({ ...prev, [key]: span }));
-        },
-        []
-    );
+    // Cache aspect ratios so resizes compute synchronously
+    const ratiosRef = useRef<Record<string, number>>({});
 
-    // Use micro images for span computation
+    const recomputeAllSpans = useCallback(() => {
+        if (!gridRef.current) return;
+        const gridStyles = window.getComputedStyle(gridRef.current);
+        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
+        const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
+
+        const next: Record<string, number> = {};
+        for (const [key, ratio] of Object.entries(ratiosRef.current)) {
+            const imageHeight = columnWidth * ratio;
+            next[key] = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
+        }
+        setSpans(next);
+    }, []);
+
+    // Load micro images to get aspect ratios, then compute spans
     useEffect(() => {
         filteredImages.forEach((image) => {
             const key = imageKey(image);
+            if (ratiosRef.current[key] !== undefined) return; // already cached
             const img = new window.Image();
             img.src = thumbUrl(key, "micro");
             img.onload = () => {
-                computeSpan(key, img.naturalWidth, img.naturalHeight);
+                ratiosRef.current[key] = img.naturalHeight / img.naturalWidth;
+                recomputeAllSpans();
             };
         });
-    }, [filteredImages, computeSpan]);
+        // Recompute for already-cached ratios (handles image list changes)
+        recomputeAllSpans();
+    }, [filteredImages, recomputeAllSpans]);
+
+    // Recompute spans when grid resizes
+    useEffect(() => {
+        const grid = gridRef.current;
+        if (!grid) return;
+
+        const observer = new ResizeObserver(() => {
+            requestAnimationFrame(recomputeAllSpans);
+        });
+        observer.observe(grid);
+
+        return () => observer.disconnect();
+    }, [recomputeAllSpans]);
 
     function getTagColor(tagId: string): string | undefined {
         return tagDefs.find((t) => t.id === tagId)?.color;

@@ -46,8 +46,16 @@ export default function TweetBlock({ block }: TweetBlockProps) {
 
     useEffect(() => {
         computeCols();
-        window.addEventListener("resize", computeCols);
-        return () => window.removeEventListener("resize", computeCols);
+
+        const grid = containerRef.current?.closest(`.${styles.masonryGrid}`) as HTMLElement | null;
+        if (!grid) return;
+
+        const observer = new ResizeObserver(() => {
+            requestAnimationFrame(computeCols);
+        });
+        observer.observe(grid);
+
+        return () => observer.disconnect();
     }, [computeCols]);
 
     useEffect(() => {

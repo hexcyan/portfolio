@@ -28,6 +28,9 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
     const baseCols = block.cols ?? 1;
     const [cols, setCols] = useState(baseCols);
 
+    // Cache aspect ratio so resizes compute synchronously (no async onload race)
+    const aspectRatioRef = useRef<number | null>(null);
+
     const computeSpan = useCallback(() => {
         const grid = cellRef.current?.parentElement;
         if (!grid) return;
@@ -39,23 +42,41 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
         setCols(effectiveCols);
 
         const gridStyles = window.getComputedStyle(grid);
-        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ");
-        const columnWidth = parseInt(colWidths[0]) || MASONRY.columnFallback;
-        const colGap = parseInt(gridStyles.getPropertyValue("column-gap")) || 0;
+        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
+        const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
+        const colGap = parseFloat(gridStyles.getPropertyValue("column-gap")) || 0;
         const totalWidth = columnWidth * effectiveCols + colGap * (effectiveCols - 1);
+
+        // If aspect ratio is cached, compute synchronously
+        if (aspectRatioRef.current !== null) {
+            const imageHeight = totalWidth * aspectRatioRef.current;
+            setSpan(Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap);
+            return;
+        }
+
+        // First load: fetch micro image to get aspect ratio, then cache it
         const img = new window.Image();
         img.src = microSrc;
         img.onload = () => {
-            const aspectRatio = img.naturalHeight / img.naturalWidth;
-            const imageHeight = totalWidth * aspectRatio;
+            const ratio = img.naturalHeight / img.naturalWidth;
+            aspectRatioRef.current = ratio;
+            const imageHeight = totalWidth * ratio;
             setSpan(Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap);
         };
     }, [microSrc, baseCols, block.maxCols]);
 
     useEffect(() => {
         computeSpan();
-        window.addEventListener("resize", computeSpan);
-        return () => window.removeEventListener("resize", computeSpan);
+
+        const grid = cellRef.current?.parentElement;
+        if (!grid) return;
+
+        const observer = new ResizeObserver(() => {
+            requestAnimationFrame(computeSpan);
+        });
+        observer.observe(grid);
+
+        return () => observer.disconnect();
     }, [computeSpan]);
 
     function getTagColor(tagId: string): string | undefined {

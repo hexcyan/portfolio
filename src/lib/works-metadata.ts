@@ -21,8 +21,14 @@ export interface WorksImageMeta {
     url?: string;
 }
 
+export interface GridChildBlock {
+    filename: string;
+    caption?: string;
+    tags?: string[];
+}
+
 export interface ContentBlock {
-    type: "image" | "text" | "youtube" | "tweet";
+    type: "image" | "text" | "youtube" | "tweet" | "grid";
     filename?: string;    // for image blocks
     content?: string;     // for text blocks
     videoId?: string;     // for youtube blocks
@@ -32,6 +38,8 @@ export interface ContentBlock {
     span?: number;        // grid row span override (each unit = 4px)
     cols?: number;        // grid column span (1 or 2, default varies by type)
     maxCols?: number;     // max columns this block can span
+    layout?: "quad";      // for grid blocks
+    blocks?: GridChildBlock[]; // for grid blocks
 }
 
 export interface WorksSubsectionMeta {
@@ -72,8 +80,17 @@ export interface WorksImage {
     date?: string;
 }
 
+export interface WorksGridChild {
+    filename: string;
+    folder: string;
+    caption?: string;
+    tags: string[];
+    date?: string;
+    url?: string;
+}
+
 export interface WorksBlock {
-    type: "image" | "text" | "youtube" | "tweet";
+    type: "image" | "text" | "youtube" | "tweet" | "grid";
     // Image fields (resolved from images dict)
     filename?: string;
     folder?: string;
@@ -90,6 +107,9 @@ export interface WorksBlock {
     span?: number;        // grid row span override (each unit = 4px)
     cols?: number;        // grid column span (1 or 2)
     maxCols?: number;     // max columns this block can span
+    // Grid fields
+    layout?: string;
+    children?: WorksGridChild[];
 }
 
 export interface WorksSubsection {

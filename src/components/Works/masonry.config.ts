@@ -16,6 +16,6 @@ export const MASONRY = {
     textMinWidth: 200,
     /** Minimum width for tweet blocks before they expand columns (px). */
     tweetMinWidth: 250,
-    /** Default maximum grid columns for a subsection. */
-    maxColumns: 6,
+    /** Default column-span for grid blocks. */
+    defaultGridCols: 2,
 } as const;
