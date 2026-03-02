@@ -62,7 +62,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
+    /* Prevent scrolling */
 }
 
 .contentBox {
@@ -87,10 +88,11 @@ footer.titlebar {
 
 .popupWindow {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    margin: auto;
+    max-width: calc(100vw - 32px);
     width: fit-content;
+    height: fit-content;
     font-family: "RedHatMono", monospace;
     line-height: 1.5;
 }
@@ -108,3 +110,14 @@ footer.titlebar {
         height: 100%;
     }
 }
+
+/* @media only screen and (max-width: 480px) {
+    .popupWindow {
+        inset: 0 16px;
+    }
+
+    .popupWindow .contentBox {
+        gap: 16px;
+        padding: 16px 20px;
+    }
+} */
