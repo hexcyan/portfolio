@@ -44,14 +44,18 @@ export default function WorksSubsectionComponent({
 
     return (
         <div className={styles.subsectionBlock}>
-            <div className={styles.subsectionHeader}>
-                <span className={styles.subsectionTitle}>{subsection.title}</span>
-                {subsection.dateRange && (
-                    <span className={styles.subsectionDateRange}>
-                        {subsection.dateRange}
-                    </span>
-                )}
-            </div>
+            {(subsection.title || subsection.dateRange) && (
+                <div className={styles.subsectionHeader}>
+                    {subsection.title && (
+                        <span className={styles.subsectionTitle}>{subsection.title}</span>
+                    )}
+                    {subsection.dateRange && (
+                        <span className={styles.subsectionDateRange}>
+                            {subsection.dateRange}
+                        </span>
+                    )}
+                </div>
+            )}
 
             {subsection.description && (
                 <p className={styles.subsectionDescription}>

@@ -46,4 +46,7 @@ next-env.d.ts
 /src/app/(default)/gallery/admin/
 
 # works admin (local-only)
-/src/app/(works)/works/admin/
+/src/app/(works)/board/admin/
+
+# works admin API routes (local-only)
+/src/app/api/works-*/

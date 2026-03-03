@@ -196,6 +196,7 @@ export default function WorksSectionComponent({
     const gridRef = useRef<HTMLDivElement>(null);
 
     const hasSubsections = filteredSubsections.length > 0;
+    const hasSubsectionsWithTitles = filteredSubsections.some(sub => !!sub.title);
     const hasLooseImages = filteredImages.length > 0;
 
     return (
@@ -235,7 +236,7 @@ export default function WorksSectionComponent({
             {/* Render loose/unassigned images (not in any subsection) */}
             {hasLooseImages && (
                 <>
-                    {hasSubsections && (
+                    {hasSubsectionsWithTitles && (
                         <div className={styles.subsectionHeader}>
                             <span className={styles.subsectionTitle}>Other</span>
                         </div>
