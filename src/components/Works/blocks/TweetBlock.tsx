@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
 import { computeBlockCols } from "./grid-utils";
+import { useMasonryGrid } from "../MasonryContext";
 import type { WorksBlock } from "@/lib/works-metadata";
 
 interface TweetBlockProps {
@@ -24,15 +25,9 @@ export default function TweetBlock({ block }: TweetBlockProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const baseCols = block.cols ?? MASONRY.defaultEmbedCols;
     const [span, setSpan] = useState<number | null>(block.span ?? null);
-    const [cols, setCols] = useState(baseCols);
+    const m = useMasonryGrid();
 
-    const computeCols = useCallback(() => {
-        const grid = containerRef.current?.closest(`.${styles.masonryGrid}`) as HTMLElement | null;
-        if (!grid) return;
-
-        const needed = computeBlockCols(grid, baseCols, MASONRY.tweetMinWidth, block.maxCols);
-        setCols(needed);
-    }, [baseCols, block.maxCols]);
+    const cols = m ? computeBlockCols(m, baseCols, MASONRY.tweetMinWidth, block.maxCols) : baseCols;
 
     const measureSpan = useCallback(() => {
         if (block.span) return;
@@ -43,20 +38,6 @@ export default function TweetBlock({ block }: TweetBlockProps) {
             setSpan(Math.ceil(contentHeight / MASONRY.rowHeight) + MASONRY.gap);
         }
     }, [block.span]);
-
-    useEffect(() => {
-        computeCols();
-
-        const grid = containerRef.current?.closest(`.${styles.masonryGrid}`) as HTMLElement | null;
-        if (!grid) return;
-
-        const observer = new ResizeObserver(() => {
-            requestAnimationFrame(computeCols);
-        });
-        observer.observe(grid);
-
-        return () => observer.disconnect();
-    }, [computeCols]);
 
     useEffect(() => {
         if (!document.getElementById("twitter-wjs")) {
@@ -79,6 +60,7 @@ export default function TweetBlock({ block }: TweetBlockProps) {
         return () => clearInterval(interval);
     }, [block.tweetId]);
 
+    // Self-ResizeObserver for tweet widget height (this is measuring the tweet content, not the grid)
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;

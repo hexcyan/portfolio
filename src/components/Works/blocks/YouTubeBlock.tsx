@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
 import { computeBlockCols } from "./grid-utils";
+import { useMasonryGrid } from "../MasonryContext";
 import type { WorksBlock } from "@/lib/works-metadata";
 
 const ASPECT_RATIO = 9 / 16;
@@ -14,45 +14,24 @@ interface YouTubeBlockProps {
 
 export default function YouTubeBlock({ block }: YouTubeBlockProps) {
     const baseCols = block.cols ?? MASONRY.defaultEmbedCols;
-    const cellRef = useRef<HTMLDivElement>(null);
-    const [span, setSpan] = useState<number | null>(block.span ?? null);
-    const [cols, setCols] = useState(baseCols);
+    const m = useMasonryGrid();
 
-    const computeSpan = useCallback(() => {
-        if (block.span) return;
-        const grid = cellRef.current?.parentElement;
-        if (!grid) return;
+    let span: number | null = block.span ?? null;
+    let cols = baseCols;
 
-        const effectiveCols = computeBlockCols(grid, baseCols, 0, block.maxCols);
-        setCols(effectiveCols);
+    if (m) {
+        cols = computeBlockCols(m, baseCols, 0, block.maxCols);
 
-        const gridStyles = window.getComputedStyle(grid);
-        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
-        const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
-        const colGap = parseFloat(gridStyles.getPropertyValue("column-gap")) || 0;
-        const totalWidth = columnWidth * effectiveCols + colGap * (effectiveCols - 1);
-        const embedHeight = totalWidth * ASPECT_RATIO;
-        const captionHeight = block.caption ? 24 : 0;
-        setSpan(Math.ceil((embedHeight + captionHeight) / MASONRY.rowHeight) + MASONRY.gap);
-    }, [block.span, block.caption, block.maxCols, baseCols]);
-
-    useEffect(() => {
-        computeSpan();
-
-        const grid = cellRef.current?.parentElement;
-        if (!grid) return;
-
-        const observer = new ResizeObserver(() => {
-            requestAnimationFrame(computeSpan);
-        });
-        observer.observe(grid);
-
-        return () => observer.disconnect();
-    }, [computeSpan]);
+        if (!block.span) {
+            const totalWidth = m.columnWidth * cols + m.colGap * (cols - 1);
+            const embedHeight = totalWidth * ASPECT_RATIO;
+            const captionHeight = block.caption ? 24 : 0;
+            span = Math.ceil((embedHeight + captionHeight) / MASONRY.rowHeight) + MASONRY.gap;
+        }
+    }
 
     return (
         <div
-            ref={cellRef}
             className={styles.embedBlock}
             style={{
                 gridRowEnd: span ? `span ${span}` : "span 1",

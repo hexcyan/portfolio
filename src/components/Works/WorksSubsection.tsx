@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import styles from "./Works.module.css";
 import { MASONRY } from "./masonry.config";
+import { MasonryProvider } from "./MasonryContext";
 import ImageBlock from "./blocks/ImageBlock";
 import TextBlock from "./blocks/TextBlock";
 import YouTubeBlock from "./blocks/YouTubeBlock";
@@ -77,39 +78,42 @@ export default function WorksSubsectionComponent({
                     } : {}),
                 } as React.CSSProperties}
             >
-                {subsection.blocks.map((block, i) => {
-                    const key = block.type === "image"
-                        ? `img-${block.filename}-${i}`
-                        : `${block.type}-${i}`;
+                <MasonryProvider gridRef={gridRef}>
+                    {subsection.blocks.map((block, i) => {
+                        const key = block.type === "image"
+                            ? `img-${block.filename}-${i}`
+                            : `${block.type}-${i}`;
 
-                    switch (block.type) {
-                        case "image":
-                            return (
-                                <ImageBlock
-                                    key={key}
-                                    block={block}
-                                    tagDefs={tagDefs}
-                                    onClick={() => onImageClick(block)}
-                                />
-                            );
-                        case "text":
-                            return <TextBlock key={key} block={block} />;
-                        case "youtube":
-                            return <YouTubeBlock key={key} block={block} />;
-                        case "tweet":
-                            return <TweetBlock key={key} block={block} />;
-                        case "grid":
-                            return (
-                                <GridBlock
-                                    key={key}
-                                    block={block}
-                                    onImageClick={onImageClick}
-                                />
-                            );
-                        default:
-                            return null;
-                    }
-                })}
+                        switch (block.type) {
+                            case "image":
+                                return (
+                                    <ImageBlock
+                                        key={key}
+                                        block={block}
+                                        tagDefs={tagDefs}
+                                        onClick={() => onImageClick(block)}
+                                    />
+                                );
+                            case "text":
+                                return <TextBlock key={key} block={block} />;
+                            case "youtube":
+                                return <YouTubeBlock key={key} block={block} />;
+                            case "tweet":
+                                return <TweetBlock key={key} block={block} />;
+                            case "grid":
+                                return (
+                                    <GridBlock
+                                        key={key}
+                                        block={block}
+                                        tagDefs={tagDefs}
+                                        onImageClick={onImageClick}
+                                    />
+                                );
+                            default:
+                                return null;
+                        }
+                    })}
+                </MasonryProvider>
             </div>
         </div>
     );

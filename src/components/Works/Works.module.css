@@ -326,7 +326,7 @@
     left: 0;
     right: 0;
     padding: 20px 8px 6px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+    background: linear-gradient(transparent, rgba(23, 29, 106, 0.82));
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
@@ -491,6 +491,14 @@
 
 .gridChildCell:hover {
     filter: brightness(1.08);
+}
+
+.gridChildCell .imageCellInner {
+    height: 100%;
+}
+
+.gridChildCell:hover .imageOverlay {
+    opacity: 1;
 }
 
 .gridChildImg {

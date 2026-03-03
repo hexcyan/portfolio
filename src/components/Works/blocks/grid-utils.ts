@@ -1,24 +1,22 @@
-import { MASONRY } from "../masonry.config";
+import type { MasonryMeasurements } from "../MasonryContext";
 
 /**
  * Compute how many grid columns a block should span.
  *
+ * Pure function — accepts pre-measured grid values, zero DOM access.
+ *
  * Handles three concerns:
  *  1. Expand to meet a minimum pixel width
- *  2. Expand to fill awkward leftover columns (e.g. 2-col in 3-col grid → 3)
+ *  2. Expand to fill awkward leftover columns (e.g. 2-col in 3-col grid -> 3)
  *  3. Cap at maxCols / total grid columns
  */
 export function computeBlockCols(
-    grid: HTMLElement,
+    m: MasonryMeasurements,
     baseCols: number,
     minWidth: number = 0,
     maxCols?: number,
 ): number {
-    const gridStyles = window.getComputedStyle(grid);
-    const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
-    const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
-    const colGap = parseFloat(gridStyles.getPropertyValue("column-gap")) || 0;
-    const totalGridCols = colWidths.length;
+    const { columnWidth, colGap, totalGridCols } = m;
 
     let needed = baseCols;
 

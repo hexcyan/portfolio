@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
 import { computeBlockCols } from "./grid-utils";
+import { useMasonryGrid } from "../MasonryContext";
 import { thumbUrl } from "@/lib/cdn";
 import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
 
@@ -11,12 +12,13 @@ interface ImageBlockProps {
     block: WorksBlock;
     tagDefs: WorksTagDef[];
     onClick: () => void;
+    /** When true, skip masonry positioning — image fills its parent cell with object-fit: cover */
+    contained?: boolean;
 }
 
-export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps) {
-    const [span, setSpan] = useState<number | null>(null);
+export default function ImageBlock({ block, tagDefs, onClick, contained }: ImageBlockProps) {
     const [thumbLoaded, setThumbLoaded] = useState(false);
-    const cellRef = useRef<HTMLDivElement>(null);
+    const m = useMasonryGrid();
 
     const imagePath = block.folder
         ? `works/${block.folder}/${block.filename}`
@@ -26,58 +28,36 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
     const thumbSrc = thumbUrl(imagePath, "thumb");
 
     const baseCols = block.cols ?? 1;
-    const [cols, setCols] = useState(baseCols);
 
     // Cache aspect ratio so resizes compute synchronously (no async onload race)
     const aspectRatioRef = useRef<number | null>(null);
+    const [aspectRatio, setAspectRatio] = useState<number | null>(null);
 
-    const computeSpan = useCallback(() => {
-        const grid = cellRef.current?.parentElement;
-        if (!grid) return;
-
-        // Smart column expansion for multi-col images
-        const effectiveCols = baseCols > 1
-            ? computeBlockCols(grid, baseCols, 0, block.maxCols)
-            : baseCols;
-        setCols(effectiveCols);
-
-        const gridStyles = window.getComputedStyle(grid);
-        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
-        const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
-        const colGap = parseFloat(gridStyles.getPropertyValue("column-gap")) || 0;
-        const totalWidth = columnWidth * effectiveCols + colGap * (effectiveCols - 1);
-
-        // If aspect ratio is cached, compute synchronously
-        if (aspectRatioRef.current !== null) {
-            const imageHeight = totalWidth * aspectRatioRef.current;
-            setSpan(Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap);
-            return;
-        }
-
-        // First load: fetch micro image to get aspect ratio, then cache it
+    // Load micro image once to get aspect ratio (skip when contained — not needed)
+    useEffect(() => {
+        if (contained) return;
+        if (aspectRatioRef.current !== null) return;
         const img = new window.Image();
         img.src = microSrc;
         img.onload = () => {
             const ratio = img.naturalHeight / img.naturalWidth;
             aspectRatioRef.current = ratio;
-            const imageHeight = totalWidth * ratio;
-            setSpan(Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap);
+            setAspectRatio(ratio);
         };
-    }, [microSrc, baseCols, block.maxCols]);
+    }, [microSrc, contained]);
 
-    useEffect(() => {
-        computeSpan();
+    let span: number | null = null;
+    let cols = baseCols;
 
-        const grid = cellRef.current?.parentElement;
-        if (!grid) return;
+    if (!contained && m && aspectRatio !== null) {
+        cols = baseCols > 1
+            ? computeBlockCols(m, baseCols, 0, block.maxCols)
+            : baseCols;
 
-        const observer = new ResizeObserver(() => {
-            requestAnimationFrame(computeSpan);
-        });
-        observer.observe(grid);
-
-        return () => observer.disconnect();
-    }, [computeSpan]);
+        const totalWidth = m.columnWidth * cols + m.colGap * (cols - 1);
+        const imageHeight = totalWidth * aspectRatio;
+        span = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
+    }
 
     function getTagColor(tagId: string): string | undefined {
         return tagDefs.find((t) => t.id === tagId)?.color;
@@ -95,15 +75,25 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
         window.open(block.url, "_blank", "noopener,noreferrer");
     }
 
+    const cellClass = contained
+        ? styles.gridChildCell
+        : `${styles.imageCell} ${span ? styles.imageCellReady : styles.imageCellPending}`;
+
+    const imgClass = contained
+        ? `${styles.gridChildImg} ${thumbLoaded ? styles.gridChildImgLoaded : ""}`
+        : `${styles.imageCellImg} ${thumbLoaded ? styles.imageCellImgLoaded : ""}`;
+
+    const cellStyle = contained
+        ? undefined
+        : {
+            gridRowEnd: span ? `span ${span}` : "span 1",
+            ...(cols > 1 ? { gridColumn: `span ${cols}` } : {}),
+        };
+
     return (
         <div
-            ref={cellRef}
-            className={`${styles.imageCell} ${span ? styles.imageCellReady : styles.imageCellPending
-                }`}
-            style={{
-                gridRowEnd: span ? `span ${span}` : "span 1",
-                ...(cols > 1 ? { gridColumn: `span ${cols}` } : {}),
-            }}
+            className={cellClass}
+            style={cellStyle}
             onClick={onClick}
         >
             <div className={styles.imageCellInner}>
@@ -118,7 +108,7 @@ export default function ImageBlock({ block, tagDefs, onClick }: ImageBlockProps)
                 <img
                     src={thumbSrc}
                     alt={block.caption || block.filename || ""}
-                    className={`${styles.imageCellImg} ${thumbLoaded ? styles.imageCellImgLoaded : ""}`}
+                    className={imgClass}
                     loading="lazy"
                     ref={(el) => {
                         if (el?.complete && el.naturalWidth > 0 && !thumbLoaded) setThumbLoaded(true);

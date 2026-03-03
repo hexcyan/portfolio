@@ -194,13 +194,32 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
         );
     }, [viewMode, metadata.sections, filterSubsections]);
 
-    // Collect all visible image blocks for lightbox
+    // Collect all visible image blocks for lightbox (including grid children)
     const allVisibleImageBlocks = useMemo(() => {
         const blocks: WorksBlock[] = [];
+        function collectFromBlocks(blockList: WorksBlock[]) {
+            for (const b of blockList) {
+                if (b.type === "image") {
+                    blocks.push(b);
+                } else if (b.type === "grid" && b.children) {
+                    for (const child of b.children) {
+                        blocks.push({
+                            type: "image",
+                            filename: child.filename,
+                            folder: child.folder,
+                            caption: child.caption,
+                            tags: child.tags,
+                            date: child.date,
+                            url: child.url,
+                        });
+                    }
+                }
+            }
+        }
         if (viewMode === "sections") {
             for (const { subsections, images } of filteredSections) {
                 for (const sub of subsections) {
-                    blocks.push(...sub.blocks.filter((b) => b.type === "image"));
+                    collectFromBlocks(sub.blocks);
                 }
                 // Loose images as blocks
                 for (const img of images) {
@@ -217,7 +236,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
             }
         } else {
             for (const sub of chronoSubsections) {
-                blocks.push(...sub.blocks.filter((b) => b.type === "image"));
+                collectFromBlocks(sub.blocks);
             }
         }
         return blocks;

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./Works.module.css";
 import { MASONRY } from "./masonry.config";
+import { MasonryProvider, useMasonryGrid } from "./MasonryContext";
 import StickyHeader from "@/components/Gallery/StickyHeader";
 import WorksSubsectionComponent from "./WorksSubsection";
 import { getCDNConfig, thumbUrl } from "@/lib/cdn";
@@ -24,19 +25,18 @@ interface WorksSectionProps {
     onBlockClick: (block: WorksBlock) => void;
 }
 
+/* ── Loose image grid (lives inside MasonryProvider) ─────────────── */
 
-export default function WorksSectionComponent({
-    section,
-    filteredImages,
-    filteredSubsections,
-    tagDefs,
-    onImageClick,
-    onBlockClick,
-}: WorksSectionProps) {
+interface LooseImageGridProps {
+    filteredImages: WorksImage[];
+    tagDefs: WorksTagDef[];
+    onImageClick: (image: WorksImage) => void;
+}
+
+function LooseImageGrid({ filteredImages, tagDefs, onImageClick }: LooseImageGridProps) {
     const [spans, setSpans] = useState<Record<string, number>>({});
     const [loadedThumbs, setLoadedThumbs] = useState<Set<string>>(new Set());
-    const gridRef = useRef<HTMLDivElement>(null);
-    const { pullZone } = getCDNConfig();
+    const m = useMasonryGrid();
 
     const imageKey = (img: WorksImage) => getWorksImagePath(img);
 
@@ -44,24 +44,20 @@ export default function WorksSectionComponent({
     const ratiosRef = useRef<Record<string, number>>({});
 
     const recomputeAllSpans = useCallback(() => {
-        if (!gridRef.current) return;
-        const gridStyles = window.getComputedStyle(gridRef.current);
-        const colWidths = gridStyles.getPropertyValue("grid-template-columns").split(" ").filter(w => w !== "0px");
-        const columnWidth = parseFloat(colWidths[0]) || MASONRY.columnFallback;
-
+        if (!m) return;
         const next: Record<string, number> = {};
         for (const [key, ratio] of Object.entries(ratiosRef.current)) {
-            const imageHeight = columnWidth * ratio;
+            const imageHeight = m.columnWidth * ratio;
             next[key] = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
         }
         setSpans(next);
-    }, []);
+    }, [m]);
 
     // Load micro images to get aspect ratios, then compute spans
     useEffect(() => {
         filteredImages.forEach((image) => {
             const key = imageKey(image);
-            if (ratiosRef.current[key] !== undefined) return; // already cached
+            if (ratiosRef.current[key] !== undefined) return;
             const img = new window.Image();
             img.src = thumbUrl(key, "micro");
             img.onload = () => {
@@ -73,18 +69,10 @@ export default function WorksSectionComponent({
         recomputeAllSpans();
     }, [filteredImages, recomputeAllSpans]);
 
-    // Recompute spans when grid resizes
+    // Recompute when measurements change
     useEffect(() => {
-        const grid = gridRef.current;
-        if (!grid) return;
-
-        const observer = new ResizeObserver(() => {
-            requestAnimationFrame(recomputeAllSpans);
-        });
-        observer.observe(grid);
-
-        return () => observer.disconnect();
-    }, [recomputeAllSpans]);
+        recomputeAllSpans();
+    }, [m, recomputeAllSpans]);
 
     function getTagColor(tagId: string): string | undefined {
         return tagDefs.find((t) => t.id === tagId)?.color;
@@ -93,6 +81,119 @@ export default function WorksSectionComponent({
     function getTagLabel(tagId: string): string {
         return tagDefs.find((t) => t.id === tagId)?.label ?? tagId;
     }
+
+    return (
+        <>
+            {filteredImages.map((image) => {
+                const key = imageKey(image);
+                const hasOverlay =
+                    image.caption || image.tags.length > 0 || image.date;
+                const isLink = !!image.url;
+                const microSrc = thumbUrl(key, "micro");
+                const thumbSrc = thumbUrl(key, "thumb");
+                const isThumbLoaded = loadedThumbs.has(key);
+
+                function handleLinkClick(e: React.MouseEvent) {
+                    e.stopPropagation();
+                    window.open(image.url, "_blank", "noopener,noreferrer");
+                }
+
+                return (
+                    <div
+                        key={key}
+                        className={`${styles.imageCell} ${
+                            spans[key]
+                                ? styles.imageCellReady
+                                : styles.imageCellPending
+                        }`}
+                        style={{
+                            gridRowEnd: spans[key]
+                                ? `span ${spans[key]}`
+                                : "span 1",
+                        }}
+                        onClick={() => onImageClick(image)}
+                    >
+                        <div className={styles.imageCellInner}>
+                            {/* Blur-up micro placeholder */}
+                            <img
+                                src={microSrc}
+                                alt=""
+                                aria-hidden="true"
+                                className={`${styles.blurPlaceholder} ${isThumbLoaded ? styles.blurHidden : ""}`}
+                            />
+                            {/* Thumb image */}
+                            <img
+                                src={thumbSrc}
+                                alt={image.caption || key}
+                                className={`${styles.imageCellImg} ${isThumbLoaded ? styles.imageCellImgLoaded : ""}`}
+                                loading="lazy"
+                                ref={(el) => {
+                                    if (el?.complete && el.naturalWidth > 0 && !loadedThumbs.has(key))
+                                        setLoadedThumbs((prev) => new Set(prev).add(key));
+                                }}
+                                onLoad={() =>
+                                    setLoadedThumbs((prev) => {
+                                        if (prev.has(key)) return prev;
+                                        return new Set(prev).add(key);
+                                    })
+                                }
+                            />
+                            {isLink && (
+                                <span className={styles.linkBadge} onClick={handleLinkClick}>&#x2197;</span>
+                            )}
+                            {hasOverlay && (
+                                <div className={styles.imageOverlay}>
+                                    {image.caption && (
+                                        <span className={styles.overlayCaption}>
+                                            {image.caption}
+                                        </span>
+                                    )}
+                                    {image.date && (
+                                        <span className={styles.overlayDate}>
+                                            {image.date}
+                                        </span>
+                                    )}
+                                    {image.tags.length > 0 && (
+                                        <span className={styles.overlayTags}>
+                                            {image.tags.map((tagId) => (
+                                                <span
+                                                    key={tagId}
+                                                    className={styles.overlayTag}
+                                                    style={
+                                                        getTagColor(tagId)
+                                                            ? {
+                                                                  borderColor: getTagColor(tagId),
+                                                                  color: getTagColor(tagId),
+                                                              }
+                                                            : undefined
+                                                    }
+                                                >
+                                                    {getTagLabel(tagId)}
+                                                </span>
+                                            ))}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            })}
+        </>
+    );
+}
+
+/* ── Main section component ──────────────────────────────────────── */
+
+export default function WorksSectionComponent({
+    section,
+    filteredImages,
+    filteredSubsections,
+    tagDefs,
+    onImageClick,
+    onBlockClick,
+}: WorksSectionProps) {
+    const gridRef = useRef<HTMLDivElement>(null);
 
     const hasSubsections = filteredSubsections.length > 0;
     const hasLooseImages = filteredImages.length > 0;
@@ -146,101 +247,13 @@ export default function WorksSectionComponent({
                             "--masonry-col-min": `${section.columnMinWidth ?? MASONRY.columnMinWidth}px`,
                         } as React.CSSProperties}
                     >
-                        {filteredImages.map((image) => {
-                            const key = imageKey(image);
-                            const hasOverlay =
-                                image.caption || image.tags.length > 0 || image.date;
-                            const isLink = !!image.url;
-                            const microSrc = thumbUrl(key, "micro");
-                            const thumbSrc = thumbUrl(key, "thumb");
-                            const isThumbLoaded = loadedThumbs.has(key);
-
-                            function handleLinkClick(e: React.MouseEvent) {
-                                e.stopPropagation();
-                                window.open(image.url, "_blank", "noopener,noreferrer");
-                            }
-
-                            return (
-                                <div
-                                    key={key}
-                                    className={`${styles.imageCell} ${
-                                        spans[key]
-                                            ? styles.imageCellReady
-                                            : styles.imageCellPending
-                                    }`}
-                                    style={{
-                                        gridRowEnd: spans[key]
-                                            ? `span ${spans[key]}`
-                                            : "span 1",
-                                    }}
-                                    onClick={() => onImageClick(image)}
-                                >
-                                    <div className={styles.imageCellInner}>
-                                        {/* Blur-up micro placeholder */}
-                                        <img
-                                            src={microSrc}
-                                            alt=""
-                                            aria-hidden="true"
-                                            className={`${styles.blurPlaceholder} ${isThumbLoaded ? styles.blurHidden : ""}`}
-                                        />
-                                        {/* Thumb image */}
-                                        <img
-                                            src={thumbSrc}
-                                            alt={image.caption || key}
-                                            className={`${styles.imageCellImg} ${isThumbLoaded ? styles.imageCellImgLoaded : ""}`}
-                                            loading="lazy"
-                                            ref={(el) => {
-                                                if (el?.complete && el.naturalWidth > 0 && !loadedThumbs.has(key))
-                                                    setLoadedThumbs((prev) => new Set(prev).add(key));
-                                            }}
-                                            onLoad={() =>
-                                                setLoadedThumbs((prev) => {
-                                                    if (prev.has(key)) return prev;
-                                                    return new Set(prev).add(key);
-                                                })
-                                            }
-                                        />
-                                        {isLink && (
-                                            <span className={styles.linkBadge} onClick={handleLinkClick}>&#x2197;</span>
-                                        )}
-                                        {hasOverlay && (
-                                            <div className={styles.imageOverlay}>
-                                                {image.caption && (
-                                                    <span className={styles.overlayCaption}>
-                                                        {image.caption}
-                                                    </span>
-                                                )}
-                                                {image.date && (
-                                                    <span className={styles.overlayDate}>
-                                                        {image.date}
-                                                    </span>
-                                                )}
-                                                {image.tags.length > 0 && (
-                                                    <span className={styles.overlayTags}>
-                                                        {image.tags.map((tagId) => (
-                                                            <span
-                                                                key={tagId}
-                                                                className={styles.overlayTag}
-                                                                style={
-                                                                    getTagColor(tagId)
-                                                                        ? {
-                                                                              borderColor: getTagColor(tagId),
-                                                                              color: getTagColor(tagId),
-                                                                          }
-                                                                        : undefined
-                                                                }
-                                                            >
-                                                                {getTagLabel(tagId)}
-                                                            </span>
-                                                        ))}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            );
-                        })}
+                        <MasonryProvider gridRef={gridRef}>
+                            <LooseImageGrid
+                                filteredImages={filteredImages}
+                                tagDefs={tagDefs}
+                                onImageClick={onImageClick}
+                            />
+                        </MasonryProvider>
                     </div>
                 </>
             )}

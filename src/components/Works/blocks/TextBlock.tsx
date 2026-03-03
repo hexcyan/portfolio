@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
 import { computeBlockCols } from "./grid-utils";
+import { useMasonryGrid } from "../MasonryContext";
 import type { WorksBlock } from "@/lib/works-metadata";
 
 interface TextBlockProps {
@@ -12,21 +13,17 @@ interface TextBlockProps {
 
 export default function TextBlock({ block }: TextBlockProps) {
     const baseCols = block.cols ?? 1;
-    const cellRef = useRef<HTMLDivElement>(null);
     const innerRef = useRef<HTMLDivElement>(null);
     const [span, setSpan] = useState<number | null>(block.span ?? null);
-    const [cols, setCols] = useState(baseCols);
+    const m = useMasonryGrid();
 
-    const computeLayout = useCallback(() => {
-        const grid = cellRef.current?.parentElement;
-        if (!grid) return;
+    const cols = m ? computeBlockCols(m, baseCols, MASONRY.textMinWidth, block.maxCols) : baseCols;
 
-        const needed = computeBlockCols(grid, baseCols, MASONRY.textMinWidth, block.maxCols);
-        setCols(needed);
-
-        // Measure span after layout settles
+    // Re-measure scrollHeight when grid measurements change (column width affects text reflow)
+    useEffect(() => {
+        if (block.span) return;
+        // Wait one frame for the new column span to apply before measuring
         requestAnimationFrame(() => {
-            if (block.span) return;
             const el = innerRef.current;
             if (!el) return;
             const contentHeight = el.scrollHeight;
@@ -35,25 +32,10 @@ export default function TextBlock({ block }: TextBlockProps) {
                 setSpan(Math.ceil((contentHeight + extra) / MASONRY.rowHeight));
             }
         });
-    }, [block.span, block.content, block.maxCols, baseCols]);
-
-    useEffect(() => {
-        computeLayout();
-
-        const grid = cellRef.current?.parentElement;
-        if (!grid) return;
-
-        const observer = new ResizeObserver(() => {
-            requestAnimationFrame(computeLayout);
-        });
-        observer.observe(grid);
-
-        return () => observer.disconnect();
-    }, [computeLayout]);
+    }, [m, cols, block.span, block.content]);
 
     return (
         <div
-            ref={cellRef}
             className={styles.textBlock}
             style={{
                 gridRowEnd: span ? `span ${span}` : "span 1",
