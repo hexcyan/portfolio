@@ -19,9 +19,12 @@
     display: flex;
     align-items: center;
 }
+
 .filelink__filename {
     margin-top: 8px;
     max-width: inherit;
     text-overflow: ellipsis;
     margin-bottom: 0;
+    font-family: "TahomaXP", "Courier New", Courier, monospace;
+    font-size: 1.25rem
 }

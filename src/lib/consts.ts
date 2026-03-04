@@ -39,12 +39,12 @@ export const files: IIcon[] = [
     },
     {
         title: "gallery",
-        type: "folder",
+        type: "gallery",
         route: "/gallery",
     },
     {
         title: "board",
-        type: "folder",
+        type: "thumbnail",
         route: "/board",
     },
     {
