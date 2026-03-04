@@ -1,7 +1,7 @@
 /** Shared masonry grid constants — single source of truth. */
 export const MASONRY = {
     /** Height of each implicit grid row (px). Smaller = finer span granularity. */
-    rowHeight: 1,
+    rowHeight: 2,
     /** Extra rows added to each span calculation (breathing room). */
     gap: 0,
     /** Minimum column width before the grid wraps to fewer columns (px). */

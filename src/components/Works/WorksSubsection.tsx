@@ -73,7 +73,6 @@ export default function WorksSubsectionComponent({
                     ...(maxWidth ? { "--masonry-max-width": `${maxWidth}px` } : {}),
                     ...(align ? {
                         "--masonry-justify": JUSTIFY_MAP[align],
-                        "--masonry-col-max": `${colMin}px`,
                         ...(maxWidth ? {
                             marginInlineStart: align === "right" ? "auto" : undefined,
                             marginInlineEnd: align === "left" ? "auto" : undefined,

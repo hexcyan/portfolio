@@ -231,8 +231,8 @@
 /* Keep in sync with masonry.config.ts */
 .masonryGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min, 320px), var(--masonry-col-max, 1fr)));
-    grid-auto-rows: var(--masonry-row-height, 1px);
+    grid-template-columns: repeat(auto-fit, minmax(var(--masonry-col-min), var(--masonry-col-max, 1fr)));
+    grid-auto-rows: var(--masonry-row-height);
     grid-auto-flow: dense;
     justify-content: var(--masonry-justify, start);
     margin-top: 12px;
@@ -631,7 +631,7 @@
     }
 
     .masonryGrid {
-        grid-template-columns: repeat(auto-fill, minmax(var(--masonry-col-min-mobile, 220px), var(--masonry-col-max, 1fr)));
+        grid-template-columns: repeat(auto-fit, minmax(var(--masonry-col-min-mobile), var(--masonry-col-max, 1fr)));
     }
 
     .imageOverlay {

@@ -47,7 +47,7 @@ function LooseImageGrid({ filteredImages, tagDefs, onImageClick }: LooseImageGri
         if (!m) return;
         const next: Record<string, number> = {};
         for (const [key, ratio] of Object.entries(ratiosRef.current)) {
-            const imageHeight = m.columnWidth * ratio;
+            const imageHeight = m.columnWidth * ratio * MASONRY.rowHeight;
             next[key] = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
         }
         setSpans(next);
@@ -101,11 +101,10 @@ function LooseImageGrid({ filteredImages, tagDefs, onImageClick }: LooseImageGri
                 return (
                     <div
                         key={key}
-                        className={`${styles.imageCell} ${
-                            spans[key]
-                                ? styles.imageCellReady
-                                : styles.imageCellPending
-                        }`}
+                        className={`${styles.imageCell} ${spans[key]
+                            ? styles.imageCellReady
+                            : styles.imageCellPending
+                            }`}
                         style={{
                             gridRowEnd: spans[key]
                                 ? `span ${spans[key]}`
@@ -162,9 +161,9 @@ function LooseImageGrid({ filteredImages, tagDefs, onImageClick }: LooseImageGri
                                                     style={
                                                         getTagColor(tagId)
                                                             ? {
-                                                                  borderColor: getTagColor(tagId),
-                                                                  color: getTagColor(tagId),
-                                                              }
+                                                                borderColor: getTagColor(tagId),
+                                                                color: getTagColor(tagId),
+                                                            }
                                                             : undefined
                                                     }
                                                 >
@@ -246,6 +245,7 @@ export default function WorksSectionComponent({
                         ref={gridRef}
                         style={{
                             "--masonry-col-min": `${section.columnMinWidth ?? MASONRY.columnMinWidth}px`,
+                            "--masonry-col-min-mobile": `${section.columnMinWidth ?? MASONRY.columnMinWidthMobile}px`,
                         } as React.CSSProperties}
                     >
                         <MasonryProvider gridRef={gridRef}>

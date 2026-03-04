@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
 import { computeBlockCols } from "./grid-utils";
