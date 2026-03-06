@@ -428,6 +428,8 @@ export default function PaletteBuilderPage({ allPaints, layouts, curatedPalettes
                     onToggleCompact={toggleCompact}
                     onChangeCustomCols={(v) => changeCustomDimension("customCols", v)}
                     onChangeCustomRows={(v) => changeCustomDimension("customRows", v)}
+                    customPanSize={state.customPanSize}
+                    onChangeCustomPanSize={changeCustomPanSize}
                     canUndo={canUndo}
                     onUndo={undo}
                 />

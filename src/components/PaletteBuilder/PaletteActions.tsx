@@ -1,7 +1,7 @@
 "use client";
 
 import { PalettePaint } from "@/lib/palette-paints";
-import { PaletteLayout, generateManifest, validateStock } from "@/lib/palettes";
+import { PaletteLayout, PanSizeId, generateManifest, validateStock } from "@/lib/palettes";
 import styles from "./PaletteBuilder.module.css";
 import { useState } from "react";
 import SwatchCardModal from "./SwatchCardModal";
@@ -13,6 +13,7 @@ interface PaletteActionsProps {
     cols: number;
     rows: number;
     onClearAll: () => void;
+    panSizeOverride?: PanSizeId;
 }
 
 export default function PaletteActions({
@@ -22,11 +23,12 @@ export default function PaletteActions({
     cols,
     rows,
     onClearAll,
+    panSizeOverride
 }: PaletteActionsProps) {
     const [copied, setCopied] = useState(false);
     const [swatchCardOpen, setSwatchCardOpen] = useState(false);
     const filledSlots = slots.filter((s) => s !== null);
-    const { allInStock, outOfStock } = validateStock(slots, allPaints, layout);
+    const { allInStock, outOfStock } = validateStock(slots, allPaints, layout, panSizeOverride);
     const isEmpty = filledSlots.length === 0;
 
     async function handleOrder() {
@@ -73,7 +75,7 @@ export default function PaletteActions({
                     onClick={() => setSwatchCardOpen(true)}
                 >
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style={{ flexShrink: 0 }}>
-                        <path d="M4 1h8v3H4V1zm-1 4a2 2 0 00-2 2v4h3v3h8v-3h3V7a2 2 0 00-2-2H3zm2 6V9h6v5H5v-3z"/>
+                        <path d="M4 1h8v3H4V1zm-1 4a2 2 0 00-2 2v4h3v3h8v-3h3V7a2 2 0 00-2-2H3zm2 6V9h6v5H5v-3z" />
                     </svg>
                     Swatch Card
                 </button>

@@ -23,6 +23,15 @@ export function getPanSize(layout: PaletteLayout): PanSize {
     return panSizes[layout.panSize];
 }
 
+export function getValidSizes(panSize: PanSizeId): number[] {
+    switch (panSize) {
+        case "mini": return [0, 1, 2, 3];
+        case "full": return [2];
+        case "half":
+        default:     return [1, 2];
+    }
+}
+
 // ─── Types ──────────────────────────────────────────────────
 
 export interface PaletteLayout {
@@ -33,7 +42,6 @@ export interface PaletteLayout {
     xGap: number;
     yGap: number;
     panSize: PanSizeId;
-    validStockSizes: number[];  // myStock indices that work for this palette: 0=5ml, 1=15ml, 2=60ml, 3=mini
     blockedSlots?: number[];
     backgroundImage?: string;
     etsyUrl?: string;
@@ -64,17 +72,6 @@ export interface PaletteState {
 
 export const paletteLayouts: PaletteLayout[] = [
     {
-        id: "12-pan",
-        name: "12-Pan (3×4)",
-        cols: 4,
-        rows: 3,
-        xGap: 4,
-        yGap: 4,
-        panSize: "mini",
-        validStockSizes: [0, 1, 2, 3],   // 5ml, 15ml, 60ml, mini — all sizes work
-        etsyUrl: "https://www.etsy.com/listing/12pan",
-    },
-    {
         id: "15-pan",
         name: "15-Pan Wood Palette",
         cols: 4,
@@ -82,10 +79,9 @@ export const paletteLayouts: PaletteLayout[] = [
         xGap: 32,
         yGap: 28,
         panSize: "mini",
-        validStockSizes: [0, 1, 2, 3],   // 5ml, 15ml, 60ml, mini — uses minipan
         blockedSlots: [3],
         backgroundImage: "/15-pan-mini.png",
-        etsyUrl: "https://www.etsy.com/listing/15pan",
+        etsyUrl: "https://candycolourshop.etsy.com/listing/1404478694",
         padding: [71, 64],
         imgWidth: 480
     },
@@ -97,8 +93,7 @@ export const paletteLayouts: PaletteLayout[] = [
         xGap: 4,
         yGap: 4,
         panSize: "half",
-        validStockSizes: [0, 1, 2],      // 5ml, 15ml, 60ml — half pans, no mini
-        etsyUrl: "https://www.etsy.com/listing/24pan",
+        etsyUrl: "https://candycolourshop.etsy.com/listing/4466934563",
     },
     {
         id: "custom",
@@ -108,7 +103,7 @@ export const paletteLayouts: PaletteLayout[] = [
         xGap: 4,
         yGap: 4,
         panSize: "half",
-        validStockSizes: [0, 1, 2, 3],   // all sizes
+        etsyUrl: "https://candycolourshop.etsy.com/listing/4466934563",
     },
 ];
 
@@ -219,8 +214,10 @@ export function generateManifest(
 export function validateStock(
     slots: (string | null)[],
     allPaints: PalettePaint[],
-    layout: PaletteLayout
+    layout: PaletteLayout,
+    panSizeOverride?: PanSizeId
 ): { allInStock: boolean; outOfStock: PalettePaint[] } {
+    const validSizes = getValidSizes(panSizeOverride ?? layout.panSize);
     const paintMap = new Map(allPaints.map((p) => [p.id, p]));
     const outOfStock: PalettePaint[] = [];
     const seen = new Set<string>();
@@ -228,7 +225,7 @@ export function validateStock(
         if (!id || seen.has(id)) continue;
         seen.add(id);
         const p = paintMap.get(id);
-        if (p && !isInStockForLayout(p, layout.validStockSizes)) outOfStock.push(p);
+        if (p && !isInStockForLayout(p, validSizes)) outOfStock.push(p);
     }
     return { allInStock: outOfStock.length === 0, outOfStock };
 }

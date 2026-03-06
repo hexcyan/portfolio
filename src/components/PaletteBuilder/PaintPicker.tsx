@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { PalettePaint, isInStockForLayout } from "@/lib/palette-paints";
-import { PaletteLayout } from "@/lib/palettes";
+import { getValidSizes, PaletteLayout, PanSizeId } from "@/lib/palettes";
 import styles from "./PaletteBuilder.module.css";
 
 type BrandFilter = "all" | "holbein" | "vangogh" | "handmade";
@@ -15,21 +15,26 @@ interface PaintPickerProps {
     onAddPaint: (paintId: string) => void;
     selectedPaintId?: string | null;
     onSelectPaint?: (paintId: string) => void;
+    panSizeOverride?: PanSizeId;
 }
 
-export default function PaintPicker({ allPaints, layout, onAddPaint, selectedPaintId, onSelectPaint }: PaintPickerProps) {
+export default function PaintPicker({ allPaints, layout, onAddPaint, selectedPaintId, onSelectPaint, panSizeOverride }: PaintPickerProps) {
     const [brand, setBrand] = useState<BrandFilter>("all");
     const [search, setSearch] = useState("");
     const [stockFilter, setStockFilter] = useState(true);
 
-    const validSizeLabels = layout.validStockSizes
+    const effectivePanSize = panSizeOverride ?? layout.panSize;
+    const validSizes = getValidSizes(effectivePanSize);
+
+
+    const validSizeLabels = validSizes
         .map((i) => STOCK_SIZE_LABELS[i])
         .join("/");
 
     const filtered = useMemo(() => {
         return allPaints.filter((p) => {
             if (brand !== "all" && p.brand !== brand) return false;
-            if (stockFilter && !isInStockForLayout(p, layout.validStockSizes)) return false;
+            if (stockFilter && !isInStockForLayout(p, validSizes)) return false;
             if (search) {
                 const q = search.toLowerCase();
                 return (
@@ -40,7 +45,7 @@ export default function PaintPicker({ allPaints, layout, onAddPaint, selectedPai
             }
             return true;
         });
-    }, [allPaints, brand, search, stockFilter, layout.validStockSizes]);
+    }, [allPaints, brand, search, stockFilter, validSizes]);
 
     const brandTabs: { key: BrandFilter; label: string }[] = [
         { key: "all", label: "All" },
@@ -68,31 +73,31 @@ export default function PaintPicker({ allPaints, layout, onAddPaint, selectedPai
                     />
                 </div>
                 <div className={styles.pickerTabs}>
-                {brandTabs.map((tab) => (
+                    {brandTabs.map((tab) => (
+                        <button
+                            key={tab.key}
+                            className={`${styles.pickerTab} ${brand === tab.key ? styles.pickerTabActive : ""}`}
+                            onClick={() => setBrand(tab.key)}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                     <button
-                        key={tab.key}
-                        className={`${styles.pickerTab} ${brand === tab.key ? styles.pickerTabActive : ""}`}
-                        onClick={() => setBrand(tab.key)}
+                        className={`${styles.pickerTab} ${styles.stockToggle} ${stockFilter ? styles.stockToggleActive : ""}`}
+                        onClick={() => setStockFilter((v) => !v)}
+                        title={
+                            stockFilter
+                                ? `Showing only paints in stock (${validSizeLabels}). Click to show all.`
+                                : "Showing all paints. Click to filter by stock."
+                        }
                     >
-                        {tab.label}
+                        {stockFilter ? `In Stock (${validSizeLabels})` : "All Stock"}
                     </button>
-                ))}
-                <button
-                    className={`${styles.pickerTab} ${styles.stockToggle} ${stockFilter ? styles.stockToggleActive : ""}`}
-                    onClick={() => setStockFilter((v) => !v)}
-                    title={
-                        stockFilter
-                            ? `Showing only paints in stock (${validSizeLabels}). Click to show all.`
-                            : "Showing all paints. Click to filter by stock."
-                    }
-                >
-                    {stockFilter ? `In Stock (${validSizeLabels})` : "All Stock"}
-                </button>
                 </div>
             </div>
             <div className={styles.pickerGrid}>
                 {filtered.map((paint) => {
-                    const inStock = isInStockForLayout(paint, layout.validStockSizes);
+                    const inStock = isInStockForLayout(paint, validSizes);
                     return (
                         <div
                             key={paint.id}
