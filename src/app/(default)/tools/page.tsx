@@ -2,8 +2,33 @@
 
 import { useState } from "react";
 import Icon from "@/components/Icon";
-import { projects, tools } from "@/lib/consts";
+import { projects, tools, type IIcon } from "@/lib/consts";
 import styles from "./Tools.module.css";
+
+function DescriptionBox({ file }: { file: IIcon }) {
+    return (
+        <div className={styles.description}>
+            {file.descr?.split("\n").map((line, i) => (
+                <p key={i}>{line}</p>
+            ))}
+            {file.links && file.links.length > 0 && (
+                <div className={styles.descrLinks}>
+                    {file.links.map(([name, url]) => (
+                        <a
+                            key={url}
+                            href={url}
+                            className={styles.descrLink}
+                            {...(url.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        >
+                            {name}
+                            <span className={styles.descrLinkArrow}>&#x2197;</span>
+                        </a>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
 
 export default function ToolsPage() {
     const [query, setQuery] = useState("");
@@ -45,11 +70,7 @@ export default function ToolsPage() {
                             className={styles.projectRow}
                         >
                             <Icon file={file} index={index} center={true} />
-                            <div className={styles.description}>
-                                {file.descr?.split("\n").map((line, i) => (
-                                    <p key={i}>{line}</p>
-                                ))}
-                            </div>
+                            <DescriptionBox file={file} />
                         </div>
                     ))}
                 </div>
@@ -65,11 +86,7 @@ export default function ToolsPage() {
                                 className={styles.projectRow}
                             >
                                 <Icon file={file} index={index} />
-                                <div className={styles.description}>
-                                    {file.descr?.split("\n").map((line, i) => (
-                                        <p key={i}>{line}</p>
-                                    ))}
-                                </div>
+                                <DescriptionBox file={file} />
                             </div>
                         ))}
                     </div>

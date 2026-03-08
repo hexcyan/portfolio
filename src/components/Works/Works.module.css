@@ -545,10 +545,13 @@
 .tweetEmbed>blockquote,
 .tweetEmbed>div {
     margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
 }
 
 .tweetEmbed iframe {
     max-height: 100% !important;
+    width: 100% !important;
 }
 
 .embedCaption {

@@ -29,6 +29,7 @@ export interface IIcon {
     type: string;
     route: string;
     descr?: string;
+    links?: [string, string][];  // [friendly name, url]
 }
 
 export const files: IIcon[] = [
@@ -69,7 +70,8 @@ export const projects: IIcon[] = [
             title: "KeebSoc",
             type: "keebsoc",
             route: "https://keebsoc.com",
-            descr: "The website rework for the Mechanical Keyboard Society of the University of New South Wales :)",
+            descr: "The website rework for the Mechanical Keyboard Society of the University of New South Wales :) \n To see other KeebSoc related works, please check out these links:",
+            links: [["board","/board?tags=keebsoc"]]
         },
     ];
 

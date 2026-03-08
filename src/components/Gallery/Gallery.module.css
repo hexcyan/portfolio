@@ -469,6 +469,22 @@
     z-index: 10;
 }
 
+.linkAlbumBadge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    color: var(--cyan);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.75em;
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    z-index: 10;
+    line-height: 1;
+}
+
 .folderInfo {
     display: flex;
     align-items: center;

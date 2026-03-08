@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAlbumMetadata, putAlbumMetadata } from "@/lib/gallery-metadata";
-import type { AlbumMetadata } from "@/lib/gallery-metadata";
+import {
+    getAlbumMetadata,
+    putAlbumMetadata,
+    getGalleryGlobalMeta,
+    putGalleryGlobalMeta,
+} from "@/lib/gallery-metadata";
+import type { AlbumMetadata, GalleryGlobalMeta } from "@/lib/gallery-metadata";
 
 export async function GET(request: NextRequest) {
     const folder = request.nextUrl.searchParams.get("folder");
+
+    // No folder = return global gallery metadata
     if (!folder) {
-        return NextResponse.json(
-            { error: "Missing folder parameter" },
-            { status: 400 }
-        );
+        const global = await getGalleryGlobalMeta();
+        return NextResponse.json(global);
     }
 
     const metadata = await getAlbumMetadata(folder);
@@ -19,11 +24,18 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     const folder = request.nextUrl.searchParams.get("folder");
+
+    // No folder = write global gallery metadata
     if (!folder) {
-        return NextResponse.json(
-            { error: "Missing folder parameter" },
-            { status: 400 }
-        );
+        const data = (await request.json()) as GalleryGlobalMeta;
+        const ok = await putGalleryGlobalMeta(data);
+        if (!ok) {
+            return NextResponse.json(
+                { error: "Failed to write global metadata" },
+                { status: 500 }
+            );
+        }
+        return NextResponse.json({ ok: true });
     }
 
     const data = (await request.json()) as AlbumMetadata;

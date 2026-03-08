@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { getFolders, getImagesFromFolder, getCDNConfig, thumbUrl } from "@/lib/cdn";
-import { getAlbumMetadata } from "@/lib/gallery-metadata";
+import { getAlbumMetadata, getGalleryGlobalMeta } from "@/lib/gallery-metadata";
 import StickyHeader from "@/components/Gallery/StickyHeader";
 import FolderPreviewImage from "@/components/Gallery/FolderPreviewImage";
+import LinkAlbumCard from "@/components/Gallery/LinkAlbumCard";
 
 import styles from "@/components/Gallery/Gallery.module.css";
 
@@ -60,7 +61,16 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
 }
 
 export default async function GalleryPage() {
-    const folders = await getFoldersWithPreviews();
+    const [folders, globalMeta] = await Promise.all([
+        getFoldersWithPreviews(),
+        getGalleryGlobalMeta(),
+    ]);
+
+    const linkAlbums = (globalMeta.linkAlbums || []).sort(
+        (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
+
+    const totalCount = folders.length + linkAlbums.length;
 
     return (
         <div className="explorer">
@@ -73,8 +83,8 @@ export default async function GalleryPage() {
                     <span>Gallery</span>
                 </span>
                 <span className={styles.indexHeaderCount}>
-                    {folders.length} folder
-                    {folders.length !== 1 ? "s" : ""}
+                    {totalCount} folder
+                    {totalCount !== 1 ? "s" : ""}
                 </span>
             </StickyHeader>
 
@@ -132,6 +142,9 @@ export default async function GalleryPage() {
                             </span>
                         </div>
                     </Link>
+                ))}
+                {linkAlbums.map((album) => (
+                    <LinkAlbumCard key={album.id} album={album} />
                 ))}
             </div>
         </div>

@@ -50,3 +50,6 @@ next-env.d.ts
 
 # works admin API routes (local-only)
 /src/app/api/works-*/
+
+# gallery admin API routes (local-only)
+/src/app/api/gallery-upload/

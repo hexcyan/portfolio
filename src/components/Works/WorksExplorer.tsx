@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
 import styles from "./Works.module.css";
 import WorksSectionComponent from "./WorksSection";
 import WorksSubsectionComponent from "./WorksSubsection";
@@ -24,48 +24,67 @@ type ViewMode = "sections" | "chronological";
 
 export default function WorksExplorer({ metadata, unsortedImages }: WorksExplorerProps) {
     const searchParams = useSearchParams();
-    const router = useRouter();
-    const [search, setSearch] = useState("");
+    const pathname = usePathname();
     const [viewerOpen, setViewerOpen] = useState(false);
     const [viewerIndex, setViewerIndex] = useState(0);
 
-    // View mode from URL
-    const viewMode: ViewMode = searchParams.get("view") === "chrono" ? "chronological" : "sections";
-
-    function setViewMode(mode: ViewMode) {
-        const params = new URLSearchParams(searchParams.toString());
-        if (mode === "chronological") {
-            params.set("view", "chrono");
-        } else {
-            params.delete("view");
-        }
-        const qs = params.toString();
-        router.replace(qs ? `?${qs}` : "/works", { scroll: false });
-    }
-
-    // Read active tags from URL
-    const activeTags = useMemo(() => {
+    // All filter state is local; URL is updated silently for shareability
+    const [viewMode, setViewModeLocal] = useState<ViewMode>(
+        searchParams.get("view") === "chrono" ? "chronological" : "sections"
+    );
+    const [activeTags, setActiveTags] = useState<Set<string>>(() => {
         const param = searchParams.get("tags");
         if (!param) return new Set<string>();
         return new Set(param.split(",").filter(Boolean));
-    }, [searchParams]);
+    });
+    const [search, setSearchLocal] = useState(searchParams.get("q") ?? "");
+    const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
-    function setActiveTags(tags: Set<string>) {
-        const params = new URLSearchParams(searchParams.toString());
-        if (tags.size === 0) {
-            params.delete("tags");
-        } else {
-            params.set("tags", Array.from(tags).join(","));
-        }
+    // Silently sync state to URL without triggering Next.js navigation
+    function syncUrl(overrides: { view?: ViewMode; tags?: Set<string>; q?: string }) {
+        const view = overrides.view ?? viewMode;
+        const tags = overrides.tags ?? activeTags;
+        const q = overrides.q ?? search;
+
+        const params = new URLSearchParams();
+        if (view === "chronological") params.set("view", "chrono");
+        if (tags.size > 0) params.set("tags", Array.from(tags).join(","));
+        if (q.trim()) params.set("q", q);
+
         const qs = params.toString();
-        router.replace(qs ? `?${qs}` : "/works", { scroll: false });
+        window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
+    }
+
+    function setViewMode(mode: ViewMode) {
+        setViewModeLocal(mode);
+        syncUrl({ view: mode });
     }
 
     function toggleTag(tagId: string) {
-        const next = new Set(activeTags);
-        if (next.has(tagId)) next.delete(tagId);
-        else next.add(tagId);
-        setActiveTags(next);
+        setActiveTags((prev) => {
+            const next = new Set(prev);
+            if (next.has(tagId)) next.delete(tagId);
+            else next.add(tagId);
+            syncUrl({ tags: next });
+            return next;
+        });
+    }
+
+    function clearTags() {
+        clearTags();
+        syncUrl({ tags: new Set() });
+    }
+
+    function setSearch(value: string) {
+        setSearchLocal(value);
+        clearTimeout(debounceRef.current);
+        if (!value.trim()) {
+            syncUrl({ q: "" });
+        } else {
+            debounceRef.current = setTimeout(() => {
+                syncUrl({ q: value });
+            }, 300);
+        }
     }
 
     // Filter blocks within a subsection
@@ -95,6 +114,16 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                     }
                     if (block.type === "youtube" || block.type === "tweet") {
                         return block.caption?.toLowerCase().includes(q);
+                    }
+                    if (block.type === "grid") {
+                        return (
+                            block.tags.some((t) => t.toLowerCase().includes(q)) ||
+                            block.children?.some(
+                                (c) =>
+                                    c.filename.toLowerCase().includes(q) ||
+                                    c.caption?.toLowerCase().includes(q)
+                            )
+                        );
                     }
                 }
 
@@ -338,17 +367,15 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                     </div>
                     <div className={styles.viewToggle}>
                         <button
-                            className={`${styles.viewBtn} ${
-                                viewMode === "sections" ? styles.viewBtnActive : ""
-                            }`}
+                            className={`${styles.viewBtn} ${viewMode === "sections" ? styles.viewBtnActive : ""
+                                }`}
                             onClick={() => setViewMode("sections")}
                         >
                             Sections
                         </button>
                         <button
-                            className={`${styles.viewBtn} ${
-                                viewMode === "chronological" ? styles.viewBtnActive : ""
-                            }`}
+                            className={`${styles.viewBtn} ${viewMode === "chronological" ? styles.viewBtnActive : ""
+                                }`}
                             onClick={() => setViewMode("chronological")}
                         >
                             Timeline
@@ -362,19 +389,18 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                         {metadata.tags.map((tag) => (
                             <button
                                 key={tag.id}
-                                className={`${styles.tagBtn} ${
-                                    activeTags.has(tag.id) ? styles.tagBtnActive : ""
-                                }`}
+                                className={`${styles.tagBtn} ${activeTags.has(tag.id) ? styles.tagBtnActive : ""
+                                    }`}
                                 onClick={() => toggleTag(tag.id)}
                                 style={
                                     activeTags.has(tag.id) && tag.color
                                         ? {
-                                              borderColor: tag.color,
-                                              background: `${tag.color}33`,
-                                          }
+                                            borderColor: tag.color,
+                                            background: `${tag.color}33`,
+                                        }
                                         : tag.color
-                                          ? { borderColor: `${tag.color}66` }
-                                          : undefined
+                                            ? { borderColor: `${tag.color}66` }
+                                            : undefined
                                 }
                             >
                                 {tag.label}
@@ -383,7 +409,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                         {activeTags.size > 0 && (
                             <button
                                 className={styles.tagClearAll}
-                                onClick={() => setActiveTags(new Set())}
+                                onClick={() => clearTags()}
                             >
                                 clear all
                             </button>

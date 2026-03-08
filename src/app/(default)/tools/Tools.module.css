@@ -90,6 +90,39 @@
     margin-bottom: 0;
 }
 
+/* Links row inside description */
+.descrLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+}
+
+.descrLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-family: "RedHatMono", monospace;
+    font-size: 0.65em;
+    padding: 1px 6px;
+    border: 1px solid rgba(0, 128, 128, 0.5);
+    color: teal;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background 0.12s, border-color 0.12s;
+    cursor: pointer;
+}
+
+.descrLink:hover {
+    background: rgba(0, 128, 128, 0.1);
+    border-color: teal;
+}
+
+.descrLinkArrow {
+    font-size: 0.9em;
+    line-height: 1;
+}
+
 /* No results */
 .noResults {
     color: rgba(255, 255, 255, 0.4);
