@@ -38,7 +38,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
         return new Set(param.split(",").filter(Boolean));
     });
     const [search, setSearchLocal] = useState(searchParams.get("q") ?? "");
-    const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+    const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
     // Silently sync state to URL without triggering Next.js navigation
     function syncUrl(overrides: { view?: ViewMode; tags?: Set<string>; q?: string }) {
