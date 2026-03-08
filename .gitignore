@@ -53,3 +53,4 @@ next-env.d.ts
 
 # gallery admin API routes (local-only)
 /src/app/api/gallery-upload/
+/src/app/api/gallery-generate-thumbs/

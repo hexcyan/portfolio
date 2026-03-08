@@ -72,7 +72,7 @@ export async function getFolders(folderPath: string): Promise<IIcon[]> {
         const data = (await response.json()) as BunnyStorageObject[];
 
         const newdata = data
-            .filter((item) => item.ObjectName !== "_thumbs")
+            .filter((item) => item.IsDirectory && !item.ObjectName.startsWith("_"))
             .map((item) => ({
                 title: item.ObjectName,
                 type: "mypics",
