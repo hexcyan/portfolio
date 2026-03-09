@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import styles from "../Works.module.css";
-import { MASONRY } from "../masonry.config";
 import { computeBlockCols } from "./grid-utils";
 import { useMasonryGrid } from "../MasonryContext";
 import { thumbUrl } from "@/lib/cdn";
@@ -10,19 +9,23 @@ import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
 
 interface ImageBlockProps {
     block: WorksBlock;
-    tagDefs: WorksTagDef[];
+    tagDefs?: WorksTagDef[];
     onClick: () => void;
     /** When true, skip masonry positioning — image fills its parent cell with object-fit: cover */
     contained?: boolean;
+    /** Direct CDN path — when provided, bypasses folder/filename construction */
+    imagePath?: string;
 }
 
 export default function ImageBlock({ block, tagDefs, onClick, contained }: ImageBlockProps) {
     const [thumbLoaded, setThumbLoaded] = useState(false);
     const m = useMasonryGrid();
 
-    const imagePath = block.folder
-        ? `works/${block.folder}/${block.filename}`
-        : `works/${block.filename}`;
+    const imagePath = block.path
+        ? block.path
+        : block.folder
+            ? `works/${block.folder}/${block.filename}`
+            : `works/${block.filename}`;
 
     const microSrc = thumbUrl(imagePath, "micro");
     const thumbSrc = thumbUrl(imagePath, "thumb");
@@ -56,15 +59,15 @@ export default function ImageBlock({ block, tagDefs, onClick, contained }: Image
 
         const totalWidth = m.columnWidth * cols + m.colGap * (cols - 1);
         const imageHeight = totalWidth * aspectRatio;
-        span = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
+        span = Math.ceil(imageHeight / m.rowHeight) + m.gap;
     }
 
     function getTagColor(tagId: string): string | undefined {
-        return tagDefs.find((t) => t.id === tagId)?.color;
+        return tagDefs?.find((t) => t.id === tagId)?.color;
     }
 
     function getTagLabel(tagId: string): string {
-        return tagDefs.find((t) => t.id === tagId)?.label ?? tagId;
+        return tagDefs?.find((t) => t.id === tagId)?.label ?? tagId;
     }
 
     const isLink = !!block.url;

@@ -30,14 +30,14 @@ export default function TweetBlock({ block }: TweetBlockProps) {
     const cols = m ? computeBlockCols(m, baseCols, MASONRY.tweetMinWidth, block.maxCols) : baseCols;
 
     const measureSpan = useCallback(() => {
-        if (block.span) return;
+        if (block.span || !m) return;
         const el = containerRef.current;
         if (!el) return;
         const contentHeight = el.scrollHeight;
         if (contentHeight > 0) {
-            setSpan(Math.ceil(contentHeight / MASONRY.rowHeight) + MASONRY.gap);
+            setSpan(Math.ceil(contentHeight / m.rowHeight) + m.gap);
         }
-    }, [block.span]);
+    }, [block.span, m]);
 
     useEffect(() => {
         if (!document.getElementById("twitter-wjs")) {

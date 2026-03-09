@@ -205,6 +205,9 @@ export default function WorksSectionComponent({
                 stuckClass={styles.sectionHeaderStuck}
             >
                 <span className={styles.sectionTitle}>{section.title}</span>
+                {section.source === "gallery" && (
+                    <span className={styles.sourceBadge}>Gallery</span>
+                )}
                 {section.dateRange && (
                     <span className={styles.sectionDateRange}>
                         {section.dateRange}

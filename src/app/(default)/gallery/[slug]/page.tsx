@@ -1,5 +1,6 @@
 import { getImagesFromFolder, getFolders } from "@/lib/cdn";
 import { getAlbumMetadata } from "@/lib/gallery-metadata";
+import { getWorksGlobalMeta } from "@/lib/works-metadata";
 import GalleryGrid from "@/components/Gallery/GalleryGrid";
 import StickyHeader from "@/components/Gallery/StickyHeader";
 import styles from "@/components/Gallery/Gallery.module.css";
@@ -29,13 +30,16 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
     const folderName = slug.charAt(0).toUpperCase() + slug.slice(1);
 
     try {
-        const [allImages, metadata] = await Promise.all([
+        const [allImages, metadata, worksGlobalMeta] = await Promise.all([
             getImagesFromFolder(`gallery/${slug}`),
             getAlbumMetadata(slug),
+            getWorksGlobalMeta(),
         ]);
         const images = allImages.filter(
             (img) => img.id.replace(/\.[^.]+$/, "").toLowerCase() !== "_cover"
         );
+
+        const globalTags = worksGlobalMeta?.tags ?? [];
 
         return (
             <div className="explorer">
@@ -66,11 +70,22 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
                             <>
                                 <span className={styles.albumInfoDivider} />
                                 <span className={styles.albumInfoLabel}>tags:</span>
-                                {metadata.tags.map((tag) => (
-                                    <span key={tag} className={styles.albumInfoTag}>
-                                        {tag}
-                                    </span>
-                                ))}
+                                {metadata.tags.map((tag) => {
+                                    const tagDef = globalTags.find((t) => t.id === tag);
+                                    return (
+                                        <span
+                                            key={tag}
+                                            className={styles.albumInfoTag}
+                                            style={
+                                                tagDef?.color
+                                                    ? { borderColor: tagDef.color, color: tagDef.color }
+                                                    : undefined
+                                            }
+                                        >
+                                            {tagDef?.label ?? tag}
+                                        </span>
+                                    );
+                                })}
                             </>
                         )}
                     </div>
@@ -79,6 +94,7 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
                     images={images}
                     folderName={folderName}
                     metadata={metadata}
+                    globalTags={globalTags}
                 />
             </div>
         );

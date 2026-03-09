@@ -1,9 +1,8 @@
-import Link from "next/link";
-import { getFolders, getImagesFromFolder, getCDNConfig, thumbUrl } from "@/lib/cdn";
+import { getFolders, getImagesFromFolder, thumbUrl } from "@/lib/cdn";
 import { getAlbumMetadata, getGalleryGlobalMeta } from "@/lib/gallery-metadata";
+import { getWorksGlobalMeta } from "@/lib/works-metadata";
 import StickyHeader from "@/components/Gallery/StickyHeader";
-import FolderPreviewImage from "@/components/Gallery/FolderPreviewImage";
-import LinkAlbumCard from "@/components/Gallery/LinkAlbumCard";
+import GalleryIndex from "@/components/Gallery/GalleryIndex";
 
 import styles from "@/components/Gallery/Gallery.module.css";
 
@@ -61,16 +60,17 @@ async function getFoldersWithPreviews(): Promise<FolderWithPreview[]> {
 }
 
 export default async function GalleryPage() {
-    const [folders, globalMeta] = await Promise.all([
+    const [folders, globalMeta, worksGlobalMeta] = await Promise.all([
         getFoldersWithPreviews(),
         getGalleryGlobalMeta(),
+        getWorksGlobalMeta(),
     ]);
 
     const linkAlbums = (globalMeta.linkAlbums || []).sort(
         (a, b) => (a.order ?? 0) - (b.order ?? 0)
     );
 
-    const totalCount = folders.length + linkAlbums.length;
+    const globalTags = worksGlobalMeta?.tags ?? [];
 
     return (
         <div className="explorer">
@@ -83,70 +83,16 @@ export default async function GalleryPage() {
                     <span>Gallery</span>
                 </span>
                 <span className={styles.indexHeaderCount}>
-                    {totalCount} folder
-                    {totalCount !== 1 ? "s" : ""}
+                    {folders.length + linkAlbums.length} folder
+                    {folders.length + linkAlbums.length !== 1 ? "s" : ""}
                 </span>
             </StickyHeader>
 
-            <div className={styles.folderGrid}>
-                {folders.map((folder) => (
-                    <Link
-                        key={folder.name}
-                        href={folder.route}
-                        className={styles.folderCard}
-                    >
-                        <div className={styles.folderPreview}>
-                            {folder.previewPath ? (
-                                <FolderPreviewImage
-                                    thumbSrc={thumbUrl(folder.previewPath, "thumb")}
-                                    microSrc={thumbUrl(folder.previewPath, "micro")}
-                                    alt={folder.name}
-                                />
-                            ) : (
-                                <div className={styles.folderPreviewEmpty}>
-                                    📂
-                                </div>
-                            )}
-                            {folder.imageCount > 0 && (
-                                <span className={styles.folderPreviewCount}>
-                                    {folder.imageCount} image
-                                    {folder.imageCount !== 1 ? "s" : ""}
-                                </span>
-                            )}
-                            {(folder.description || folder.tags.length > 0) && (
-                                <div className={styles.folderMeta}>
-                                    {folder.description && (
-                                        <span className={styles.folderDescription}>
-                                            {folder.description}
-                                        </span>
-                                    )}
-                                    {folder.tags.length > 0 && (
-                                        <span className={styles.folderTags}>
-                                            {folder.tags.map((tag) => (
-                                                <span
-                                                    key={tag}
-                                                    className={styles.folderTag}
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </span>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        <div className={styles.folderInfo}>
-                            <span className={styles.folderIcon}>📁</span>
-                            <span className={styles.folderName}>
-                                {folder.name}
-                            </span>
-                        </div>
-                    </Link>
-                ))}
-                {linkAlbums.map((album) => (
-                    <LinkAlbumCard key={album.id} album={album} />
-                ))}
-            </div>
+            <GalleryIndex
+                folders={folders}
+                linkAlbums={linkAlbums}
+                globalTags={globalTags}
+            />
         </div>
     );
 }

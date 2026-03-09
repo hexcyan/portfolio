@@ -21,7 +21,7 @@ export default function TextBlock({ block }: TextBlockProps) {
 
     // Re-measure scrollHeight when grid measurements change (column width affects text reflow)
     useEffect(() => {
-        if (block.span) return;
+        if (block.span || !m) return;
         // Wait one frame for the new column span to apply before measuring
         requestAnimationFrame(() => {
             const el = innerRef.current;
@@ -29,7 +29,7 @@ export default function TextBlock({ block }: TextBlockProps) {
             const contentHeight = el.scrollHeight;
             if (contentHeight > 0) {
                 const extra = 32 + 8;
-                setSpan(Math.ceil((contentHeight + extra) / MASONRY.rowHeight));
+                setSpan(Math.ceil((contentHeight + extra) / m.rowHeight));
             }
         });
     }, [m, cols, block.span, block.content]);

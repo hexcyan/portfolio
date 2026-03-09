@@ -23,6 +23,7 @@ export interface WorksImageMeta {
 
 export interface GridChildBlock {
     filename: string;
+    source?: string;      // CDN folder override for cross-referencing
     caption?: string;
     tags?: string[];
 }
@@ -30,6 +31,7 @@ export interface GridChildBlock {
 export interface ContentBlock {
     type: "image" | "text" | "youtube" | "tweet" | "grid";
     filename?: string;    // for image blocks
+    source?: string;      // CDN folder override (e.g. "gallery/vacation") for cross-referencing
     content?: string;     // for text blocks
     videoId?: string;     // for youtube blocks
     tweetId?: string;     // for tweet blocks
@@ -83,6 +85,7 @@ export interface WorksImage {
 export interface WorksGridChild {
     filename: string;
     folder: string;
+    path?: string;        // full CDN path override (for cross-referenced images)
     caption?: string;
     tags: string[];
     date?: string;
@@ -94,6 +97,7 @@ export interface WorksBlock {
     // Image fields (resolved from images dict)
     filename?: string;
     folder?: string;
+    path?: string;        // full CDN path override (for cross-referenced/gallery images)
     caption?: string;
     tags: string[];
     date?: string;
@@ -135,6 +139,7 @@ export interface WorksSection {
     maxColumns?: number;
     align?: "left" | "center" | "right";
     order: number;
+    source?: "works" | "gallery";  // origin system for display purposes
     images: WorksImage[];
     subsections: WorksSubsection[];
 }
@@ -231,8 +236,8 @@ export async function putWorksFolderMeta(
     }
 }
 
-export function getWorksImagePath(image: WorksImage): string {
-    if (image.path) return image.path;
+export function getWorksImagePath(image: WorksImage | WorksBlock | WorksGridChild): string {
+    if ('path' in image && image.path) return image.path;
     if (image.folder) return `works/${image.folder}/${image.filename}`;
     return `works/${image.filename}`;
 }

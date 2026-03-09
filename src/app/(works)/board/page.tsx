@@ -10,14 +10,15 @@ import type {
     WorksSection,
     WorksMetadata,
 } from "@/lib/works-metadata";
-import { listFolder } from "@/lib/cdn";
+import { listFolder, getImagesFromFolder } from "@/lib/cdn";
+import { getAlbumMetadata } from "@/lib/gallery-metadata";
 import WorksExplorer from "@/components/Works/WorksExplorer";
 import WorksConstructionPopup from "@/components/Works/WorksConstructionPopup";
 import Spinner from "@/components/Spinner";
 
 export const revalidate = 3600;
 
-async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: WorksImage[] }> {
+async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: WorksImage[]; gallerySections: WorksSection[] }> {
     const [globalMeta, rootContents] = await Promise.all([
         getWorksGlobalMeta(),
         listFolder("works").catch(() => ({ directories: [], images: [] })),
@@ -73,6 +74,19 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                 const blocks: WorksBlock[] = sub.blocks.map((block) => {
                     const layout = { span: block.span, cols: block.cols, maxCols: block.maxCols };
                     if (block.type === "image" && block.filename) {
+                        // Cross-reference: if source is specified, use that instead of works folder
+                        if (block.source) {
+                            assignedFilenames.add(block.filename);
+                            return {
+                                type: "image" as const,
+                                filename: block.filename,
+                                folder: block.source,
+                                path: `${block.source}/${block.filename}`,
+                                caption: block.caption,
+                                tags: [...new Set([...folderTags, ...subTags, ...(block.tags ?? [])])],
+                                ...layout,
+                            };
+                        }
                         assignedFilenames.add(block.filename);
                         const imgMeta = meta.images[block.filename];
                         return {
@@ -107,6 +121,16 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                     if (block.type === "grid" && block.blocks) {
                         const children = block.blocks.map((child) => {
                             assignedFilenames.add(child.filename);
+                            // Cross-reference support for grid children
+                            if (child.source) {
+                                return {
+                                    filename: child.filename,
+                                    folder: child.source,
+                                    path: `${child.source}/${child.filename}`,
+                                    caption: child.caption,
+                                    tags: [...new Set([...folderTags, ...subTags, ...(child.tags ?? [])])],
+                                };
+                            }
                             const imgMeta = meta.images[child.filename];
                             return {
                                 filename: child.filename,
@@ -164,6 +188,7 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
                 maxColumns: meta.maxColumns,
                 align: meta.align,
                 order: meta.order ?? 0,
+                source: "works" as const,
                 images: unassignedImages,
                 subsections,
             } satisfies WorksSection;
@@ -183,12 +208,67 @@ async function buildWorksData(): Promise<WorksMetadata & { unsortedImages: Works
             tags: [] as string[],
         }));
 
-    return { tags, sections, unsortedImages: looseImages };
+    // ── Build gallery sections (fetched always, toggled client-side) ──
+    const gallerySections = await buildGallerySections(tags);
+
+    return { tags, sections, unsortedImages: looseImages, gallerySections };
+}
+
+async function buildGallerySections(globalTags: { id: string; label: string; color?: string }[]): Promise<WorksSection[]> {
+    let galleryFolders: { directories: string[] };
+    try {
+        const contents = await listFolder("gallery");
+        galleryFolders = { directories: contents.directories.filter((d) => !d.startsWith("_")) };
+    } catch {
+        return [];
+    }
+
+    const results = await Promise.all(
+        galleryFolders.directories.map(async (folder) => {
+            try {
+                const [allImages, albumMeta] = await Promise.all([
+                    getImagesFromFolder(`gallery/${folder}`),
+                    getAlbumMetadata(folder),
+                ]);
+
+                const displayImages = allImages.filter(
+                    (img) => img.id.replace(/\.[^.]+$/, "").toLowerCase() !== "_cover"
+                );
+
+                const albumTags = albumMeta?.tags ?? [];
+
+                const images: WorksImage[] = displayImages.map((img) => {
+                    const imgMeta = albumMeta?.images?.[img.id];
+                    return {
+                        filename: img.id,
+                        folder: `gallery/${folder}`,
+                        path: `gallery/${folder}/${img.id}`,
+                        caption: imgMeta?.caption,
+                        tags: [...new Set([...albumTags, ...(imgMeta?.tags ?? [])])],
+                    };
+                });
+
+                return {
+                    id: `gallery-${folder}`,
+                    title: folder.charAt(0).toUpperCase() + folder.slice(1),
+                    description: albumMeta?.description,
+                    order: 999,
+                    source: "gallery" as const,
+                    images,
+                    subsections: [],
+                } satisfies WorksSection;
+            } catch {
+                return null;
+            }
+        })
+    );
+
+    return results.filter((s): s is NonNullable<typeof s> => s !== null && s.images.length > 0) as WorksSection[];
 }
 
 export default async function WorksPage() {
     const data = await buildWorksData();
-    const { unsortedImages, ...metadata } = data;
+    const { unsortedImages, gallerySections, ...metadata } = data;
 
     return (
         <Suspense
@@ -211,7 +291,11 @@ export default async function WorksPage() {
             }
         >
             <WorksConstructionPopup />
-            <WorksExplorer metadata={metadata} unsortedImages={unsortedImages} />
+            <WorksExplorer
+                metadata={metadata}
+                unsortedImages={unsortedImages}
+                gallerySections={gallerySections}
+            />
         </Suspense>
     );
 }

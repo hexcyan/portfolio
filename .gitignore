@@ -42,15 +42,17 @@ next-env.d.ts
 .claude
 /data
 
-# gallery admin (local-only)
+# admin pages (local-only)
+/src/app/(default)/admin/
 /src/app/(default)/gallery/admin/
-
-# works admin (local-only)
+/src/app/(default)/tools/admin/
 /src/app/(works)/board/admin/
 
-# works admin API routes (local-only)
+# admin API routes (local-only)
 /src/app/api/works-*/
-
-# gallery admin API routes (local-only)
+/src/app/api/gallery-admin/
 /src/app/api/gallery-upload/
 /src/app/api/gallery-generate-thumbs/
+/src/app/api/site-status/
+/src/app/api/site-tools/
+/src/app/api/site-revalidate/

@@ -8,6 +8,10 @@ export interface MasonryMeasurements {
     colGap: number;
     rowGap: number;
     totalGridCols: number;
+    /** Height of each implicit grid row (px). */
+    rowHeight: number;
+    /** Extra rows added to each span calculation. */
+    gap: number;
 }
 
 const MasonryContext = createContext<MasonryMeasurements | null>(null);
@@ -15,9 +19,15 @@ const MasonryContext = createContext<MasonryMeasurements | null>(null);
 interface MasonryProviderProps {
     gridRef: React.RefObject<HTMLElement | null>;
     children: ReactNode;
+    /** Override row height (defaults to MASONRY.rowHeight). */
+    rowHeight?: number;
+    /** Override gap rows (defaults to MASONRY.gap). */
+    gap?: number;
 }
 
-export function MasonryProvider({ gridRef, children }: MasonryProviderProps) {
+export function MasonryProvider({ gridRef, children, rowHeight, gap }: MasonryProviderProps) {
+    const rh = rowHeight ?? MASONRY.rowHeight;
+    const gp = gap ?? MASONRY.gap;
     const [measurements, setMeasurements] = useState<MasonryMeasurements | null>(null);
     const prevRef = useRef<MasonryMeasurements | null>(null);
 
@@ -46,10 +56,10 @@ export function MasonryProvider({ gridRef, children }: MasonryProviderProps) {
             return; // skip re-render if nothing changed
         }
 
-        const next = { columnWidth, colGap, rowGap, totalGridCols };
+        const next = { columnWidth, colGap, rowGap, totalGridCols, rowHeight: rh, gap: gp };
         prevRef.current = next;
         setMeasurements(next);
-    }, [gridRef]);
+    }, [gridRef, rh, gp]);
 
     useEffect(() => {
         measure();

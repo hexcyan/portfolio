@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import styles from "./Works.module.css";
 import WorksSectionComponent from "./WorksSection";
@@ -18,11 +18,12 @@ import { getWorksImagePath } from "@/lib/works-metadata";
 interface WorksExplorerProps {
     metadata: WorksMetadata;
     unsortedImages: WorksImage[];
+    gallerySections?: WorksSection[];
 }
 
 type ViewMode = "sections" | "chronological";
 
-export default function WorksExplorer({ metadata, unsortedImages }: WorksExplorerProps) {
+export default function WorksExplorer({ metadata, unsortedImages, gallerySections = [] }: WorksExplorerProps) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const [viewerOpen, setViewerOpen] = useState(false);
@@ -38,18 +39,28 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
         return new Set(param.split(",").filter(Boolean));
     });
     const [search, setSearchLocal] = useState(searchParams.get("q") ?? "");
+    const [includeGallery, setIncludeGalleryLocal] = useState(
+        searchParams.get("gallery") === "true"
+    );
+    const [collapsed, setCollapsedLocal] = useState(
+        searchParams.get("collapsed") === "true"
+    );
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
     // Silently sync state to URL without triggering Next.js navigation
-    function syncUrl(overrides: { view?: ViewMode; tags?: Set<string>; q?: string }) {
+    function syncUrl(overrides: { view?: ViewMode; tags?: Set<string>; q?: string; gallery?: boolean; collapsed?: boolean }) {
         const view = overrides.view ?? viewMode;
         const tags = overrides.tags ?? activeTags;
         const q = overrides.q ?? search;
+        const gallery = overrides.gallery ?? includeGallery;
+        const coll = overrides.collapsed ?? collapsed;
 
         const params = new URLSearchParams();
         if (view === "chronological") params.set("view", "chrono");
         if (tags.size > 0) params.set("tags", Array.from(tags).join(","));
         if (q.trim()) params.set("q", q);
+        if (gallery) params.set("gallery", "true");
+        if (coll) params.set("collapsed", "true");
 
         const qs = params.toString();
         window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
@@ -71,7 +82,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
     }
 
     function clearTags() {
-        clearTags();
+        setActiveTags(new Set());
         syncUrl({ tags: new Set() });
     }
 
@@ -85,6 +96,18 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                 syncUrl({ q: value });
             }, 300);
         }
+    }
+
+    function toggleGallery() {
+        const next = !includeGallery;
+        setIncludeGalleryLocal(next);
+        syncUrl({ gallery: next });
+    }
+
+    function toggleCollapsed() {
+        const next = !collapsed;
+        setCollapsedLocal(next);
+        syncUrl({ collapsed: next });
     }
 
     // Filter blocks within a subsection
@@ -172,10 +195,18 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
         [filterBlocks]
     );
 
+    // Combine works sections with gallery sections when toggled on
+    const allSections = useMemo(() => {
+        if (includeGallery && gallerySections.length > 0) {
+            return [...metadata.sections, ...gallerySections];
+        }
+        return metadata.sections;
+    }, [metadata.sections, gallerySections, includeGallery]);
+
     // Sorted sections
     const sortedSections = useMemo(
-        () => [...metadata.sections].sort((a, b) => a.order - b.order),
-        [metadata.sections]
+        () => [...allSections].sort((a, b) => a.order - b.order),
+        [allSections]
     );
 
     // Unsorted section
@@ -191,26 +222,74 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
         };
     }, [unsortedImages]);
 
+    // When collapsed, merge all sections into one flat section
+    const collapsedSection: WorksSection | null = useMemo(() => {
+        if (!collapsed) return null;
+        const allBlocks: WorksBlock[] = [];
+
+        const sources = [...sortedSections];
+        if (unsortedSection) sources.push(unsortedSection);
+
+        for (const section of sources) {
+            // 1. Flatten blocks out of their individual subsections
+            for (const sub of section.subsections) {
+                allBlocks.push(...sub.blocks);
+            }
+            // 2. Convert loose images to blocks and add them to the unified pool
+            const looseImageBlocks: WorksBlock[] = section.images.map((img) => ({
+                type: "image",
+                filename: img.filename,
+                folder: img.folder,
+                path: img.path,
+                caption: img.caption,
+                tags: img.tags,
+                date: img.date,
+                url: img.url,
+            }));
+            allBlocks.push(...looseImageBlocks);
+
+
+        }
+
+        return {
+            id: "__collapsed",
+            title: "All",
+            order: 0,
+            images: [], // <-- Keep this empty so it doesn't render a second grid!
+            subsections: allBlocks.length > 0 ? [
+                {
+                    id: "__collapsed_sub",
+                    sectionId: "__collapsed",
+                    sectionTitle: "All",
+                    title: "",
+                    blocks: allBlocks,
+                }
+            ] : [],
+        };
+    }, [collapsed, sortedSections, unsortedSection]);
+
     // === SECTIONS VIEW ===
     const filteredSections = useMemo(() => {
-        const allSections = unsortedSection
-            ? [...sortedSections, unsortedSection]
-            : sortedSections;
+        const sections = collapsed && collapsedSection
+            ? [collapsedSection]
+            : unsortedSection
+                ? [...sortedSections, unsortedSection]
+                : sortedSections;
 
-        return allSections
+        return sections
             .map((section) => ({
                 section,
                 images: filterImages(section.images),
                 subsections: filterSubsections(section.subsections),
             }))
             .filter(({ images, subsections }) => images.length > 0 || subsections.length > 0);
-    }, [sortedSections, unsortedSection, filterImages, filterSubsections]);
+    }, [sortedSections, unsortedSection, collapsed, collapsedSection, filterImages, filterSubsections]);
 
     // === CHRONOLOGICAL VIEW ===
     const chronoSubsections = useMemo(() => {
         if (viewMode !== "chronological") return [];
         const allSubs: WorksSubsection[] = [];
-        for (const section of metadata.sections) {
+        for (const section of allSections) {
             allSubs.push(...section.subsections);
         }
         // Sort by date descending
@@ -221,7 +300,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                 return db.localeCompare(da);
             })
         );
-    }, [viewMode, metadata.sections, filterSubsections]);
+    }, [viewMode, allSections, filterSubsections]);
 
     // Collect all visible image blocks for lightbox (including grid children)
     const allVisibleImageBlocks = useMemo(() => {
@@ -236,6 +315,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                             type: "image",
                             filename: child.filename,
                             folder: child.folder,
+                            path: child.path,
                             caption: child.caption,
                             tags: child.tags,
                             date: child.date,
@@ -256,6 +336,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                         type: "image",
                         filename: img.filename,
                         folder: img.folder,
+                        path: img.path,
                         caption: img.caption,
                         tags: img.tags,
                         date: img.date,
@@ -271,18 +352,12 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
         return blocks;
     }, [viewMode, filteredSections, chronoSubsections]);
 
-    // Also collect loose images for counting
-    const allVisibleLooseImages = useMemo(() => {
-        if (viewMode !== "sections") return [];
-        return filteredSections.flatMap(({ images }) => images);
-    }, [viewMode, filteredSections]);
-
     // Total visible count
     const visibleCount = allVisibleImageBlocks.length;
 
     // Total counts
     const totalImages =
-        metadata.sections.reduce((sum, s) => {
+        allSections.reduce((sum, s) => {
             const subImages = s.subsections.reduce(
                 (acc, sub) => acc + sub.blocks.filter((b) => b.type === "image").length,
                 0
@@ -290,13 +365,11 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
             return sum + s.images.length + subImages;
         }, 0) + unsortedImages.length;
 
-    // Lightbox images
+    // Lightbox images — use path field when available
     const viewerImages = useMemo(
         () =>
             allVisibleImageBlocks.map((block) => {
-                const path = block.folder
-                    ? `works/${block.folder}/${block.filename}`
-                    : `works/${block.filename}`;
+                const path = getWorksImagePath(block as WorksImage);
                 return {
                     id: block.filename || "",
                     path,
@@ -366,6 +439,20 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                         )}
                     </div>
                     <div className={styles.viewToggle}>
+                        {gallerySections.length > 0 && (
+                            <button
+                                className={`${styles.viewBtn} ${styles.galleryToggle} ${includeGallery ? styles.viewBtnActive : ""}`}
+                                onClick={toggleGallery}
+                            >
+                                Include Gallery
+                            </button>
+                        )}
+                        <button
+                            className={`${styles.viewBtn} ${styles.galleryToggle} ${collapsed ? styles.viewBtnActive : ""}`}
+                            onClick={toggleCollapsed}
+                        >
+                            Collapse
+                        </button>
                         <button
                             className={`${styles.viewBtn} ${viewMode === "sections" ? styles.viewBtnActive : ""
                                 }`}
@@ -376,7 +463,7 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                         <button
                             className={`${styles.viewBtn} ${viewMode === "chronological" ? styles.viewBtnActive : ""
                                 }`}
-                            onClick={() => setViewMode("chronological")}
+                        // onClick={() => setViewMode("chronological")}
                         >
                             Timeline
                         </button>
@@ -468,9 +555,9 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
             <div className={styles.statusBar}>
                 <div className={styles.statusLeft}>
                     <span>
-                        {allVisibleImageBlocks.length} image
-                        {allVisibleImageBlocks.length !== 1 ? "s" : ""}
-                        {allVisibleImageBlocks.length !== totalImages &&
+                        {visibleCount} image
+                        {visibleCount !== 1 ? "s" : ""}
+                        {visibleCount !== totalImages &&
                             ` (${totalImages} total)`}
                     </span>
                     {activeTags.size > 0 && (
@@ -484,6 +571,12 @@ export default function WorksExplorer({ metadata, unsortedImages }: WorksExplore
                                 )
                                 .join(", ")}
                         </span>
+                    )}
+                    {includeGallery && (
+                        <span>+ Gallery</span>
+                    )}
+                    {collapsed && (
+                        <span>Collapsed</span>
                     )}
                 </div>
                 <div className={styles.statusRight}>

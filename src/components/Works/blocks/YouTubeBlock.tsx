@@ -26,7 +26,7 @@ export default function YouTubeBlock({ block }: YouTubeBlockProps) {
             const totalWidth = m.columnWidth * cols + m.colGap * (cols - 1);
             const embedHeight = totalWidth * ASPECT_RATIO;
             const captionHeight = block.caption ? 24 : 0;
-            span = Math.ceil((embedHeight + captionHeight) / MASONRY.rowHeight) + MASONRY.gap;
+            span = Math.ceil((embedHeight + captionHeight) / m.rowHeight) + m.gap;
         }
     }
 

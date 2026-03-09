@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
 import styles from "./Gallery.module.css";
 import GalleryViewer from "./GalleryViewer";
-import Spinner from "@/components/Spinner";
-import { getCDNConfig, thumbUrl } from "@/lib/cdn";
+import { MasonryProvider } from "@/components/Works/MasonryContext";
+import ImageBlock from "@/components/Works/blocks/ImageBlock";
 import type { AlbumMetadata } from "@/lib/gallery-metadata";
+import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
 
 interface GalleryGridProps {
     images: {
@@ -15,20 +17,59 @@ interface GalleryGridProps {
     }[];
     folderName: string;
     metadata?: AlbumMetadata | null;
+    globalTags?: WorksTagDef[];
 }
 
-const ROW_HEIGHT = 4; // matches grid-auto-rows
-const GAP = 3; // rows of gap between items
+const GALLERY_ROW_HEIGHT = 4; // matches grid-auto-rows in Gallery.module.css
+const GALLERY_GAP = 3; // rows of gap between items
 
-export default function GalleryGrid({ images, folderName, metadata }: GalleryGridProps) {
+export default function GalleryGrid({ images, folderName, metadata, globalTags = [] }: GalleryGridProps) {
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
     const [viewerOpen, setViewerOpen] = useState(false);
     const [viewerIndex, setViewerIndex] = useState(0);
-    const [spans, setSpans] = useState<Record<string, number>>({});
-    const [loadedThumbs, setLoadedThumbs] = useState<Set<string>>(new Set());
-    const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
+    const [activeTags, setActiveTags] = useState<Set<string>>(() => {
+        const param = searchParams.get("tags");
+        if (!param) return new Set<string>();
+        return new Set(param.split(",").filter(Boolean));
+    });
+    const [search, setSearchLocal] = useState(searchParams.get("q") ?? "");
+    const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
     const gridRef = useRef<HTMLDivElement>(null);
 
-    const { pullZone } = getCDNConfig();
+    function syncUrl(overrides: { tags?: Set<string>; q?: string }) {
+        const tags = overrides.tags ?? activeTags;
+        const q = overrides.q ?? search;
+
+        const params = new URLSearchParams();
+        if (tags.size > 0) params.set("tags", Array.from(tags).join(","));
+        if (q.trim()) params.set("q", q);
+
+        const qs = params.toString();
+        window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
+    }
+
+    function setSearch(value: string) {
+        setSearchLocal(value);
+        clearTimeout(debounceRef.current);
+        if (!value.trim()) {
+            syncUrl({ q: "" });
+        } else {
+            debounceRef.current = setTimeout(() => {
+                syncUrl({ q: value });
+            }, 300);
+        }
+    }
+
+    // Resolve tag ID to label/color
+    function getTagLabel(tagId: string): string {
+        return globalTags.find((t) => t.id === tagId)?.label ?? tagId;
+    }
+
+    function getTagColor(tagId: string): string | undefined {
+        return globalTags.find((t) => t.id === tagId)?.color;
+    }
 
     // Collect all unique image-level tags
     const allImageTags = useMemo(() => {
@@ -40,53 +81,49 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
         return Array.from(tagSet).sort();
     }, [metadata]);
 
-    // Filter images by active tags
+    // Filter images by active tags and search
     const filteredImages = useMemo(() => {
-        if (activeTags.size === 0) return images;
-        return images.filter((img) => {
-            const imgMeta = metadata?.images?.[img.id];
-            if (!imgMeta?.tags) return false;
-            return imgMeta.tags.some((t) => activeTags.has(t));
-        });
-    }, [images, activeTags, metadata]);
+        let result = images;
+
+        if (activeTags.size > 0) {
+            result = result.filter((img) => {
+                const imgMeta = metadata?.images?.[img.id];
+                if (!imgMeta?.tags) return false;
+                return imgMeta.tags.some((t) => activeTags.has(t));
+            });
+        }
+
+        if (search.trim()) {
+            const q = search.toLowerCase();
+            result = result.filter((img) => {
+                const imgMeta = metadata?.images?.[img.id];
+                return (
+                    img.id.toLowerCase().includes(q) ||
+                    imgMeta?.caption?.toLowerCase().includes(q) ||
+                    imgMeta?.tags?.some((t) =>
+                        t.toLowerCase().includes(q) || getTagLabel(t).toLowerCase().includes(q)
+                    )
+                );
+            });
+        }
+
+        return result;
+    }, [images, activeTags, search, metadata]);
 
     function toggleTag(tag: string) {
         setActiveTags((prev) => {
             const next = new Set(prev);
             if (next.has(tag)) next.delete(tag);
             else next.add(tag);
+            syncUrl({ tags: next });
             return next;
         });
     }
 
-    const computeSpan = useCallback(
-        (id: string, naturalWidth: number, naturalHeight: number) => {
-            if (!gridRef.current) return;
-            const gridStyles = window.getComputedStyle(gridRef.current);
-            const columnWidth =
-                parseInt(
-                    gridStyles
-                        .getPropertyValue("grid-template-columns")
-                        .split(" ")[0]
-                ) || 280;
-            const aspectRatio = naturalHeight / naturalWidth;
-            const imageHeight = columnWidth * aspectRatio;
-            const span = Math.ceil(imageHeight / ROW_HEIGHT) + GAP;
-            setSpans((prev) => ({ ...prev, [id]: span }));
-        },
-        []
-    );
-
-    // Use micro images for span computation (tiny, fast to load)
-    useEffect(() => {
-        images.forEach((image) => {
-            const img = new window.Image();
-            img.src = thumbUrl(image.path, "micro");
-            img.onload = () => {
-                computeSpan(image.id, img.naturalWidth, img.naturalHeight);
-            };
-        });
-    }, [images, computeSpan]);
+    function clearTags() {
+        setActiveTags(new Set());
+        syncUrl({ tags: new Set() });
+    }
 
     function openViewer(index: number) {
         const image = filteredImages[index];
@@ -95,26 +132,65 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
         setViewerOpen(true);
     }
 
-    const hasAnySpan = Object.keys(spans).length > 0;
+    const isFiltering = activeTags.size > 0 || search.trim().length > 0;
 
     return (
         <>
+            {/* Search bar */}
+            <div className={styles.searchBar}>
+                <span className={styles.searchBarLabel}>Search:</span>
+                <div className={styles.searchBarWrap}>
+                    <span className={styles.searchBarIcon}>&#x2315;</span>
+                    <input
+                        type="text"
+                        className={styles.searchBarInput}
+                        placeholder="filter images..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    {search && (
+                        <button
+                            className={styles.searchBarClear}
+                            onClick={() => setSearch("")}
+                        >
+                            &#x2715;
+                        </button>
+                    )}
+                </div>
+                {isFiltering && (
+                    <span className={styles.searchBarLabel} style={{ marginLeft: "auto", opacity: 0.4 }}>
+                        {filteredImages.length}/{images.length} images
+                    </span>
+                )}
+            </div>
+
+            {/* Tag bar */}
             {allImageTags.length > 0 && (
                 <div className={styles.tagBar}>
-                    <span className={styles.tagBarLabel}>filter:</span>
-                    {allImageTags.map((tag) => (
-                        <button
-                            key={tag}
-                            className={`${styles.tagPill} ${activeTags.has(tag) ? styles.tagPillActive : ""}`}
-                            onClick={() => toggleTag(tag)}
-                        >
-                            {tag}
-                        </button>
-                    ))}
+                    <span className={styles.tagBarLabel}>Tags:</span>
+                    {allImageTags.map((tag) => {
+                        const color = getTagColor(tag);
+                        return (
+                            <button
+                                key={tag}
+                                className={`${styles.tagPill} ${activeTags.has(tag) ? styles.tagPillActive : ""}`}
+                                onClick={() => toggleTag(tag)}
+                                style={
+                                    activeTags.has(tag) && color
+                                        ? { borderColor: color, background: `${color}33` }
+                                        : color
+                                            ? { borderColor: `${color}66` }
+                                            : undefined
+                                }
+                            >
+                                {getTagLabel(tag)}
+                            </button>
+                        );
+                    })}
                     {activeTags.size > 0 && (
                         <button
                             className={styles.tagClear}
-                            onClick={() => setActiveTags(new Set())}
+                            onClick={clearTags}
                         >
                             clear all
                         </button>
@@ -122,73 +198,27 @@ export default function GalleryGrid({ images, folderName, metadata }: GalleryGri
                 </div>
             )}
 
-            {!hasAnySpan && (
-                <div className={styles.gridLoading}>
-                    <Spinner size={22} />
-                    <span>Loading gallery...</span>
-                </div>
-            )}
             <div className={styles.galleryGrid} ref={gridRef}>
-                {filteredImages.map((image, i) => {
-                    const imgMeta = metadata?.images?.[image.id];
-                    const caption = imgMeta?.caption;
-                    const imgTags = imgMeta?.tags;
-                    const hasOverlay = caption || (imgTags && imgTags.length > 0);
-                    const microSrc = thumbUrl(image.path, "micro");
-                    const thumbSrc = thumbUrl(image.path, "thumb");
-                    const isThumbLoaded = loadedThumbs.has(image.id);
-                    return (
-                        <div
-                            key={image.id}
-                            className={`${styles.gridItem} ${spans[image.id] ? styles.gridItemReady : styles.gridItemPending}`}
-                            style={{
-                                gridRowEnd: spans[image.id]
-                                    ? `span ${spans[image.id]}`
-                                    : "span 1",
-                            }}
-                            onClick={() => openViewer(i)}
-                        >
-                            <div className={styles.gridImageWrapper}>
-                                {/* Blur-up micro placeholder */}
-                                <img
-                                    src={microSrc}
-                                    alt=""
-                                    aria-hidden="true"
-                                    className={`${styles.gridPlaceholder} ${isThumbLoaded ? styles.gridPlaceholderHidden : ""}`}
-                                />
-                                {/* Thumb image */}
-                                <img
-                                    src={thumbSrc}
-                                    alt={image.id}
-                                    className={`${styles.gridThumb} ${isThumbLoaded ? styles.gridThumbLoaded : ""}`}
-                                    loading="lazy"
-                                    ref={(el) => {
-                                        if (el?.complete && el.naturalWidth > 0 && !loadedThumbs.has(image.id))
-                                            setLoadedThumbs((prev) => new Set(prev).add(image.id));
-                                    }}
-                                    onLoad={() =>
-                                        setLoadedThumbs((prev) => {
-                                            if (prev.has(image.id)) return prev;
-                                            return new Set(prev).add(image.id);
-                                        })
-                                    }
-                                />
-                                {hasOverlay && (
-                                    <div className={styles.imageCaption}>
-                                        {caption && <span className={styles.imageCaptionText}>{caption}</span>}
-                                        {imgTags && imgTags.length > 0 && (
-                                            <span className={styles.imageCaptionTags}>
-                                                {imgTags.map((tag) => (
-                                                    <span key={tag} className={styles.imageCaptionTag}>{tag}</span>
-                                                ))}
-                                            </span>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    );
-                })}
+                <MasonryProvider gridRef={gridRef} rowHeight={GALLERY_ROW_HEIGHT} gap={GALLERY_GAP}>
+                    {filteredImages.map((image, i) => {
+                        const imgMeta = metadata?.images?.[image.id];
+                        const block: WorksBlock = {
+                            type: "image",
+                            path: image.path,
+                            filename: image.id,
+                            caption: imgMeta?.caption,
+                            tags: imgMeta?.tags ?? [],
+                        };
+                        return (
+                            <ImageBlock
+                                key={image.id}
+                                block={block}
+                                tagDefs={globalTags}
+                                onClick={() => openViewer(i)}
+                            />
+                        );
+                    })}
+                </MasonryProvider>
             </div>
 
             {viewerOpen && (

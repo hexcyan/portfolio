@@ -235,7 +235,6 @@
     grid-auto-rows: var(--masonry-row-height);
     grid-auto-flow: dense;
     justify-content: var(--masonry-justify, start);
-    margin-top: 12px;
     width: 100%;
     max-width: var(--masonry-max-width, none);
 }
@@ -399,11 +398,26 @@
     color: white;
 }
 
+.galleryToggle {
+    margin-right: 6px;
+    border-style: dashed;
+}
+
+/* ── Gallery source badge on section header ── */
+.sourceBadge {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.7em;
+    padding: 0px 6px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: rgba(0, 255, 255, 0.6);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
 /* ── Subsection ── */
 .subsectionBlock {
     display: flex;
     flex-direction: column;
-    margin-top: 16px;
 }
 
 .subsectionHeader {
@@ -550,8 +564,8 @@
 }
 
 .tweetEmbed iframe {
-    max-height: 100% !important;
-    width: 100% !important;
+    /* max-height: 100% !important;
+    width: 100% !important; */
 }
 
 .embedCaption {

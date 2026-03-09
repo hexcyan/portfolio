@@ -27,6 +27,7 @@ interface LayoutState {
 }
 
 function childImagePath(child: WorksGridChild): string {
+    if (child.path) return child.path;
     return `works/${child.folder}/${child.filename}`;
 }
 
@@ -35,6 +36,7 @@ function childToBlock(child: WorksGridChild): WorksBlock {
         type: "image",
         filename: child.filename,
         folder: child.folder,
+        path: child.path,
         caption: child.caption,
         tags: child.tags,
         date: child.date,
@@ -129,7 +131,7 @@ export default function GridBlock({ block, tagDefs, onImageClick }: GridBlockPro
             totalHeight = rowH;
         }
 
-        const span = Math.ceil(totalHeight / MASONRY.rowHeight) + MASONRY.gap;
+        const span = Math.ceil(totalHeight / m.rowHeight) + m.gap;
         setLayout({ span, cols: effectiveCols, mode, colGap: m.colGap, rowGap: m.rowGap, rowTemplate });
     }, [m, dimsLoaded, children, block.cols, block.maxCols]);
 
