@@ -46,7 +46,7 @@ export const files: IIcon[] = [
     {
         title: "board",
         type: "thumbnail",
-        route: "/board",
+        route: "/board?gallery=true&collapsed=true",
     },
     {
         title: "this site",
