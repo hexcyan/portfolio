@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getFolders, getImagesFromFolder, thumbUrl } from "@/lib/cdn";
 import { getAlbumMetadata, getGalleryGlobalMeta } from "@/lib/gallery-metadata";
 import { getWorksGlobalMeta } from "@/lib/works-metadata";
@@ -88,11 +89,13 @@ export default async function GalleryPage() {
                 </span>
             </StickyHeader>
 
-            <GalleryIndex
-                folders={folders}
-                linkAlbums={linkAlbums}
-                globalTags={globalTags}
-            />
+            <Suspense>
+                <GalleryIndex
+                    folders={folders}
+                    linkAlbums={linkAlbums}
+                    globalTags={globalTags}
+                />
+            </Suspense>
         </div>
     );
 }

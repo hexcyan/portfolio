@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getImagesFromFolder, getFolders } from "@/lib/cdn";
 import { getAlbumMetadata } from "@/lib/gallery-metadata";
 import { getWorksGlobalMeta } from "@/lib/works-metadata";
@@ -90,12 +91,14 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
                         )}
                     </div>
                 )}
-                <GalleryGrid
-                    images={images}
-                    folderName={folderName}
-                    metadata={metadata}
-                    globalTags={globalTags}
-                />
+                <Suspense>
+                    <GalleryGrid
+                        images={images}
+                        folderName={folderName}
+                        metadata={metadata}
+                        globalTags={globalTags}
+                    />
+                </Suspense>
             </div>
         );
     } catch {
