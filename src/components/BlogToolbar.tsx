@@ -7,21 +7,20 @@ import Image from "next/image";
 import Card from "@/components/Card";
 import type { BlogFrontMatter } from "@/lib/blog";
 import styles from "./BlogToolbar.module.css";
+import TagPill, { TagClear } from "@/components/TagPill/TagPill";
 
 type SortField = "title" | "description" | "tags" | "date";
 type SortDir = "asc" | "desc";
 type ViewMode = "detail" | "grid";
 
 // ── Tag Colors ──
-const TAG_COLORS: Record<string, { border: string; color: string; bg: string }> = {
-    meta: { border: "#ff79c6", color: "#ff79c6", bg: "rgba(255, 37, 160, 0.2)" },
-    keyboards: { border: "#50fa7b", color: "#50fa7b", bg: "rgba(80, 250, 123, 0.12)" },
+const TAG_COLORS: Record<string, string> = {
+    meta: "#ff79c6",
+    keyboards: "#50fa7b",
 };
 
-const DEFAULT_TAG_COLOR = { border: "rgba(0, 255, 255, 0.3)", color: "rgba(255, 255, 255, 0.7)", bg: "transparent" };
-
-function getTagColor(tag: string) {
-    return TAG_COLORS[tag.toLowerCase()] || DEFAULT_TAG_COLOR;
+function getTagColor(tag: string): string | undefined {
+    return TAG_COLORS[tag.toLowerCase()];
 }
 
 interface BlogToolbarProps {
@@ -193,30 +192,18 @@ export default function BlogToolbar({ posts, allTags }: BlogToolbarProps) {
             {allTags.length > 0 && (
                 <div className={styles.tagBar}>
                     <span className={styles.tagBarLabel}>Tags:</span>
-                    {allTags.map((tag) => {
-                        const tc = getTagColor(tag);
-                        return (
-                            <button
-                                key={tag}
-                                className={`${styles.tagBtn} ${activeTags.includes(tag) ? styles.tagBtnActive : ""}`}
-                                style={{
-                                    borderColor: tc.border,
-                                    color: tc.color,
-                                    backgroundColor: tc.bg,
-                                }}
-                                onClick={() => toggleTag(tag)}
-                            >
-                                {tag}
-                            </button>
-                        );
-                    })}
-                    {activeTags.length > 0 && (
-                        <button
-                            className={styles.tagClearAll}
-                            onClick={() => setTags([])}
+                    {allTags.map((tag) => (
+                        <TagPill
+                            key={tag}
+                            color={getTagColor(tag)}
+                            active={activeTags.includes(tag)}
+                            onClick={() => toggleTag(tag)}
                         >
-                            clear all
-                        </button>
+                            {tag}
+                        </TagPill>
+                    ))}
+                    {activeTags.length > 0 && (
+                        <TagClear onClick={() => setTags([])} />
                     )}
                 </div>
             )}
@@ -272,22 +259,16 @@ export default function BlogToolbar({ posts, allTags }: BlogToolbarProps) {
                                     <div
                                         className={`${styles.detailCell} ${styles.cellTags}`}
                                     >
-                                        {post.tags?.map((tag) => {
-                                            const tc = getTagColor(tag);
-                                            return (
-                                                <span
-                                                    key={tag}
-                                                    className={styles.miniTag}
-                                                    style={{
-                                                        borderColor: tc.border,
-                                                        color: tc.color,
-                                                        backgroundColor: tc.bg,
-                                                    }}
-                                                >
-                                                    {tag}
-                                                </span>
-                                            );
-                                        })}
+                                        {post.tags?.map((tag) => (
+                                            <TagPill
+                                                key={tag}
+                                                size="sm"
+                                                color={getTagColor(tag)}
+                                                style={{ flexShrink: 0, height: "fit-content" }}
+                                            >
+                                                {tag}
+                                            </TagPill>
+                                        ))}
                                     </div>
                                     <div
                                         className={`${styles.detailCell} ${styles.cellDate}`}
@@ -350,22 +331,15 @@ export default function BlogToolbar({ posts, allTags }: BlogToolbarProps) {
                                                         }
                                                     >
                                                         {post.tags.map(
-                                                            (tag) => {
-                                                                const tc = getTagColor(tag);
-                                                                return (
-                                                                    <span
-                                                                        key={tag}
-                                                                        className={styles.cardTag}
-                                                                        style={{
-                                                                            borderColor: tc.border,
-                                                                            color: tc.color,
-                                                                            backgroundColor: tc.bg,
-                                                                        }}
-                                                                    >
-                                                                        {tag}
-                                                                    </span>
-                                                                );
-                                                            }
+                                                            (tag) => (
+                                                                <TagPill
+                                                                    key={tag}
+                                                                    size="lg"
+                                                                    color={getTagColor(tag)}
+                                                                >
+                                                                    {tag}
+                                                                </TagPill>
+                                                            )
                                                         )}
                                                     </div>
                                                 )}

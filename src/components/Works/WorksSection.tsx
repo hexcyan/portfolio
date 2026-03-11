@@ -6,7 +6,8 @@ import { MASONRY } from "./masonry.config";
 import { MasonryProvider, useMasonryGrid } from "./MasonryContext";
 import StickyHeader from "@/components/Gallery/StickyHeader";
 import WorksSubsectionComponent from "./WorksSubsection";
-import { getCDNConfig, thumbUrl } from "@/lib/cdn";
+import { thumbUrl } from "@/lib/cdn";
+import TagPill from "@/components/TagPill/TagPill";
 import type {
     WorksImage,
     WorksBlock,
@@ -155,20 +156,13 @@ function LooseImageGrid({ filteredImages, tagDefs, onImageClick }: LooseImageGri
                                     {image.tags.length > 0 && (
                                         <span className={styles.overlayTags}>
                                             {image.tags.map((tagId) => (
-                                                <span
+                                                <TagPill
                                                     key={tagId}
-                                                    className={styles.overlayTag}
-                                                    style={
-                                                        getTagColor(tagId)
-                                                            ? {
-                                                                borderColor: getTagColor(tagId),
-                                                                color: getTagColor(tagId),
-                                                            }
-                                                            : undefined
-                                                    }
+                                                    size="xs"
+                                                    color={getTagColor(tagId)}
                                                 >
                                                     {getTagLabel(tagId)}
-                                                </span>
+                                                </TagPill>
                                             ))}
                                         </span>
                                     )}
@@ -206,7 +200,7 @@ export default function WorksSectionComponent({
             >
                 <span className={styles.sectionTitle}>{section.title}</span>
                 {section.source === "gallery" && (
-                    <span className={styles.sourceBadge}>Gallery</span>
+                    <TagPill size="sm">Gallery</TagPill>
                 )}
                 {section.dateRange && (
                     <span className={styles.sectionDateRange}>

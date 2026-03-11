@@ -121,47 +121,6 @@
     white-space: nowrap;
 }
 
-.tagBtn {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.72em;
-    padding: 1px 8px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-}
-
-.tagBtn:hover {
-    border-color: var(--cyan);
-    color: white;
-    background: rgba(0, 255, 255, 0.08);
-}
-
-.tagBtnActive {
-    border-color: var(--cyan);
-    background: var(--titlebar-bg);
-    color: white;
-}
-
-.tagClearAll {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.65em;
-    padding: 1px 6px;
-    border: 1px dashed rgba(0, 255, 255, 0.3);
-    background: transparent;
-    color: rgba(0, 255, 255, 0.5);
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-    margin-left: auto;
-}
-
-.tagClearAll:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-}
 
 /* ── Sections Container ── */
 .sectionsContainer {
@@ -359,14 +318,6 @@
     margin-top: 1px;
 }
 
-.overlayTag {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.62em;
-    padding: 0px 5px;
-    border: 1px solid rgba(0, 255, 255, 0.4);
-    color: rgba(0, 255, 255, 0.8);
-    white-space: nowrap;
-}
 
 /* ── View Toggle ── */
 .viewToggle {
@@ -403,16 +354,6 @@
     border-style: dashed;
 }
 
-/* ── Gallery source badge on section header ── */
-.sourceBadge {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.7em;
-    padding: 0px 6px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: rgba(0, 255, 255, 0.6);
-    white-space: nowrap;
-    letter-spacing: 0.02em;
-}
 
 /* ── Subsection ── */
 .subsectionBlock {
@@ -659,4 +600,41 @@
         padding: 6px 12px;
     }
 
+}
+
+/* ═══════════════════════════════════════════════════════
+   Standalone mode — blocks rendered outside masonry grid
+   (e.g. in blog posts)
+   ═══════════════════════════════════════════════════════ */
+
+.imageStandalone {
+    cursor: pointer;
+    margin: 1rem 0rem 2rem 0;
+    width: 100%;
+}
+
+.imageStandaloneInner {
+    position: relative;
+    overflow: hidden;
+}
+
+/* .imageStandaloneImg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    transition: opacity 0.2s ease;
+} */
+
+.imageStandaloneCaption {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.72em;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 6px 2px 0;
+    text-align: center
+}
+
+.embedStandalone {
+    margin: 1.5rem 0;
+    max-width: 100%;
 }

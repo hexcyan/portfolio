@@ -6,6 +6,7 @@ import styles from "./Gallery.module.css";
 import Spinner from "@/components/Spinner";
 import { getCDNConfig, thumbUrl as cdnThumbUrl } from "@/lib/cdn";
 import type { AlbumMetadata } from "@/lib/gallery-metadata";
+import TagPill from "@/components/TagPill/TagPill";
 
 interface GalleryViewerProps {
     images: { id: string; path: string }[];
@@ -157,9 +158,9 @@ export default function GalleryViewer({
                         <>
                             {caption && <span className={styles.viewerInfoDivider} />}
                             {imageTags.map((tag) => (
-                                <span key={tag} className={styles.viewerInfoTag}>
+                                <TagPill key={tag} style={{ flexShrink: 0 }}>
                                     {tag}
-                                </span>
+                                </TagPill>
                             ))}
                         </>
                     )}

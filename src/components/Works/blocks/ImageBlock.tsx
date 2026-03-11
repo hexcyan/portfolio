@@ -6,6 +6,7 @@ import { computeBlockCols } from "./grid-utils";
 import { useMasonryGrid } from "../MasonryContext";
 import { thumbUrl } from "@/lib/cdn";
 import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
+import TagPill from "@/components/TagPill/TagPill";
 
 interface ImageBlockProps {
     block: WorksBlock;
@@ -15,11 +16,16 @@ interface ImageBlockProps {
     contained?: boolean;
     /** Direct CDN path — when provided, bypasses folder/filename construction */
     imagePath?: string;
+    /** When true, render as a simple standalone image (no masonry grid required) */
+    standalone?: boolean;
 }
 
-export default function ImageBlock({ block, tagDefs, onClick, contained }: ImageBlockProps) {
+export default function ImageBlock({ block, tagDefs, onClick, contained, standalone }: ImageBlockProps) {
     const [thumbLoaded, setThumbLoaded] = useState(false);
     const m = useMasonryGrid();
+
+    // Auto-detect standalone when no masonry context and not contained
+    const isStandalone = standalone ?? (!m && !contained);
 
     const imagePath = block.path
         ? block.path
@@ -36,9 +42,9 @@ export default function ImageBlock({ block, tagDefs, onClick, contained }: Image
     const aspectRatioRef = useRef<number | null>(null);
     const [aspectRatio, setAspectRatio] = useState<number | null>(null);
 
-    // Load micro image once to get aspect ratio (skip when contained — not needed)
+    // Load micro image once to get aspect ratio (skip when contained or standalone — not needed)
     useEffect(() => {
-        if (contained) return;
+        if (contained || isStandalone) return;
         if (aspectRatioRef.current !== null) return;
         const img = new window.Image();
         img.src = microSrc;
@@ -47,7 +53,31 @@ export default function ImageBlock({ block, tagDefs, onClick, contained }: Image
             aspectRatioRef.current = ratio;
             setAspectRatio(ratio);
         };
-    }, [microSrc, contained]);
+    }, [microSrc, contained, isStandalone]);
+
+    // ── Standalone render ──
+    if (isStandalone) {
+        return (
+            <div
+                className={styles.imageStandalone}
+                onClick={onClick}
+            >
+                <div className={styles.imageStandaloneInner}>
+                    <img
+                        src={thumbSrc}
+                        alt={block.caption || block.filename || ""}
+                        className={styles.imageStandaloneImg}
+                        loading="lazy"
+                    />
+                    {block.caption && (
+                        <div className={styles.imageStandaloneCaption}>
+                            {block.caption}
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     let span: number | null = null;
     let cols = baseCols;
@@ -132,20 +162,13 @@ export default function ImageBlock({ block, tagDefs, onClick, contained }: Image
                         {block.tags.length > 0 && (
                             <span className={styles.overlayTags}>
                                 {block.tags.map((tagId) => (
-                                    <span
+                                    <TagPill
                                         key={tagId}
-                                        className={styles.overlayTag}
-                                        style={
-                                            getTagColor(tagId)
-                                                ? {
-                                                    borderColor: getTagColor(tagId),
-                                                    color: getTagColor(tagId),
-                                                }
-                                                : undefined
-                                        }
+                                        size="xs"
+                                        color={getTagColor(tagId)}
                                     >
                                         {getTagLabel(tagId)}
-                                    </span>
+                                    </TagPill>
                                 ))}
                             </span>
                         )}

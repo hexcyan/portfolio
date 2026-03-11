@@ -571,15 +571,6 @@
     letter-spacing: 0.02em;
 }
 
-.albumInfoTag {
-    font-family: "RedHatMono", monospace;
-    font-size: 1em;
-    padding: 1px 8px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    white-space: nowrap;
-}
 
 /* ── Search Bar (gallery index + album pages) ── */
 .searchBar {
@@ -672,47 +663,6 @@
     white-space: nowrap;
 }
 
-.tagPill {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.72em;
-    padding: 1px 8px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-}
-
-.tagPill:hover {
-    border-color: var(--cyan);
-    color: white;
-    background: rgba(0, 255, 255, 0.08);
-}
-
-.tagPillActive {
-    border-color: var(--cyan);
-    background: var(--titlebar-bg);
-    color: white;
-}
-
-.tagClear {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.65em;
-    padding: 1px 6px;
-    border: 1px dashed rgba(0, 255, 255, 0.3);
-    background: transparent;
-    color: rgba(0, 255, 255, 0.5);
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-    margin-left: auto;
-}
-
-.tagClear:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-}
 
 /* ── Image Caption Overlay ── */
 .imageCaption {
@@ -738,20 +688,6 @@
     display: block;
 }
 
-.imageCaptionTags {
-    display: flex;
-    gap: 4px;
-    margin-top: 3px;
-    flex-wrap: wrap;
-}
-
-.imageCaptionTag {
-    font-size: 0.9em;
-    padding: 0px 5px;
-    border: 1px solid rgba(0, 255, 255, 0.4);
-    color: rgba(0, 255, 255, 0.8);
-    white-space: nowrap;
-}
 
 /* ── Viewer Info Bar (between preview and filmstrip) ── */
 .viewerInfoBar {
@@ -784,15 +720,6 @@
     flex-shrink: 0;
 }
 
-.viewerInfoTag {
-    font-family: "RedHatMono", monospace;
-    font-size: 1em;
-    padding: 1px 8px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.6);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
 
 /* ── Folder Card Metadata (overlay on preview image) ── */
 .folderMeta {
@@ -831,14 +758,6 @@
     gap: 4px;
 }
 
-.folderTag {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.7em;
-    padding: 0px 5px;
-    border: 1px solid rgba(0, 255, 255, 0.4);
-    color: rgba(0, 255, 255, 0.8);
-    white-space: nowrap;
-}
 
 /* ── Responsive ── */
 @media (max-width: 640px) {

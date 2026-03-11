@@ -6,11 +6,14 @@
  *   _thumbs/{name}.micro.webp  — 30px wide, quality 50
  *
  * Usage:
- *   npm run generate-thumbs                          # process all gallery + works
+ *   npm run generate-thumbs                          # process all gallery + works + blog
  *   npm run generate-thumbs -- --only gallery        # just gallery
  *   npm run generate-thumbs -- --only works          # just works
+ *   npm run generate-thumbs -- --only blog           # just blog
  *   npm run generate-thumbs -- --folder gallery/cats # single folder
  *   npm run generate-thumbs -- --force               # regenerate even if thumbs exist
+ *   npm run generate-thumbs -- --purge               # delete orphaned thumbs (no matching original)
+ *   npm run generate-thumbs -- --purge --only blog   # purge only blog thumbs
  */
 
 import sharp from "sharp";
@@ -33,10 +36,7 @@ interface BunnyStorageObject {
 
 const IMAGE_RE = /\.(jpg|jpeg|png|gif|webp)$/i;
 
-const SIZES = [
-    { suffix: "thumb", width: 400, quality: 75 },
-    { suffix: "micro", width: 30, quality: 50 },
-] as const;
+import { THUMB_SIZES } from "@/lib/cdn";
 
 // ── BunnyCDN helpers ──
 
@@ -79,6 +79,15 @@ async function fileExists(filePath: string): Promise<boolean> {
     const url = `${BASE_URL}/${filePath}`;
     const res = await fetch(url, {
         method: "HEAD",
+        headers: { AccessKey: API_KEY! },
+    });
+    return res.ok;
+}
+
+async function deleteFile(filePath: string): Promise<boolean> {
+    const url = `${BASE_URL}/${filePath}`;
+    const res = await fetch(url, {
+        method: "DELETE",
         headers: { AccessKey: API_KEY! },
     });
     return res.ok;
@@ -171,7 +180,13 @@ async function processFolder(folder: string, force: boolean): Promise<{ processe
 
         // Step 2: Resize the correctly-oriented image (no EXIF ambiguity)
         let allOk = true;
-        for (const size of SIZES) {
+        const root = folder.split("/")[0];
+        const baseSuffixes = [...new Set(THUMB_SIZES.map((s) => s.suffix.replace(/^[^_]+_/, "")))];
+        const resolved = baseSuffixes.map((s) => {
+            const override = THUMB_SIZES.find((e) => e.suffix === `${root}_${s}`);
+            return { ...(override ?? THUMB_SIZES.find((e) => e.suffix === s)!), suffix: s };
+        });
+        for (const size of resolved) {
             const outName = `${base}.${size.suffix}.webp`;
             const outPath = `${folder}/_thumbs/${outName}`;
 
@@ -203,42 +218,111 @@ async function processFolder(folder: string, force: boolean): Promise<{ processe
     return stats;
 }
 
+async function purgeFolder(folder: string): Promise<{ purged: number; kept: number }> {
+    const stats = { purged: 0, kept: 0 };
+
+    // Get original image base names
+    let originals: Set<string>;
+    try {
+        const images = await getImages(folder);
+        originals = new Set(images.map(baseName));
+    } catch {
+        console.error(`  ERROR listing ${folder}`);
+        return stats;
+    }
+
+    // List _thumbs/ contents
+    let thumbItems: BunnyStorageObject[];
+    try {
+        thumbItems = await listDir(`${folder}/_thumbs`);
+    } catch {
+        // No _thumbs folder — nothing to purge
+        return stats;
+    }
+
+    const thumbFiles = thumbItems
+        .filter((item) => !item.IsDirectory)
+        .map((item) => item.ObjectName);
+
+    for (const thumbFile of thumbFiles) {
+        // Extract original base name: "foo.thumb.webp" or "foo.micro.webp" → "foo"
+        const thumbBase = thumbFile.replace(/\.(thumb|micro)\.webp$/, "");
+        if (originals.has(thumbBase)) {
+            stats.kept++;
+        } else {
+            const thumbPath = `${folder}/_thumbs/${thumbFile}`;
+            const ok = await deleteFile(thumbPath);
+            if (ok) {
+                console.log(`    🗑 ${thumbFile}`);
+                stats.purged++;
+            } else {
+                console.error(`    FAIL delete ${thumbPath}`);
+            }
+        }
+    }
+
+    if (stats.purged > 0 || thumbFiles.length > 0) {
+        console.log(`  📂 ${folder} — ${stats.purged} purged, ${stats.kept} kept`);
+    }
+
+    return stats;
+}
+
 // ── CLI ──
 
-async function main() {
-    const args = process.argv.slice(2);
-    const force = args.includes("--force");
-
-    let folders: string[] = [];
-
+async function resolveFolders(args: string[]): Promise<string[]> {
     const folderIdx = args.indexOf("--folder");
     const onlyIdx = args.indexOf("--only");
 
     if (folderIdx !== -1 && args[folderIdx + 1]) {
-        // Single folder mode
-        const target = args[folderIdx + 1].replace(/\/$/, "");
-        folders = [target];
-    } else if (onlyIdx !== -1 && args[onlyIdx + 1]) {
-        // Filter to specific root
+        return [args[folderIdx + 1].replace(/\/$/, "")];
+    }
+
+    if (onlyIdx !== -1 && args[onlyIdx + 1]) {
         const root = args[onlyIdx + 1];
-        if (root !== "gallery" && root !== "works") {
-            console.error(`--only must be "gallery" or "works"`);
+        if (root !== "gallery" && root !== "works" && root !== "blog") {
+            console.error(`--only must be "gallery", "works", or "blog"`);
             process.exit(1);
         }
         console.log(`Scanning ${root}/...\n`);
-        folders = await getSubfolders(root);
-    } else {
-        // Process all
-        console.log("Scanning gallery/ and works/...\n");
-        const [galleryFolders, worksFolders] = await Promise.all([
-            getSubfolders("gallery"),
-            getSubfolders("works"),
-        ]);
-        folders = [...galleryFolders, ...worksFolders];
+        if (root === "blog") return ["blog"];
+        return getSubfolders(root);
     }
+
+    // Process all
+    console.log("Scanning gallery/, works/, and blog/...\n");
+    const [galleryFolders, worksFolders] = await Promise.all([
+        getSubfolders("gallery"),
+        getSubfolders("works"),
+    ]);
+    return [...galleryFolders, ...worksFolders, "blog"];
+}
+
+async function main() {
+    const args = process.argv.slice(2);
+    const force = args.includes("--force");
+    const purge = args.includes("--purge");
+
+    const folders = await resolveFolders(args);
 
     if (folders.length === 0) {
         console.log("No folders found.");
+        return;
+    }
+
+    if (purge) {
+        console.log(`Purging orphaned thumbnails in ${folders.length} folder(s):\n`);
+
+        let totalPurged = 0;
+        let totalKept = 0;
+
+        for (const folder of folders) {
+            const stats = await purgeFolder(folder);
+            totalPurged += stats.purged;
+            totalKept += stats.kept;
+        }
+
+        console.log(`\nDone: ${totalPurged} purged, ${totalKept} kept`);
         return;
     }
 

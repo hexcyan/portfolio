@@ -6,6 +6,7 @@ import GalleryGrid from "@/components/Gallery/GalleryGrid";
 import StickyHeader from "@/components/Gallery/StickyHeader";
 import styles from "@/components/Gallery/Gallery.module.css";
 import Link from "next/link";
+import TagPill from "@/components/TagPill/TagPill";
 
 // ISR: serve static, revalidate in background every hour as fallback
 export const revalidate = 3600;
@@ -74,17 +75,12 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
                                 {metadata.tags.map((tag) => {
                                     const tagDef = globalTags.find((t) => t.id === tag);
                                     return (
-                                        <span
+                                        <TagPill
                                             key={tag}
-                                            className={styles.albumInfoTag}
-                                            style={
-                                                tagDef?.color
-                                                    ? { borderColor: tagDef.color, color: tagDef.color }
-                                                    : undefined
-                                            }
+                                            color={tagDef?.color}
                                         >
                                             {tagDef?.label ?? tag}
-                                        </span>
+                                        </TagPill>
                                     );
                                 })}
                             </>

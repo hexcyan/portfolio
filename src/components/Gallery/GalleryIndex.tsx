@@ -9,6 +9,7 @@ import LinkAlbumCard from "./LinkAlbumCard";
 import { thumbUrl } from "@/lib/cdn";
 import type { WorksTagDef } from "@/lib/works-metadata";
 import type { LinkAlbum } from "@/lib/gallery-metadata";
+import TagPill, { TagClear } from "@/components/TagPill/TagPill";
 
 interface FolderWithPreview {
     name: string;
@@ -177,29 +178,18 @@ export default function GalleryIndex({ folders, linkAlbums, globalTags }: Galler
             {allTags.length > 0 && (
                 <div className={styles.tagBar}>
                     <span className={styles.tagBarLabel}>Tags:</span>
-                    {allTags.map((tag) => {
-                        const color = getTagColor(tag);
-                        return (
-                            <button
-                                key={tag}
-                                className={`${styles.tagPill} ${activeTags.has(tag) ? styles.tagPillActive : ""}`}
-                                onClick={() => toggleTag(tag)}
-                                style={
-                                    activeTags.has(tag) && color
-                                        ? { borderColor: color, background: `${color}33` }
-                                        : color
-                                            ? { borderColor: `${color}66` }
-                                            : undefined
-                                }
-                            >
-                                {getTagLabel(tag)}
-                            </button>
-                        );
-                    })}
+                    {allTags.map((tag) => (
+                        <TagPill
+                            key={tag}
+                            color={getTagColor(tag)}
+                            active={activeTags.has(tag)}
+                            onClick={() => toggleTag(tag)}
+                        >
+                            {getTagLabel(tag)}
+                        </TagPill>
+                    ))}
                     {activeTags.size > 0 && (
-                        <button className={styles.tagClear} onClick={clearTags}>
-                            clear all
-                        </button>
+                        <TagClear onClick={clearTags} />
                     )}
                 </div>
             )}
@@ -240,17 +230,13 @@ export default function GalleryIndex({ folders, linkAlbums, globalTags }: Galler
                                     {folder.tags.length > 0 && (
                                         <span className={styles.folderTags}>
                                             {folder.tags.map((tag) => (
-                                                <span
+                                                <TagPill
                                                     key={tag}
-                                                    className={styles.folderTag}
-                                                    style={
-                                                        getTagColor(tag)
-                                                            ? { borderColor: getTagColor(tag), color: getTagColor(tag) }
-                                                            : undefined
-                                                    }
+                                                    size="sm"
+                                                    color={getTagColor(tag)}
                                                 >
                                                     {getTagLabel(tag)}
-                                                </span>
+                                                </TagPill>
                                             ))}
                                         </span>
                                     )}

@@ -1,10 +1,66 @@
+/* Breadcrumbs */
+.breadcrumbs {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    padding: 6px 12px;
+    background: var(--statusbar-bg);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    user-select: none;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.08);
+}
+
+.breadcrumbPath {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.breadcrumbs a {
+    color: var(--cyan);
+    text-decoration: none;
+    transition: text-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.breadcrumbs a:hover {
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.current {
+    color: rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.breadcrumbTags {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+}
+
+
 .prose {
     color: white;
     max-width: 65ch;
     margin: 0 auto;
     font-family: "RedHatDisplay", sans-serif;
     line-height: 1.8;
-    padding: 0.5rem 48px 3rem;
+    padding: 48px 3rem;
 }
 
 .prose p {
@@ -41,6 +97,7 @@
     text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
 }
 
+
 /* Images */
 .prose p:has(img) {
     display: flex;
@@ -50,11 +107,10 @@
 }
 
 .prose img {
-    max-width: 100%;
     width: 100%;
-    height: auto !important;
     max-height: 360px;
-    margin: 1.75rem auto;
+    object-fit: contain;
+    margin: 0;
 }
 
 .imgContainer {
@@ -71,7 +127,6 @@
     height: 360px;
     position: relative;
     overflow: hidden;
-    margin-bottom: 2.5rem;
 }
 
 .splash img {
@@ -85,6 +140,10 @@
 }
 
 @media only screen and (max-width: 960px) {
+    .breadcrumbs {
+        padding: 6px 8px;
+    }
+
     .prose {
         padding: 0.5rem 24px 2rem;
     }

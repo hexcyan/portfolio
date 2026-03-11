@@ -6,6 +6,7 @@ import styles from "./Works.module.css";
 import WorksSectionComponent from "./WorksSection";
 import WorksSubsectionComponent from "./WorksSubsection";
 import GalleryViewer from "@/components/Gallery/GalleryViewer";
+import TagPill, { TagClear } from "@/components/TagPill/TagPill";
 import type {
     WorksMetadata,
     WorksImage,
@@ -474,32 +475,17 @@ export default function WorksExplorer({ metadata, unsortedImages, gallerySection
                     <div className={styles.tagBar}>
                         <span className={styles.tagBarLabel}>Tags:</span>
                         {metadata.tags.map((tag) => (
-                            <button
+                            <TagPill
                                 key={tag.id}
-                                className={`${styles.tagBtn} ${activeTags.has(tag.id) ? styles.tagBtnActive : ""
-                                    }`}
+                                color={tag.color}
+                                active={activeTags.has(tag.id)}
                                 onClick={() => toggleTag(tag.id)}
-                                style={
-                                    activeTags.has(tag.id) && tag.color
-                                        ? {
-                                            borderColor: tag.color,
-                                            background: `${tag.color}33`,
-                                        }
-                                        : tag.color
-                                            ? { borderColor: `${tag.color}66` }
-                                            : undefined
-                                }
                             >
                                 {tag.label}
-                            </button>
+                            </TagPill>
                         ))}
                         {activeTags.size > 0 && (
-                            <button
-                                className={styles.tagClearAll}
-                                onClick={() => clearTags()}
-                            >
-                                clear all
-                            </button>
+                            <TagClear onClick={() => clearTags()} />
                         )}
                     </div>
                 )}

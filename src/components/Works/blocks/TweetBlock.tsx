@@ -79,6 +79,24 @@ export default function TweetBlock({ block }: TweetBlockProps) {
         };
     }, [measureSpan]);
 
+    // Standalone mode when no masonry context
+    if (!m) {
+        return (
+            <div className={styles.embedStandalone}>
+                <div className={styles.tweetEmbed} ref={containerRef}>
+                    <blockquote className="twitter-tweet" data-theme="dark">
+                        <a href={`https://twitter.com/i/status/${block.tweetId}`}>
+                            Loading tweet...
+                        </a>
+                    </blockquote>
+                </div>
+                {block.caption && (
+                    <div className={styles.embedCaption}>{block.caption}</div>
+                )}
+            </div>
+        );
+    }
+
     return (
         <div
             className={styles.embedBlock}

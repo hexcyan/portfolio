@@ -136,47 +136,6 @@
     white-space: nowrap;
 }
 
-.tagBtn {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.72em;
-    padding: 1px 8px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-}
-
-.tagBtn:hover {
-    border-color: var(--cyan);
-    color: white;
-    background: rgba(0, 255, 255, 0.08);
-}
-
-.tagBtnActive {
-    border-color: var(--cyan);
-    background: var(--titlebar-bg);
-    color: white;
-}
-
-.tagClearAll {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.65em;
-    padding: 1px 6px;
-    border: 1px dashed rgba(0, 255, 255, 0.3);
-    background: transparent;
-    color: rgba(0, 255, 255, 0.5);
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-    margin-left: auto;
-}
-
-.tagClearAll:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-}
 
 /* ── View wrappers (flex-fill) ── */
 .detailWrap {
@@ -315,16 +274,6 @@
     flex-wrap: nowrap;
 }
 
-.miniTag {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.7em;
-    padding: 0px 5px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.7);
-    white-space: nowrap;
-    flex-shrink: 0;
-    height: fit-content;
-}
 
 .cellDate {
     font-family: "RedHatMono", monospace;
@@ -386,14 +335,6 @@
     margin-top: 0.75rem;
 }
 
-.cardTag {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.8em;
-    padding: 0.2rem 0.5rem;
-    background-color: var(--titlebar-bg);
-    border: 1px solid var(--cyan);
-    color: white;
-}
 
 /* ── Status Bar (bottom) ── */
 .statusBar {

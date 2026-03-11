@@ -1,0 +1,68 @@
+.tag {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.72em;
+    padding: 1px 8px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+}
+
+/* ── Sizes ── */
+.xs {
+    font-size: 0.62em;
+    padding: 0px 5px;
+}
+
+.sm {
+    font-size: 0.7em;
+    padding: 0px 5px;
+}
+
+.md {
+    font-size: 0.72em;
+    padding: 1px 8px;
+}
+
+.lg {
+    font-size: 0.8em;
+    padding: 0.2rem 0.5rem;
+}
+
+/* ── Interactive (button) ── */
+.interactive {
+    cursor: pointer;
+    transition: all 0.12s;
+}
+
+.interactive:hover {
+    border-color: var(--cyan);
+    color: white;
+    background: rgba(0, 255, 255, 0.08);
+}
+
+/* ── Active state ── */
+.active {
+    border-color: var(--cyan);
+    background: var(--titlebar-bg);
+    color: white;
+}
+
+/* ── Clear variant ── */
+.clear {
+    font-family: "RedHatMono", monospace;
+    font-size: 0.65em;
+    padding: 1px 6px;
+    border: 1px dashed rgba(0, 255, 255, 0.3);
+    background: transparent;
+    color: rgba(0, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.clear:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}

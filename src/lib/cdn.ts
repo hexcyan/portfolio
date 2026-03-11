@@ -130,6 +130,12 @@ export function getCDNConfig() {
     };
 }
 
+export const THUMB_SIZES = [
+    { suffix: "blog_thumb", width: 600, quality: 75 },
+    { suffix: "thumb", width: 400, quality: 75 },
+    { suffix: "micro", width: 30, quality: 50 },
+] as const;
+
 export function thumbUrl(imagePath: string, size: "thumb" | "micro" = "thumb") {
     const { pullZone } = getCDNConfig();
     const dir = imagePath.substring(0, imagePath.lastIndexOf("/"));

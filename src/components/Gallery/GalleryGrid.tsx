@@ -8,6 +8,7 @@ import { MasonryProvider } from "@/components/Works/MasonryContext";
 import ImageBlock from "@/components/Works/blocks/ImageBlock";
 import type { AlbumMetadata } from "@/lib/gallery-metadata";
 import type { WorksBlock, WorksTagDef } from "@/lib/works-metadata";
+import TagPill, { TagClear } from "@/components/TagPill/TagPill";
 
 interface GalleryGridProps {
     images: {
@@ -168,32 +169,18 @@ export default function GalleryGrid({ images, folderName, metadata, globalTags =
             {allImageTags.length > 0 && (
                 <div className={styles.tagBar}>
                     <span className={styles.tagBarLabel}>Tags:</span>
-                    {allImageTags.map((tag) => {
-                        const color = getTagColor(tag);
-                        return (
-                            <button
-                                key={tag}
-                                className={`${styles.tagPill} ${activeTags.has(tag) ? styles.tagPillActive : ""}`}
-                                onClick={() => toggleTag(tag)}
-                                style={
-                                    activeTags.has(tag) && color
-                                        ? { borderColor: color, background: `${color}33` }
-                                        : color
-                                            ? { borderColor: `${color}66` }
-                                            : undefined
-                                }
-                            >
-                                {getTagLabel(tag)}
-                            </button>
-                        );
-                    })}
-                    {activeTags.size > 0 && (
-                        <button
-                            className={styles.tagClear}
-                            onClick={clearTags}
+                    {allImageTags.map((tag) => (
+                        <TagPill
+                            key={tag}
+                            color={getTagColor(tag)}
+                            active={activeTags.has(tag)}
+                            onClick={() => toggleTag(tag)}
                         >
-                            clear all
-                        </button>
+                            {getTagLabel(tag)}
+                        </TagPill>
+                    ))}
+                    {activeTags.size > 0 && (
+                        <TagClear onClick={clearTags} />
                     )}
                 </div>
             )}

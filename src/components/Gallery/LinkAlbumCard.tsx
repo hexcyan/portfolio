@@ -4,6 +4,7 @@ import type { LinkAlbum } from "@/lib/gallery-metadata";
 import { thumbUrl } from "@/lib/cdn";
 import FolderPreviewImage from "./FolderPreviewImage";
 import styles from "./Gallery.module.css";
+import TagPill from "@/components/TagPill/TagPill";
 
 interface LinkAlbumCardProps {
     album: LinkAlbum;
@@ -46,9 +47,9 @@ export default function LinkAlbumCard({ album }: LinkAlbumCardProps) {
                         {album.tags.length > 0 && (
                             <span className={styles.folderTags}>
                                 {album.tags.map((tag) => (
-                                    <span key={tag} className={styles.folderTag}>
+                                    <TagPill key={tag} size="sm">
                                         {tag}
-                                    </span>
+                                    </TagPill>
                                 ))}
                             </span>
                         )}

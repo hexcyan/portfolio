@@ -45,14 +45,14 @@ next-env.d.ts
 # admin pages (local-only)
 /src/app/(default)/admin/
 /src/app/(default)/gallery/admin/
+/src/app/(default)/blog/admin/
 /src/app/(default)/tools/admin/
 /src/app/(works)/board/admin/
 
 # admin API routes (local-only)
+/src/app/api/cdn-*/
 /src/app/api/works-*/
 /src/app/api/gallery-admin/
-/src/app/api/gallery-upload/
-/src/app/api/gallery-generate-thumbs/
 /src/app/api/site-status/
 /src/app/api/site-tools/
 /src/app/api/site-revalidate/
