@@ -2,9 +2,11 @@
     font-family: "RedHatMono", monospace;
     font-size: 0.72em;
     padding: 1px 8px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    /* Inherit color from parent context (bar, toolbar, content-box, overlay, etc.)
+       so no per-container overrides are needed. */
+    color: color-mix(in srgb, currentColor 60%, transparent);
+    border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
     background: transparent;
-    color: rgba(255, 255, 255, 0.6);
     white-space: nowrap;
 }
 
@@ -29,6 +31,25 @@
     padding: 0.2rem 0.5rem;
 }
 
+/* ── Colored tags: darken for light-bg themes via --tag-mix-amount ── */
+/* Display-only */
+.displayColor {
+    color: color-mix(in srgb, var(--tag-color) var(--tag-mix-amount, 100%), black);
+    border-color: color-mix(in srgb, var(--tag-color) var(--tag-mix-amount, 100%), black);
+}
+
+/* Interactive inactive */
+.hasColor.interactive:not(.active) {
+    border-color: color-mix(in srgb, var(--tag-color) var(--tag-mix-amount, 100%), black);
+    opacity: 0.55;
+}
+
+/* Interactive active */
+.hasColor.active {
+    border-color: color-mix(in srgb, var(--tag-color) var(--tag-mix-amount, 100%), black);
+    background: color-mix(in srgb, var(--tag-color) 22%, transparent);
+}
+
 /* ── Interactive (button) ── */
 .interactive {
     cursor: pointer;
@@ -37,11 +58,10 @@
 
 .interactive:hover {
     border-color: var(--cyan);
-    color: white;
-    background: rgba(0, 255, 255, 0.08);
+    background: var(--cyan-subtle);
 }
 
-/* ── Active state ── */
+/* ── Active state (no explicit color — colored variant handled by .hasColor.active) ── */
 .active {
     border-color: var(--cyan);
     background: var(--titlebar-bg);
@@ -53,9 +73,10 @@
     font-family: "RedHatMono", monospace;
     font-size: 0.65em;
     padding: 1px 6px;
-    border: 1px dashed rgba(0, 255, 255, 0.3);
+    border: 1px dashed var(--cyan-border);
     background: transparent;
-    color: rgba(0, 255, 255, 0.5);
+    color: var(--cyan);
+    opacity: 0.6;
     cursor: pointer;
     transition: all 0.12s;
     white-space: nowrap;
@@ -65,4 +86,5 @@
 .clear:hover {
     border-color: var(--cyan);
     color: var(--cyan);
+    opacity: 1;
 }

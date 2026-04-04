@@ -24,26 +24,18 @@ export default function TagPill({
     const isButton = !!onClick;
     const Tag = isButton ? "button" : "span";
 
-    // Compute inline color overrides
-    let colorStyle: React.CSSProperties = {};
-    if (color) {
-        if (isButton && !active) {
-            // Interactive, inactive: dimmed border hint
-            colorStyle = { borderColor: `${color}66` };
-        } else if (isButton && active) {
-            // Interactive, active: full accent
-            colorStyle = { borderColor: color, background: `${color}33` };
-        } else {
-            // Display-only: show the color
-            colorStyle = { borderColor: color, color };
-        }
-    }
+    // Set --tag-color as CSS var so color-mix in stylesheet handles all states
+    const colorStyle: React.CSSProperties = color
+        ? ({ "--tag-color": color } as React.CSSProperties)
+        : {};
 
     const cls = [
         styles.tag,
         styles[size],
         isButton && styles.interactive,
         active && styles.active,
+        color && styles.hasColor,
+        color && !isButton && styles.displayColor,
         className,
     ]
         .filter(Boolean)

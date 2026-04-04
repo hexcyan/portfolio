@@ -1,0 +1,8 @@
+/* Shared toolbar strip — compose into any header/toolbar/tagbar rule.
+   Provides the themed background + top/bottom borders in one place. */
+.strip {
+    background: var(--toolbar-bg);
+    border-top: 1px solid var(--toolbar-border);
+    border-bottom: 1px solid var(--toolbar-border);
+    color: var(--toolbar-text);
+}

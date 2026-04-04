@@ -30,19 +30,18 @@
 
 /* ── Toolbar Strip ── */
 .toolbar {
+    composes: strip from "../../styles/toolbar.module.css";
     display: flex;
     align-items: center;
     gap: 6px;
     padding: 5px 24px;
-    background: var(--statusbar-bg);
-    border-bottom: 1px solid rgba(0, 255, 255, 0.08);
     user-select: none;
 }
 
 .toolbarLabel {
     font-family: "RedHatMono", monospace;
     font-size: 0.75em;
-    color: var(--cyan);
+    color: var(--toolbar-text);
     padding: 0 4px;
     white-space: nowrap;
     opacity: 0.7;
@@ -72,14 +71,15 @@
     background: transparent;
     border: none;
     outline: none;
-    color: white;
+    color: var(--toolbar-text);
     font-family: "RedHatMono", monospace;
     font-size: 0.8em;
     min-width: 0;
 }
 
 .searchInput::placeholder {
-    color: rgba(0, 255, 255, 0.35);
+    color: var(--toolbar-text);
+    opacity: 0.4;
     font-style: italic;
 }
 
@@ -102,12 +102,11 @@
 
 /* ── Tag Filter Bar ── */
 .tagBar {
+    composes: strip from "../../styles/toolbar.module.css";
     display: flex;
     align-items: center;
     gap: 4px;
     padding: 4px 24px 6px;
-    background: var(--statusbar-bg);
-    border-bottom: 1px solid rgba(0, 255, 255, 0.12);
     overflow-x: auto;
     flex-wrap: wrap;
 }
@@ -115,7 +114,7 @@
 .tagBarLabel {
     font-family: "RedHatMono", monospace;
     font-size: 0.7em;
-    color: var(--cyan);
+    color: var(--toolbar-text);
     padding: 0 4px;
     opacity: 0.6;
     white-space: nowrap;
@@ -143,10 +142,9 @@
     align-items: baseline;
     gap: 12px;
     padding: 6px 12px;
-    background: var(--statusbar-bg);
+    background: var(--column-header-bg);
     font-family: "RedHatMono", monospace;
     font-size: 0.82em;
-    color: rgba(255, 255, 255, 0.7);
     user-select: none;
     position: sticky;
     top: 0;
@@ -158,14 +156,14 @@
 .sectionHeaderStuck {
     padding: 6px 24px;
     border-left: none;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+    border-bottom: 1px solid var(--toolbar-border);
 }
 
 .sectionTitle {
     font-family: "RedHatDisplay", sans-serif;
     font-weight: 600;
     font-size: 1.1em;
-    color: white;
+    color: var(--toolbar-text);
     letter-spacing: -0.01em;
 }
 
@@ -291,6 +289,10 @@
     display: flex;
     flex-direction: column;
     gap: 3px;
+    /* Always dark gradient — pin tag vars to light regardless of theme */
+    --text-muted: rgba(255, 255, 255, 0.65);
+    --cyan-border: rgba(255, 255, 255, 0.3);
+    --tag-mix-amount: 100%;
 }
 
 .imageCell:hover .imageOverlay {
@@ -330,9 +332,10 @@
     font-family: "RedHatMono", monospace;
     font-size: 0.72em;
     padding: 1px 10px;
-    border: 1px solid rgba(0, 255, 255, 0.25);
+    border: 1px solid var(--cyan);
     background: transparent;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--toolbar-text);
+    opacity: 0.5;
     cursor: pointer;
     transition: all 0.12s;
     white-space: nowrap;
@@ -340,13 +343,15 @@
 
 .viewBtn:hover {
     border-color: var(--cyan);
-    color: white;
+    color: var(--toolbar-text);
+    opacity: 0.9;
 }
 
 .viewBtnActive {
     border-color: var(--cyan);
-    background: var(--titlebar-bg);
-    color: white;
+    background: var(--cyan-subtle);
+    color: var(--toolbar-text);
+    opacity: 1;
 }
 
 .galleryToggle {
@@ -368,16 +373,16 @@
     padding: 5px 12px;
     font-family: "RedHatMono", monospace;
     font-size: 0.78em;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     user-select: none;
-    border-left: 2px solid rgba(0, 255, 255, 0.4);
+    border-left: 2px solid var(--cyan-border);
 }
 
 .subsectionTitle {
     font-family: "RedHatDisplay", sans-serif;
     font-weight: 500;
     font-size: 1em;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-color);
     letter-spacing: -0.01em;
 }
 
@@ -403,10 +408,10 @@
     padding: 16px 20px;
     font-family: "RedHatText", sans-serif;
     font-size: 0.85em;
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--text-secondary);
     line-height: 1.6;
-    border-left: 2px solid rgba(0, 255, 255, 0.2);
-    background: rgba(0, 255, 255, 0.03);
+    border-left: 2px solid var(--accent-dim);
+    background: var(--accent-dim);
     margin: 4px 0;
     white-space: pre-wrap;
     overflow: visible;
@@ -512,7 +517,7 @@
 .embedCaption {
     font-family: "RedHatMono", monospace;
     font-size: 0.68em;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     padding: 4px 4px 0;
 }
 
@@ -534,10 +539,11 @@
     background: var(--statusbar-bg);
     font-family: "RedHatMono", monospace;
     font-size: 0.72em;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--bar-text-color);
+    opacity: 0.6;
     user-select: none;
     flex-shrink: 0;
-    border-top: 1px solid rgba(0, 255, 255, 0.08);
+    border-top: 1px solid var(--toolbar-border);
 }
 
 .statusLeft {
@@ -546,7 +552,7 @@
 }
 
 .statusRight {
-    opacity: 0.5;
+    opacity: 0.7;
 }
 
 /* ── Empty State ── */
@@ -555,7 +561,7 @@
     text-align: center;
     font-family: "RedHatMono", monospace;
     font-size: 0.85em;
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--text-muted);
     flex: 1;
     display: flex;
     align-items: center;
@@ -629,7 +635,7 @@
 .imageStandaloneCaption {
     font-family: "RedHatMono", monospace;
     font-size: 0.72em;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     padding: 6px 2px 0;
     text-align: center
 }

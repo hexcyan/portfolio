@@ -1,20 +1,93 @@
 :root {
     --background: #177fac;
     --foreground: #171717;
+    --desktop-text: white;
     --cyan: #00ffff;
     --statusbar-bg: #113e67;
     --titlebar-bg: #00ffff66;
     --box-bg: #1d6188d9;
+    --button-bg: var(--box-bg);
     --text-color: white;
-
+    --bar-text-color: var(--cyan);
+    --toolbar-bg: var(--statusbar-bg);
+    --toolbar-text: var(--bar-text-color);
+    --toolbar-border: transparent;
+    --column-header-bg: #1392b8cb;
+    --column-header-border: var(--cyan);
+    --tag-mix-amount: 100%;
+    --card-bg: var(--box-bg);
     /* Semantic text colors */
     --text-muted: rgba(255, 255, 255, 0.55);
     --text-secondary: #c8c8c8;
 
-    /* Cyan variants */
+    /* Accent variants */
     --cyan-subtle: rgba(0, 255, 255, 0.15);
     --cyan-border: rgba(0, 255, 255, 0.25);
     --cyan-glow: rgba(0, 255, 255, 0.35);
+    --accent-dim: rgba(0, 255, 255, 0.1);
+    --accent-mid: rgba(0, 255, 255, 0.2);
+}
+
+/* Windows XP Luna */
+[data-theme="xp"] {
+    --background: #2667b3;
+    --desktop-text: white;
+    --cyan: #5aadf5;
+    --statusbar-bg: #0a2272;
+    --titlebar-bg: rgba(28, 78, 180, 0.65);
+    --box-bg: #ffffffe4;
+    --button-bg: var(--titlebar-bg);
+    --text-color: #1c2340;
+    --text-secondary: #3a4e72;
+    --text-muted: rgba(28, 35, 64, 0.55);
+    --toolbar-bg: #eeeee1;
+    --toolbar-text: #000000;
+    --toolbar-border: #e4dfcf;
+    --column-header-bg: #d8d8c8;
+    --column-header-border: #c4c4b4;
+    --tag-mix-amount: 55%;
+    --cyan-subtle: rgba(90, 173, 245, 0.15);
+    --cyan-border: rgba(90, 173, 245, 0.25);
+    --cyan-glow: rgba(90, 173, 245, 0.35);
+    --accent-dim: rgba(90, 173, 245, 0.1);
+    --accent-mid: rgba(90, 173, 245, 0.2);
+}
+
+/* Clean Dark */
+[data-theme="dark"] {
+    --background: #0a0a14;
+    --statusbar-bg: #004158;
+    /* --titlebar-bg: rgba(85, 136, 255, 0.18); */
+    --box-bg: #09293aa3;
+
+    --column-header-bg: #03293f;
+}
+
+/* Warm Parchment */
+[data-theme="parchment"] {
+    --background: #e8dcc8;
+    --desktop-text: var(--text-color);
+    --card-bg: #faf4eaf7;
+
+    --cyan: #958672;
+    --statusbar-bg: #c8b896;
+    --toolbar-bg: #eeeee1;
+    --toolbar-border: #e4dfcf;
+    --column-header-bg: var(--titlebar-bg);
+    --column-header-border: var(--statusbar-bg);
+
+    --titlebar-bg: #c8b896bf;
+    --box-bg: #eee2cdf7;
+    --text-color: #2a1a0a;
+    --bar-text-color: #2a1a0a;
+    --text-secondary: #5a3d20;
+    --text-muted: rgba(42, 26, 10, 0.55);
+    --tag-mix-amount: 55%;
+    --cyan-subtle: rgba(196, 98, 26, 0.15);
+    --cyan-border: rgba(196, 98, 26, 0.25);
+    --cyan-glow: rgba(196, 98, 26, 0.35);
+    --accent-dim: rgba(196, 98, 26, 0.1);
+    --accent-mid: rgba(196, 98, 26, 0.2);
 }
 
 /* Variable Fonts */
@@ -111,7 +184,7 @@ h1 {
     margin-bottom: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.01em;
-    text-shadow: 0 0 24px rgba(0, 255, 255, 0.12);
+    text-shadow: 0 0 24px var(--cyan-subtle);
 }
 
 h2 {
@@ -130,7 +203,7 @@ h3 {
     margin-top: 1.75rem;
     margin-bottom: 0.75rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-color);
 }
 
 h4 {
@@ -172,16 +245,16 @@ li {
 
 strong {
     font-weight: 700;
-    color: white;
+    color: var(--text-color);
 }
 
 em {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--text-muted);
 }
 
 /* Links */
 a {
-    color: white;
+    color: inherit;
     text-decoration: none;
     text-underline-offset: 2px;
     transition: opacity 0.2s;
@@ -211,8 +284,8 @@ pre code {
 
 code {
     font-family: "RedHatMono", monospace;
-    background-color: rgba(0, 255, 255, 0.06);
-    border: 1px solid rgba(0, 255, 255, 0.12);
+    background-color: var(--accent-dim);
+    border: 1px solid var(--accent-mid);
     padding: 0.15em 0.4em;
     border-radius: 3px;
     font-size: 0.875em;
@@ -222,12 +295,11 @@ code {
 blockquote {
     border-left: 3px solid var(--cyan);
     background: linear-gradient(90deg,
-            rgba(0, 255, 255, 0.06) 0%,
+            var(--cyan-subtle) 0%,
             transparent 100%);
     padding: 1rem 1.5rem;
     margin: 1.75rem 0;
     font-style: italic;
-    color: #eeffff;
     border-radius: 0 4px 4px 0;
 }
 
@@ -243,7 +315,7 @@ table {
 }
 
 th {
-    background-color: var(--titlebar-bg);
+    background-color: var(--cyan-subtle);
     border: 1px solid var(--cyan);
     padding: 0.75rem;
     text-align: left;
@@ -269,7 +341,7 @@ hr {
 
 /* Selection */
 ::selection {
-    background: rgba(0, 255, 255, 0.25);
+    background: var(--cyan-border);
 }
 
 /* Scrollbars */
@@ -283,12 +355,12 @@ hr {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(0, 255, 255, 0.2);
-    border: 1px solid rgba(0, 255, 255, 0.1);
+    background: var(--accent-mid);
+    border: 1px solid var(--accent-dim);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 255, 255, 0.35);
+    background: var(--cyan-glow);
 }
 
 ::-webkit-scrollbar-corner {

@@ -299,6 +299,7 @@
 
 /* ── Gallery Header / Toolbar Bar ── */
 .galleryHeader {
+    /* composes: strip from "../../styles/toolbar.module.css"; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -306,7 +307,6 @@
     background: var(--statusbar-bg);
     font-family: "RedHatMono", monospace;
     font-size: 0.78em;
-    color: rgba(255, 255, 255, 0.7);
     user-select: none;
     margin-bottom: 4px;
     position: sticky;
@@ -343,7 +343,8 @@
 }
 
 .galleryCount {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary);
+    opacity: 0.5;
 }
 
 .spinnerCenter {
@@ -375,19 +376,19 @@
 
 .folderCard {
     display: block;
-    background: var(--box-bg);
+    background: var(--card-bg);
     border: 1px solid transparent;
     border-radius: 3px;
     overflow: hidden;
     transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     text-decoration: none;
-    color: white;
+    color: var(--text-color);
 }
 
 .folderCard:hover {
     border-color: var(--cyan);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 255, 255, 0.12);
+    box-shadow: 0 4px 16px var(--cyan-subtle);
 }
 
 .folderPreview {
@@ -507,6 +508,7 @@
 }
 
 .indexHeader {
+    /* composes: strip from "../../styles/toolbar.module.css"; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -514,7 +516,6 @@
     background: var(--statusbar-bg);
     font-family: "RedHatMono", monospace;
     font-size: 0.78em;
-    color: rgba(255, 255, 255, 0.7);
     user-select: none;
     position: sticky;
     top: 0;
@@ -574,18 +575,17 @@
 
 /* ── Search Bar (gallery index + album pages) ── */
 .searchBar {
+    composes: strip from "../../styles/toolbar.module.css";
     display: flex;
     align-items: center;
     gap: 6px;
     padding: 5px 10px;
-    background: var(--statusbar-bg);
-    border-top: 1px solid rgba(0, 255, 255, 0.08);
     font-family: "RedHatMono", monospace;
 }
 
 .searchBarLabel {
     font-size: 0.75em;
-    color: var(--cyan);
+    color: var(--toolbar-text);
     padding: 0 4px;
     white-space: nowrap;
     opacity: 0.7;
@@ -614,14 +614,15 @@
     background: transparent;
     border: none;
     outline: none;
-    color: white;
+    color: var(--toolbar-text);
     font-family: "RedHatMono", monospace;
     font-size: 0.8em;
     min-width: 0;
 }
 
 .searchBarInput::placeholder {
-    color: rgba(0, 255, 255, 0.35);
+    color: var(--toolbar-text);
+    opacity: 0.4;
     font-style: italic;
 }
 

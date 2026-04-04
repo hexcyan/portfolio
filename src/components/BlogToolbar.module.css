@@ -18,16 +18,16 @@
     gap: 6px;
     padding: 4px;
     padding-top: 6px;
-    background: var(--statusbar-bg);
-    border-bottom: none;
-    border-top: none;
+    background: var(--toolbar-bg);
+    border-top: 1px solid var(--toolbar-border);
+    border-bottom: 1px solid var(--toolbar-border);
     user-select: none;
 }
 
 .toolbarLabel {
     font-family: "RedHatMono", monospace;
     font-size: 0.75em;
-    color: var(--cyan);
+    color: var(--toolbar-text);
     padding: 0 4px;
     white-space: nowrap;
     opacity: 0.7;
@@ -58,14 +58,15 @@
     background: transparent;
     border: none;
     outline: none;
-    color: white;
+    color: var(--toolbar-text);
     font-family: "RedHatMono", monospace;
     font-size: 0.8em;
     min-width: 0;
 }
 
 .searchInput::placeholder {
-    color: rgba(0, 255, 255, 0.35);
+    color: var(--toolbar-text);
+    opacity: 0.4;
     font-style: italic;
 }
 
@@ -92,7 +93,7 @@
 }
 
 .viewBtn {
-    background: var(--statusbar-bg);
+    background: var(--toolbar-bg);
     border: 1px solid var(--cyan);
     color: var(--cyan);
     font-family: "RedHatMono", monospace;
@@ -110,7 +111,7 @@
 
 .viewBtnActive {
     opacity: 1;
-    background: var(--titlebar-bg);
+    background: var(--cyan-subtle);
 }
 
 /* ── Tag Filter Bar ── */
@@ -120,9 +121,9 @@
     gap: 4px;
     padding: 4px;
     padding-bottom: 6px;
-    background: var(--statusbar-bg);
-    border-top: none;
-    border-bottom: none;
+    background: var(--toolbar-bg);
+    border-top: 1px solid var(--toolbar-border);
+    border-bottom: 1px solid var(--toolbar-border);
     overflow-x: auto;
     flex-wrap: wrap;
 }
@@ -130,7 +131,7 @@
 .tagBarLabel {
     font-family: "RedHatMono", monospace;
     font-size: 0.7em;
-    color: var(--cyan);
+    color: var(--toolbar-text);
     padding: 0 4px;
     opacity: 0.6;
     white-space: nowrap;
@@ -157,10 +158,10 @@
 .columnHeaders {
     display: grid;
     grid-template-columns: 3fr 4fr 2fr 120px;
-    border: 1px solid var(--cyan);
+    border: 1px solid var(--column-header-border);
     border-left: none;
     border-right: none;
-    background: rgba(0, 255, 255, 0.15);
+    background: var(--column-header-bg);
     user-select: none;
 }
 
@@ -168,14 +169,14 @@
     font-family: "RedHatMono", monospace;
     font-size: 0.78em;
     font-weight: 500;
-    color: white;
+    color: var(--text-color);
     padding: 4px 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 4px;
     transition: background 0.1s;
-    border-right: 1px solid rgba(0, 255, 255, 0.25);
+    border-right: 1px solid var(--cyan-border);
     white-space: nowrap;
     position: relative;
 }
@@ -185,11 +186,11 @@
 }
 
 .columnHeader:hover {
-    background: rgba(0, 255, 255, 0.12);
+    background: var(--accent-mid);
 }
 
 .columnHeaderActive {
-    background: rgba(0, 255, 255, 0.1);
+    background: var(--accent-dim);
 }
 
 .sortArrow {
@@ -209,8 +210,8 @@
 .detailRow {
     display: grid;
     grid-template-columns: 3fr 4fr 2fr 120px;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.12);
-    color: white;
+    border-bottom: 1px solid var(--cyan-subtle);
+    color: var(--text-color);
     text-decoration: none;
     transition: background 0.1s;
 }
@@ -240,7 +241,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-    border-right: 1px solid rgba(0, 255, 255, 0.06);
+    border-right: 1px solid var(--accent-dim);
 }
 
 .detailCell:last-child {
@@ -309,7 +310,7 @@
     font-family: "RedHatMono", monospace;
     font-size: 1.2em;
     margin: 0;
-    color: white;
+    color: var(--text-color);
 }
 
 .cardDate {
@@ -342,10 +343,12 @@
     align-items: center;
     justify-content: space-between;
     padding: 2px 10px;
-    background: var(--statusbar-bg);
+    background: var(--toolbar-bg);
+    border-top: 2px solid var(--toolbar-border);
     font-family: "RedHatMono", monospace;
     font-size: 0.72em;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--toolbar-text);
+    opacity: 0.6;
     user-select: none;
     flex-shrink: 0;
 }
@@ -365,7 +368,7 @@
     text-align: center;
     font-family: "RedHatMono", monospace;
     font-size: 0.85em;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-muted);
     border: 1px solid var(--cyan);
     flex: 1;
     display: flex;

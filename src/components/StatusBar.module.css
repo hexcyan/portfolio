@@ -4,7 +4,7 @@
     font-size: small;
     background-color: var(--statusbar-bg);
     padding: 0rem 0.8rem;
-    color: white;
+    color: var(--bar-text-color);
     align-items: center;
     gap: 1rem;
     font-family: "RedHatMono", sans-serif;
@@ -18,12 +18,15 @@
     gap: 1rem;
 }
 
-.statusbar__right {
+.socials {
     display: flex;
     gap: 0.8rem;
     margin-left: auto;
     order: 2;
     fill: aliceblue;
+    align-items: center;
+    align-self: stretch;
+    padding: 0 0.8rem;
 }
 
 .statusbar__logo {
@@ -34,9 +37,31 @@
     font-weight: 650;
 }
 
-.statusbar__right > * {
+.socials>* {
     display: inherit;
     align-items: inherit;
+}
+
+.themeButton {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--theme-accent);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 6px var(--theme-accent);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.themeButton:hover {
+    transform: scale(1.3);
+    box-shadow: 0 0 10px var(--theme-accent), 0 0 18px color-mix(in srgb, var(--theme-accent) 45%, transparent);
+}
+
+.themeButton:active {
+    transform: scale(0.85);
 }
 
 .dropdown__button {
@@ -44,7 +69,7 @@
     cursor: pointer;
     background: none;
     border: none;
-    color: white;
+    color: var(--bar-text-color);
     padding: 0;
 }
 
@@ -72,7 +97,7 @@
         padding: 0.8rem;
         width: 100%;
         text-align: center;
-        border-top: 1px solid rgba(0, 255, 255, 0.2);
+        border-top: 1px solid var(--cyan-subtle);
     }
 
     .dropdown__button {

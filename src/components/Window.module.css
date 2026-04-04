@@ -67,7 +67,7 @@
 }
 
 .contentBox {
-    color: white;
+    color: var(--text-color);
     background-color: var(--box-bg);
     border: 1px solid var(--cyan);
     box-sizing: border-box;

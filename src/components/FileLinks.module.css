@@ -7,7 +7,7 @@
 }
 
 .filelink {
-    color: white;
+    color: inherit;
     font-family: "RedHatDisplay", sans-serif !important;
     line-height: 1;
     width: 96px;

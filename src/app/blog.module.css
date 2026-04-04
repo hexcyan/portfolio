@@ -5,6 +5,7 @@
     z-index: 10;
     width: 100%;
     padding: 6px 12px;
+    color: var(--bar-text-color);
     background: var(--statusbar-bg);
     font-family: "RedHatMono", monospace;
     font-size: 0.75rem;
@@ -13,7 +14,7 @@
     justify-content: space-between;
     gap: 0.75rem;
     user-select: none;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.08);
+    border-bottom: 1px solid var(--accent-dim);
 }
 
 .breadcrumbPath {
@@ -31,16 +32,18 @@
 }
 
 .breadcrumbs a:hover {
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+    text-shadow: 0 0 8px var(--cyan-glow);
 }
 
 .separator {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--bar-text-color);
+    opacity: 0.35;
     flex-shrink: 0;
 }
 
 .current {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--bar-text-color);
+    opacity: 0.65;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -55,7 +58,7 @@
 
 
 .prose {
-    color: white;
+    color: var(--text-color);
     max-width: 65ch;
     margin: 0 auto;
     font-family: "RedHatDisplay", sans-serif;
@@ -73,8 +76,8 @@
 .prose h1 {
     font-size: 2rem;
     margin-bottom: 0.25rem;
-    color: white;
-    text-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+    color: var(--text-color);
+    text-shadow: 0 0 30px var(--cyan-subtle);
 }
 
 .prose h1+p,
@@ -86,7 +89,7 @@
 .prose a {
     color: var(--cyan);
     text-decoration: underline;
-    text-decoration-color: rgba(0, 255, 255, 0.4);
+    text-decoration-color: var(--cyan-border);
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
     transition: text-decoration-color 0.2s, text-shadow 0.2s;
@@ -94,7 +97,7 @@
 
 .prose a:hover {
     text-decoration-color: var(--cyan);
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+    text-shadow: 0 0 8px var(--cyan-glow);
 }
 
 

@@ -14,6 +14,8 @@ export default function TitleBar() {
                 draggable={false}
             />
             <p className={styles.titleThing}>lets go gamers</p>
+            {/* TODO: replace min/max/close PNGs with SVGs so their colors
+                can be controlled via CSS variables per theme */}
             <div className={`${styles.titlebar__buttons} ${styles.titleThing}`}>
                 <Image
                     draggable={false}

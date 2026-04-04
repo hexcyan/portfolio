@@ -26,7 +26,7 @@ export default async function ButtonsBox() {
                 height={100}
                 className={styles.buttons__lain}
             />
-            <Card>
+            <div className={styles.buttonboxWrapper}><Card>
                 <h3 className={styles.buttons__title}>Buttons</h3>
                 <div className={styles.buttons}>
                     {buttonFiles.map((file) => {
@@ -41,7 +41,7 @@ export default async function ButtonsBox() {
                         );
                     })}
                 </div>
-            </Card>
+            </Card></div>
         </>
     );
 }
