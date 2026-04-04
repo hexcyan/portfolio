@@ -26,6 +26,9 @@
     --cyan-glow: rgba(0, 255, 255, 0.35);
     --accent-dim: rgba(0, 255, 255, 0.1);
     --accent-mid: rgba(0, 255, 255, 0.2);
+
+    --titlebar-btn-color: var(--cyan);
+    --titlebar-btn-bg: var(--box-bg);
 }
 
 /* Windows XP Luna */
@@ -51,6 +54,9 @@
     --cyan-glow: rgba(90, 173, 245, 0.35);
     --accent-dim: rgba(90, 173, 245, 0.1);
     --accent-mid: rgba(90, 173, 245, 0.2);
+    --titlebar-btn-color: white;
+    --titlebar-btn-bg: var(--titlebar-bg);
+    --titlebar-close-bg: #e82611;
 }
 
 /* Clean Dark */

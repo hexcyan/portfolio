@@ -9,6 +9,7 @@
     font-size: 1em;
     font-weight: 650;
     flex-shrink: 0;
+    position: relative;
 }
 
 .titlebar p {
@@ -33,7 +34,11 @@
 }
 
 .titlebar__buttons {
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0;
 }
 
 .titlebar__button {
@@ -50,6 +55,28 @@
 .titlebar__button:active {
     filter: brightness(90%);
     cursor: pointer;
+}
+
+.titlebar__btn {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+    color: var(--titlebar-btn-color, var(--cyan));
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.titlebar__btn svg {
+    height: 18px;
+    width: auto;
+}
+
+.titlebar__btn:hover {
+    filter: brightness(120%);
+}
+
+.titlebar__btn:active {
+    filter: brightness(90%);
 }
 
 .titlebar.footer {

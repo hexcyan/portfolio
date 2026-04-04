@@ -17,6 +17,7 @@ export default async function Home() {
                     alt="profile banner"
                     width={1500}
                     height={500}
+                    loading="eager"
                 />
             </div>
             <article className={styles.prose}>
