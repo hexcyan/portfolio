@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-// import Image from "next/image";
 import styles from "./Gallery.module.css";
 import Spinner from "@/components/Spinner";
 import { getCDNConfig, thumbUrl as cdnThumbUrl } from "@/lib/cdn";

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import styles from "./Window.module.css";
 
 function MinSvg() {
@@ -34,7 +33,7 @@ function CloseSvg() {
 export default function TitleBar() {
     return (
         <div className={styles.titlebar}>
-            <Image
+            <img
                 src="/assets/daniel_happy.png"
                 alt="daniel_happy"
                 className={styles.titleThing}

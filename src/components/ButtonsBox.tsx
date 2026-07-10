@@ -1,7 +1,6 @@
 import Card from "./Card";
 import path from "path";
 import fs from "fs/promises";
-import Image from "next/image";
 import styles from "./ButtonsBox.module.css";
 // Generate a box with buttons from /public/buttons
 async function getButtonFiles() {
@@ -19,7 +18,7 @@ export default async function ButtonsBox() {
     const buttonFiles = await getButtonFiles();
     return (
         <>
-            <Image
+            <img
                 src="/assets/lain-bear.png"
                 alt="lain bear"
                 width={100}

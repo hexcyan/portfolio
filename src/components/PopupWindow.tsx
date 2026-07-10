@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import TitleBar from "./TitleBar";
 import styles from "./Window.module.css";
-import Image from "next/image";
 interface WindowProps {
     children: ReactNode;
 }
@@ -17,7 +16,7 @@ export default function PopupWindow({ children }: WindowProps) {
                     paddingBottom: 48,
                 }}
             >
-                <Image
+                <img
                     src="/assets/alert.png"
                     alt="Alert"
                     width={48}

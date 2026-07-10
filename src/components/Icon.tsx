@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { IIcon } from "@/lib/consts";
-import Image from "next/image";
 import styles from "./FileLinks.module.css";
 
 interface IconProps {
@@ -24,7 +23,7 @@ export default function Icon({ file, center }: IconProps) {
                         : undefined
                 }
             >
-                <Image
+                <img
                     src={`/assets/${file.type}.png`}
                     alt={file.title}
                     width={48}

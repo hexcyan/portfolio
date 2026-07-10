@@ -3,7 +3,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import Card from "@/components/Card";
 import type { BlogFrontMatter } from "@/lib/blog";
 import styles from "./BlogToolbar.module.css";
@@ -248,7 +247,7 @@ export default function BlogToolbar({ posts, allTags }: BlogToolbarProps) {
                                     <div
                                         className={`${styles.detailCell} ${styles.cellName}`}
                                     >
-                                        <Image src="/assets/file.png" alt="" width={16} height={16} className={styles.fileIcon} />
+                                        <img src="/assets/file.png" alt="" width={16} height={16} className={styles.fileIcon} />
                                         {post.title}
                                     </div>
                                     <div

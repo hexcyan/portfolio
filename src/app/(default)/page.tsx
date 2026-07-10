@@ -1,6 +1,5 @@
 import MyButton from "@/components/MyButton";
 import styles from "@/app/blog.module.css";
-import Image from "next/image";
 import { getSiteStatus } from "@/lib/site-metadata";
 
 // ISR: serve static, revalidate in background every hour
@@ -12,7 +11,7 @@ export default async function Home() {
     return (
         <>
             <div className={styles.splash}>
-                <Image
+                <img
                     src="https://pbs.twimg.com/profile_banners/1611038433098760199/1725894588/1500x500"
                     alt="profile banner"
                     width={1500}

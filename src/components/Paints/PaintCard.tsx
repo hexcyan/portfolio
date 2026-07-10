@@ -2,7 +2,6 @@
 
 import { Paint, paintSymbols, stockSizeLabels, Bit } from "@/lib/paints";
 import styles from "./Paints.module.css";
-import Image from "next/image";
 import "./globals.css";
 
 interface PaintCardProps {
@@ -21,7 +20,7 @@ export default function PaintCard({ paint, inStock, stockSizes }: PaintCardProps
 
     return (
         <div className={styles.paint__card}>
-            <Image
+            <img
                 src={imgUrl}
                 height={176}
                 width={388}
