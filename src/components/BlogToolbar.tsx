@@ -14,8 +14,9 @@ type ViewMode = "detail" | "grid";
 
 // ── Tag Colors ──
 const TAG_COLORS: Record<string, string> = {
-    meta: "#ff79c6",
-    keyboards: "#50fa7b",
+    "meta": "#ff79c6",
+    "keyboards": "#fc8c03",
+    "3d": "#50fa7b",
 };
 
 function getTagColor(tag: string): string | undefined {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import StatusBar from "@/components/StatusBar";
+import ThemeScript from "@/components/ThemeScript";
 import styles from "../desktop.module.css";
 import Window from "@/components/Window";
 import FileLinks from "@/components/FileLinks";
@@ -37,8 +38,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body>
+                <ThemeScript />
                 <StatusBar />
                 <main>
                     <DefaultLayout>{children}</DefaultLayout>

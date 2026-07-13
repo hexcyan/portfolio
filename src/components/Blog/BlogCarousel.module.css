@@ -1,0 +1,85 @@
+/* Structural layout only. Image + caption styling is inherited: the images use
+   `.prose img` and the caption reuses `.imageStandaloneCaption*` from
+   Works.module.css, so carousel slides render identically to blog images. */
+
+.carousel {
+    margin: 1rem 0 2rem;
+}
+
+.viewport {
+    position: relative;
+}
+
+.track {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+    display: none;
+}
+
+.slide {
+    /* Natural-width peek strip: each slide shrink-wraps its image (capped
+       height) so multiple show at once and the strip scroll-snaps between them. */
+    flex: 0 0 auto;
+    max-width: 100%;
+    scroll-snap-align: center;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+}
+
+.slide:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+}
+
+/* Override `.prose img` (width:100%) for the strip — natural width, capped
+   height. Scoped to `.slide` to out-specify `.prose img`. Everything else about
+   the image is still inherited from the blog `.prose img` rule. */
+.slide .image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(70vh, 480px);
+    margin: 0;
+    object-fit: contain;
+}
+
+/* The prev/next buttons reuse GalleryViewer's `.previewNav` classes for all
+   their geometry. Here we only override the one thing that differs — a solid
+   themed background instead of the translucent black (the status-bar palette
+   stays readable in every theme). Scoped under `.viewport` to out-specify the
+   base `.previewNav` rules regardless of stylesheet order. */
+.viewport .nav {
+    background: var(--box-bg);
+    color: var(--bar-text-color);
+    font-size: 1rem;
+}
+
+.viewport .nav:hover {
+    background: var(--box-bg);
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+/* Hide the scroll buttons on touch-first / narrow screens where swiping is
+   the natural interaction. */
+@media (max-width: 700px),
+(hover: none) {
+    .nav {
+        display: none;
+    }
+}
