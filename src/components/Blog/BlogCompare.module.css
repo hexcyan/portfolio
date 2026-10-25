@@ -1,0 +1,110 @@
+/* Before/after panes that scroll together. Colours come from the site theme
+   (box, status bar and cyan accent tokens), so it follows every theme. */
+
+.compare {
+    margin: 1.5rem 0 2rem;
+}
+
+.panes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--cyan-border);
+    background: var(--box-bg);
+}
+
+.paneHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    background: var(--statusbar-bg);
+    color: var(--bar-text-color);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.full {
+    color: inherit;
+    opacity: 0.75;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.full:hover,
+.full:focus-visible {
+    opacity: 1;
+}
+
+.scroller {
+    height: var(--compare-height, 560px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.scroller:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: -2px;
+}
+
+/* Full-length screenshot: out-specifies `.prose img` (max-height 500px, contain) */
+.scroller .image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    margin: 0;
+    object-fit: initial;
+}
+
+/* Before/After switch: only on narrow screens, where one pane shows at a time */
+.toggle {
+    display: none;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.toggle button {
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--cyan-border);
+    background: var(--box-bg);
+    color: var(--text-color);
+    font-family: "RedHatMono", monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.toggle button[aria-pressed="true"] {
+    border-color: var(--cyan);
+    color: var(--bar-text-color);
+    background: var(--statusbar-bg);
+}
+
+.toggle button:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+}
+
+/* One pane at a time when two wouldn't be readable. Set from the measured
+   width in BlogCompare.tsx, not the screen width. */
+.compare[data-layout="single"] .toggle {
+    display: flex;
+}
+
+.compare[data-layout="single"] .panes {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.compare[data-layout="single"][data-show="before"] .after,
+.compare[data-layout="single"][data-show="after"] .before {
+    display: none;
+}

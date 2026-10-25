@@ -14,6 +14,7 @@ import BlogImage from "@/components/Blog/BlogImage";
 import BlogYouTube from "@/components/Blog/BlogYouTube";
 import BlogTweet from "@/components/Blog/BlogTweet";
 import { Carousel, CarouselImage } from "@/components/Blog/BlogCarousel";
+import { Compare } from "@/components/Blog/BlogCompare";
 import OpenMaximized from "@/components/Blog/OpenMaximized";
 import TagPill from "@/components/TagPill/TagPill";
 import { Children, isValidElement, type ReactNode } from "react";
@@ -47,6 +48,7 @@ const components = {
     Tweet: BlogTweet,
     Carousel,
     CarouselImage,
+    Compare,
     p: MdxParagraph,
 };
 
