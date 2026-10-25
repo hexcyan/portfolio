@@ -66,6 +66,26 @@
     cursor: pointer;
 }
 
+/* The maximise control is a real button: strip the browser's button styling */
+.titlebar__btn_max {
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+}
+
+.titlebar__btn_max:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 1px;
+}
+
+/* Maximising does nothing on small screens, where the sidebar is already hidden */
+@media only screen and (max-width: 960px) {
+    .titlebar__btn_max {
+        pointer-events: none;
+    }
+}
+
 .titlebar__btn svg {
     height: 18px;
     width: auto;

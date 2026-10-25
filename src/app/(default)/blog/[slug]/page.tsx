@@ -14,6 +14,7 @@ import BlogImage from "@/components/Blog/BlogImage";
 import BlogYouTube from "@/components/Blog/BlogYouTube";
 import BlogTweet from "@/components/Blog/BlogTweet";
 import { Carousel, CarouselImage } from "@/components/Blog/BlogCarousel";
+import OpenMaximized from "@/components/Blog/OpenMaximized";
 import TagPill from "@/components/TagPill/TagPill";
 import { Children, isValidElement, type ReactNode } from "react";
 
@@ -78,6 +79,8 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
                         </div>
                     )}
                 </nav>
+
+                {post.fm.wide && <OpenMaximized />}
 
                 {post.fm.splash && (
                     <div className={styles.splash}>

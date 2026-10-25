@@ -1,5 +1,6 @@
 "use client";
 import styles from "./Window.module.css";
+import { setWindowMaximized, useWindowMaximized } from "@/lib/windowState";
 
 function MinSvg() {
     return (
@@ -31,6 +32,7 @@ function CloseSvg() {
 }
 
 export default function TitleBar() {
+    const maximized = useWindowMaximized();
     return (
         <div className={styles.titlebar}>
             <img
@@ -44,8 +46,17 @@ export default function TitleBar() {
             <p className={styles.titleThing}>lets go gamers</p>
             <div className={`${styles.titlebar__buttons} ${styles.titleThing}`}>
                 <span className={styles.titlebar__btn}><MinSvg /></span>
-                <span className={styles.titlebar__btn}><MaxSvg /></span>
-                <span className={`${styles.titlebar__btn} ${styles.titlebar__btn_close}`}><CloseSvg /></span>
+                <button
+                    type="button"
+                    className={`${styles.titlebar__btn} ${styles.titlebar__btn_max}`}
+                    aria-pressed={maximized}
+                    aria-label={maximized ? "Restore window" : "Maximise window"}
+                    title={maximized ? "Restore" : "Maximise"}
+                    onClick={() => setWindowMaximized(!maximized)}
+                >
+                    <MaxSvg />
+                </button>
+                <span className={styles.titlebar__btn}><CloseSvg /></span>
             </div>
         </div>
     );

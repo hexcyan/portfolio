@@ -5,6 +5,9 @@
 .desktop {
     display: grid;
     grid-template-columns: minmax(240px, 1fr) minmax(auto, 4fr);
+    /* One row exactly the desktop's height: the sidebar's content can never
+       stretch the window past the bottom of the screen */
+    grid-template-rows: minmax(0, 1fr);
     gap: 64px;
     width: 100%;
     max-width: 1920px;
@@ -15,11 +18,23 @@
     /* Take full height of parent */
     overflow: hidden;
     /* Prevent scrolling */
+    /* Restoring: the sidebar column opens straight away (the sidebar fades
+       back in once it has, see .desktop__sidebar) */
+    transition:
+        grid-template-columns 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        gap 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .desktop__sidebar {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    /* Restoring: fade in only after the column has finished opening, so the
+       icons and buttons never show while they re-wrap */
+    transition:
+        opacity 0.2s ease 0.35s,
+        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1) 0.35s,
+        visibility 0s linear 0.35s;
 }
 
 .desktop__files {
@@ -27,10 +42,62 @@
     color: var(--desktop-text);
 }
 
+/* File icons: 72px cells (48px art, labels up to ~51px), as many per row as
+   fit, spread edge to edge so they line up with the Buttons box below. Four
+   per row on wide screens, fewer as the sidebar narrows; never overhanging. */
+.desktop__files > div {
+    grid-template-columns: repeat(auto-fill, 72px);
+    column-gap: 12px;
+    justify-content: space-between;
+}
+
+.desktop__files > div > * {
+    width: 72px;
+    min-width: 72px;
+}
+
 .desktop__content {
     height: 100%;
     overflow: hidden;
     /* Prevent scrolling */
+}
+
+/* Smaller desktops: a narrower sidebar so the window gets more room. Two file
+   icons and two web buttons per row, edge to edge so the icons line up with
+   the Buttons box. Large screens keep the layout above. */
+@media only screen and (min-width: 961px) and (max-width: 1599px) {
+    .desktop {
+        grid-template-columns: minmax(232px, 232px) minmax(0, 1fr);
+        gap: 40px;
+    }
+}
+
+/* Maximised window (title bar button, or a post with `wide: true`): the
+   sidebar fades out first, then its column shrinks to nothing and the window
+   grows into the space. Same track structure as above so the columns animate
+   instead of jumping. */
+:global(html[data-window-maximized]) .desktop {
+    grid-template-columns: minmax(0px, 0fr) minmax(auto, 4fr);
+    gap: 0px;
+    transition-delay: 0.12s;
+}
+
+@media only screen and (min-width: 961px) and (max-width: 1599px) {
+    :global(html[data-window-maximized]) .desktop {
+        grid-template-columns: minmax(0px, 0px) minmax(0, 1fr);
+        gap: 0px;
+    }
+}
+
+:global(html[data-window-maximized]) .desktop__sidebar {
+    opacity: 0;
+    transform: translateX(-16px);
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 0.12s ease,
+        transform 0.12s ease,
+        visibility 0s linear 0.12s;
 }
 
 @media only screen and (max-width: 960px) {
