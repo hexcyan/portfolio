@@ -7,6 +7,7 @@ import WorksSectionComponent from "./WorksSection";
 import WorksSubsectionComponent from "./WorksSubsection";
 import GalleryViewer from "@/components/Gallery/GalleryViewer";
 import TagPill, { TagClear } from "@/components/TagPill/TagPill";
+import Toolbar, { ToolbarButton, ToolbarStatus } from "@/components/Toolbar/Toolbar";
 import type {
     WorksMetadata,
     WorksImage,
@@ -417,79 +418,47 @@ export default function WorksExplorer({ metadata, unsortedImages, gallerySection
 
     return (
         <div className={styles.worksPage}>
-            {/* Sticky chrome: toolbar + tag bar */}
-            <div className={styles.chrome}>
-                <div className={styles.toolbar}>
-                    <span className={styles.toolbarLabel}>Search:</span>
-                    <div className={styles.searchWrap}>
-                        <span className={styles.searchIcon}>&#x2315;</span>
-                        <input
-                            type="text"
-                            className={styles.searchInput}
-                            placeholder="filter works..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                        {search && (
-                            <button
-                                className={styles.searchClear}
-                                onClick={() => setSearch("")}
-                            >
-                                &#x2715;
-                            </button>
-                        )}
-                    </div>
-                    <div className={styles.viewToggle}>
+            <Toolbar
+                search={{ value: search, onChange: setSearch, placeholder: "filter works..." }}
+                view={
+                    <>
                         {gallerySections.length > 0 && (
-                            <button
-                                className={`${styles.viewBtn} ${styles.galleryToggle} ${includeGallery ? styles.viewBtnActive : ""}`}
-                                onClick={toggleGallery}
-                            >
+                            <ToolbarButton toggle active={includeGallery} onClick={toggleGallery}>
                                 Include Gallery
-                            </button>
+                            </ToolbarButton>
                         )}
-                        <button
-                            className={`${styles.viewBtn} ${styles.galleryToggle} ${collapsed ? styles.viewBtnActive : ""}`}
-                            onClick={toggleCollapsed}
-                        >
+                        <ToolbarButton toggle active={collapsed} onClick={toggleCollapsed}>
                             Collapse
-                        </button>
-                        <button
-                            className={`${styles.viewBtn} ${viewMode === "sections" ? styles.viewBtnActive : ""
-                                }`}
-                            onClick={() => setViewMode("sections")}
-                        >
+                        </ToolbarButton>
+                        <ToolbarButton active={viewMode === "sections"} onClick={() => setViewMode("sections")}>
                             Sections
-                        </button>
-                        <button
-                            className={`${styles.viewBtn} ${viewMode === "chronological" ? styles.viewBtnActive : ""
-                                }`}
-                        // onClick={() => setViewMode("chronological")}
-                        >
+                        </ToolbarButton>
+                        {/* Timeline view not wired up yet: onClick={() => setViewMode("chronological")} */}
+                        <ToolbarButton active={viewMode === "chronological"}>
                             Timeline
-                        </button>
-                    </div>
-                </div>
-
-                {metadata.tags.length > 0 && (
-                    <div className={styles.tagBar}>
-                        <span className={styles.tagBarLabel}>Tags:</span>
-                        {metadata.tags.map((tag) => (
-                            <TagPill
-                                key={tag.id}
-                                color={tag.color}
-                                active={activeTags.has(tag.id)}
-                                onClick={() => toggleTag(tag.id)}
-                            >
-                                {tag.label}
-                            </TagPill>
-                        ))}
-                        {activeTags.size > 0 && (
-                            <TagClear onClick={() => clearTags()} />
-                        )}
-                    </div>
-                )}
-            </div>
+                        </ToolbarButton>
+                    </>
+                }
+                filters={
+                    metadata.tags.length > 0 && (
+                        <>
+                            {metadata.tags.map((tag) => (
+                                <TagPill
+                                    key={tag.id}
+                                    color={tag.color}
+                                    active={activeTags.has(tag.id)}
+                                    onClick={() => toggleTag(tag.id)}
+                                >
+                                    {tag.label}
+                                </TagPill>
+                            ))}
+                            {activeTags.size > 0 && (
+                                <TagClear onClick={() => clearTags()} />
+                            )}
+                        </>
+                    )
+                }
+            />
 
             {/* Scrollable content area */}
             <div className={styles.worksScrollArea}>
@@ -538,39 +507,41 @@ export default function WorksExplorer({ metadata, unsortedImages, gallerySection
             </div>
 
             {/* Status bar — outside scroll area, pinned to bottom */}
-            <div className={styles.statusBar}>
-                <div className={styles.statusLeft}>
-                    <span>
-                        {visibleCount} image
-                        {visibleCount !== 1 ? "s" : ""}
-                        {visibleCount !== totalImages &&
-                            ` (${totalImages} total)`}
-                    </span>
-                    {activeTags.size > 0 && (
+            <ToolbarStatus
+                left={
+                    <>
                         <span>
-                            Filtered by:{" "}
-                            {Array.from(activeTags)
-                                .map(
-                                    (id) =>
-                                        metadata.tags.find((t) => t.id === id)
-                                            ?.label ?? id
-                                )
-                                .join(", ")}
+                            {visibleCount} image
+                            {visibleCount !== 1 ? "s" : ""}
+                            {visibleCount !== totalImages &&
+                                ` (${totalImages} total)`}
                         </span>
-                    )}
-                    {includeGallery && (
-                        <span>+ Gallery</span>
-                    )}
-                    {collapsed && (
-                        <span>Collapsed</span>
-                    )}
-                </div>
-                <div className={styles.statusRight}>
-                    {viewMode === "sections"
+                        {activeTags.size > 0 && (
+                            <span>
+                                Filtered by:{" "}
+                                {Array.from(activeTags)
+                                    .map(
+                                        (id) =>
+                                            metadata.tags.find((t) => t.id === id)
+                                                ?.label ?? id
+                                    )
+                                    .join(", ")}
+                            </span>
+                        )}
+                        {includeGallery && (
+                            <span>+ Gallery</span>
+                        )}
+                        {collapsed && (
+                            <span>Collapsed</span>
+                        )}
+                    </>
+                }
+                right={
+                    viewMode === "sections"
                         ? `${filteredSections.length} section${filteredSections.length !== 1 ? "s" : ""}`
-                        : `${chronoSubsections.length} project${chronoSubsections.length !== 1 ? "s" : ""}`}
-                </div>
-            </div>
+                        : `${chronoSubsections.length} project${chronoSubsections.length !== 1 ? "s" : ""}`
+                }
+            />
 
             {/* Lightbox */}
             {viewerOpen && viewerImages.length > 0 && (

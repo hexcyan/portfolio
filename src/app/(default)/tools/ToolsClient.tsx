@@ -4,6 +4,8 @@ import { useState } from "react";
 import Icon from "@/components/Icon";
 import { type IIcon } from "@/lib/consts";
 import styles from "./Tools.module.css";
+import win from "@/styles/window.module.css";
+import Toolbar from "@/components/Toolbar/Toolbar";
 
 function DescriptionBox({ file }: { file: IIcon }) {
     return (
@@ -53,55 +55,50 @@ export default function ToolsClient({
     const totalCount = filteredTools.length + filteredProjects.length;
 
     return (
-        <div className="explorer narrow">
-            <div className={styles.toolbar}>
-                <h1 className={styles.toolbarTitle}>Tools</h1>
-                <input
-                    type="text"
-                    className={styles.searchInput}
-                    placeholder="Search..."
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                />
-                <span className={styles.itemCount}>
-                    {totalCount} object(s)
-                </span>
-            </div>
+        <>
+            <Toolbar
+                title={<><span>Tools</span></>}
+                search={{ value: query, onChange: setQuery, placeholder: "filter tools..." }}
+                count={`${totalCount} object(s)`}
+            />
+            <div className={`${win.body} ${win.narrow}`}>
+                <h1 className={styles.pageTitle}>Tools</h1>
 
-            {filteredTools.length > 0 && (
-                <div>
-                    {filteredTools.map((file, index) => (
-                        <div
-                            key={`${file.title}-${index}`}
-                            className={styles.projectRow}
-                        >
-                            <Icon file={file} index={index} center={true} />
-                            <DescriptionBox file={file} />
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {filteredProjects.length > 0 && (
-                <>
-                    <h2 className={styles.sectionTitle}>Projects</h2>
+                {filteredTools.length > 0 && (
                     <div>
-                        {filteredProjects.map((file, index) => (
+                        {filteredTools.map((file, index) => (
                             <div
                                 key={`${file.title}-${index}`}
                                 className={styles.projectRow}
                             >
-                                <Icon file={file} index={index} />
+                                <Icon file={file} index={index} center={true} />
                                 <DescriptionBox file={file} />
                             </div>
                         ))}
                     </div>
-                </>
-            )}
+                )}
 
-            {totalCount === 0 && (
-                <p className={styles.noResults}>No results found.</p>
-            )}
-        </div>
+                {filteredProjects.length > 0 && (
+                    <>
+                        <h2 className={styles.sectionTitle}>Projects</h2>
+                        <div>
+                            {filteredProjects.map((file, index) => (
+                                <div
+                                    key={`${file.title}-${index}`}
+                                    className={styles.projectRow}
+                                >
+                                    <Icon file={file} index={index} />
+                                    <DescriptionBox file={file} />
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+
+                {totalCount === 0 && (
+                    <p className={styles.noResults}>No results found.</p>
+                )}
+            </div>
+        </>
     );
 }

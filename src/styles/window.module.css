@@ -1,0 +1,20 @@
+/* Shared window-content layout. A tab is one of:
+   - fill: <Toolbar>, a region with its own scroller, <ToolbarStatus> (Blog, Board)
+   - page: <Toolbar>, then .body, which scrolls with the window (Gallery, Album, Tools) */
+
+.fill {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+/* the one content inset: 24/48 on desktop, 12/12 on phones (tokens in globals.css) */
+.body {
+    padding: var(--win-pad-y) var(--win-pad-x);
+}
+
+.narrow {
+    max-width: 80ch;
+    margin: 0 auto;
+}

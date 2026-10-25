@@ -6,7 +6,9 @@ import Link from "next/link";
 import Card from "@/components/Card";
 import type { BlogFrontMatter } from "@/lib/blog";
 import styles from "./BlogToolbar.module.css";
+import win from "@/styles/window.module.css";
 import TagPill, { TagClear } from "@/components/TagPill/TagPill";
+import Toolbar, { ToolbarButton, ToolbarStatus } from "@/components/Toolbar/Toolbar";
 
 type SortField = "title" | "description" | "tags" | "date";
 type SortDir = "asc" | "desc";
@@ -148,65 +150,39 @@ export default function BlogToolbar({ posts, allTags }: BlogToolbarProps) {
         });
 
     return (
-        <div className={styles.explorerShell}>
-            {/* ── Toolbar ── */}
-            <div className={styles.toolbar}>
-                <span className={styles.toolbarLabel}>Search:</span>
-                <div className={styles.searchWrap}>
-                    <span className={styles.searchIcon}>⌕</span>
-                    <input
-                        type="text"
-                        className={styles.searchInput}
-                        placeholder="filter posts..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                    {search && (
-                        <button
-                            className={styles.searchClear}
-                            onClick={() => setSearch("")}
-                        >
-                            ✕
-                        </button>
-                    )}
-                </div>
-                <div className={styles.viewToggle}>
-                    <button
-                        className={`${styles.viewBtn} ${view === "detail" ? styles.viewBtnActive : ""}`}
-                        onClick={() => setView("detail")}
-                        title="Detail view"
-                    >
-                        ☰
-                    </button>
-                    <button
-                        className={`${styles.viewBtn} ${view === "grid" ? styles.viewBtnActive : ""}`}
-                        onClick={() => setView("grid")}
-                        title="Grid view"
-                    >
-                        ⊞
-                    </button>
-                </div>
-            </div>
-
-            {/* ── Tag Filter Bar ── */}
-            {allTags.length > 0 && (
-                <div className={styles.tagBar}>
-                    <span className={styles.tagBarLabel}>Tags:</span>
-                    {allTags.map((tag) => (
-                        <TagPill
-                            key={tag}
-                            color={getTagColor(tag)}
-                            active={activeTags.includes(tag)}
-                            onClick={() => toggleTag(tag)}
-                        >
-                            {tag}
-                        </TagPill>
-                    ))}
-                    {activeTags.length > 0 && (
-                        <TagClear onClick={() => setTags([])} />
-                    )}
-                </div>
-            )}
+        <div className={win.fill}>
+            <Toolbar
+                search={{ value: search, onChange: setSearch, placeholder: "filter posts..." }}
+                view={
+                    <>
+                        <ToolbarButton active={view === "detail"} onClick={() => setView("detail")} title="Detail view">
+                            ☰
+                        </ToolbarButton>
+                        <ToolbarButton active={view === "grid"} onClick={() => setView("grid")} title="Grid view">
+                            ⊞
+                        </ToolbarButton>
+                    </>
+                }
+                filters={
+                    allTags.length > 0 && (
+                        <>
+                            {allTags.map((tag) => (
+                                <TagPill
+                                    key={tag}
+                                    color={getTagColor(tag)}
+                                    active={activeTags.includes(tag)}
+                                    onClick={() => toggleTag(tag)}
+                                >
+                                    {tag}
+                                </TagPill>
+                            ))}
+                            {activeTags.length > 0 && (
+                                <TagClear onClick={() => setTags([])} />
+                            )}
+                        </>
+                    )
+                }
+            />
 
             {/* ── Detail View ── */}
             {view === "detail" && (
@@ -356,24 +332,23 @@ export default function BlogToolbar({ posts, allTags }: BlogToolbarProps) {
                 </div>
             )}
 
-            {/* ── Status Bar ── */}
-            <div className={styles.statusBar}>
-                <div className={styles.statusLeft}>
-                    <span>
-                        {filtered.length} item{filtered.length !== 1 && "s"}
-                        {filtered.length !== posts.length &&
-                            ` (${posts.length} total)`}
-                    </span>
-                    {activeTags.length > 0 && (
+            <ToolbarStatus
+                left={
+                    <>
                         <span>
-                            Filtered by: {activeTags.join(", ")}
+                            {filtered.length} item{filtered.length !== 1 && "s"}
+                            {filtered.length !== posts.length &&
+                                ` (${posts.length} total)`}
                         </span>
-                    )}
-                </div>
-                <div className={styles.statusRight}>
-                    {view === "detail" ? "Detail View" : "Grid View"}
-                </div>
-            </div>
+                        {activeTags.length > 0 && (
+                            <span>
+                                Filtered by: {activeTags.join(", ")}
+                            </span>
+                        )}
+                    </>
+                }
+                right={view === "detail" ? "Detail View" : "Grid View"}
+            />
         </div>
     );
 }

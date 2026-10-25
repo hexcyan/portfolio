@@ -20,107 +20,6 @@
     flex-direction: column;
 }
 
-/* ── Sticky Chrome (toolbar + tags) ── */
-.chrome {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    flex-shrink: 0;
-}
-
-/* ── Toolbar Strip ── */
-.toolbar {
-    composes: strip from "../../styles/toolbar.module.css";
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 24px;
-    user-select: none;
-}
-
-.toolbarLabel {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.75em;
-    color: var(--toolbar-text);
-    padding: 0 4px;
-    white-space: nowrap;
-    opacity: 0.7;
-    letter-spacing: 0.02em;
-}
-
-.searchWrap {
-    flex: 1;
-    max-width: 360px;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--cyan);
-    padding: 0 2px;
-}
-
-.searchIcon {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.7em;
-    color: var(--cyan);
-    padding: 0px 6px;
-    opacity: 0.6;
-    flex-shrink: 0;
-}
-
-.searchInput {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--toolbar-text);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.8em;
-    min-width: 0;
-}
-
-.searchInput::placeholder {
-    color: var(--toolbar-text);
-    opacity: 0.4;
-    font-style: italic;
-}
-
-.searchClear {
-    background: none;
-    border: none;
-    color: var(--cyan);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.85em;
-    cursor: pointer;
-    padding: 2px 6px;
-    opacity: 0.5;
-    transition: opacity 0.15s;
-    flex-shrink: 0;
-}
-
-.searchClear:hover {
-    opacity: 1;
-}
-
-/* ── Tag Filter Bar ── */
-.tagBar {
-    composes: strip from "../../styles/toolbar.module.css";
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 24px 6px;
-    overflow-x: auto;
-    flex-wrap: wrap;
-}
-
-.tagBarLabel {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.7em;
-    color: var(--toolbar-text);
-    padding: 0 4px;
-    opacity: 0.6;
-    white-space: nowrap;
-}
-
-
 /* ── Sections Container ── */
 .sectionsContainer {
     flex: 1;
@@ -320,46 +219,6 @@
     margin-top: 1px;
 }
 
-
-/* ── View Toggle ── */
-.viewToggle {
-    display: flex;
-    gap: 2px;
-    margin-left: auto;
-}
-
-.viewBtn {
-    font-family: "RedHatMono", monospace;
-    font-size: 0.72em;
-    padding: 1px 10px;
-    border: 1px solid var(--cyan);
-    background: transparent;
-    color: var(--toolbar-text);
-    opacity: 0.5;
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-}
-
-.viewBtn:hover {
-    border-color: var(--cyan);
-    color: var(--toolbar-text);
-    opacity: 0.9;
-}
-
-.viewBtnActive {
-    border-color: var(--cyan);
-    background: var(--cyan-subtle);
-    color: var(--toolbar-text);
-    opacity: 1;
-}
-
-.galleryToggle {
-    margin-right: 6px;
-    border-style: dashed;
-}
-
-
 /* ── Subsection ── */
 .subsectionBlock {
     display: flex;
@@ -530,31 +389,6 @@
     padding: 2px 12px;
 }
 
-/* ── Status Bar (bottom) ── */
-.statusBar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2px 24px;
-    background: var(--statusbar-bg);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.72em;
-    color: var(--bar-text-color);
-    opacity: 0.6;
-    user-select: none;
-    flex-shrink: 0;
-    border-top: 1px solid var(--toolbar-border);
-}
-
-.statusLeft {
-    display: flex;
-    gap: 16px;
-}
-
-.statusRight {
-    opacity: 0.7;
-}
-
 /* ── Empty State ── */
 .emptyState {
     padding: 48px 16px;
@@ -570,28 +404,9 @@
 
 /* ── Responsive ── */
 @media only screen and (max-width: 768px) {
-    .toolbar {
-        padding: 5px 12px;
-        flex-wrap: wrap;
-    }
-
-    .tagBar {
-        padding: 4px 12px 6px;
-        flex-wrap: wrap;
-    }
-
-    .searchWrap {
-        max-width: none;
-        min-width: 140px;
-    }
-
     .sectionsContainer {
         padding: 0;
         gap: 28px;
-    }
-
-    .statusBar {
-        padding: 2px 12px;
     }
 
     .masonryGrid {
@@ -605,7 +420,6 @@
     .sectionHeaderStuck {
         padding: 6px 12px;
     }
-
 }
 
 /* ═══════════════════════════════════════════════════════

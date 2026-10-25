@@ -1,0 +1,227 @@
+/* ═══════════════════════════════════════════════════════
+   Toolbar — the one strip every tab uses (Blog, Gallery,
+   Tools, Board). Rows sit flush to the window edges and stick
+   to the top of the scroller. Themes restyle it only through
+   --toolbar-bg / --toolbar-text / --toolbar-border.
+   ═══════════════════════════════════════════════════════ */
+
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+/* ── Rows ── */
+/* Slots are centred, so control boxes line up. Bare text (title, labels, count)
+   shares --fs-md with the input text: same size + centred = same baseline. */
+.row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    min-height: var(--toolbar-row-h);
+    padding: var(--space-4) var(--space-10);
+    background: var(--toolbar-bg);
+    border-top: 1px solid var(--toolbar-border);
+    border-bottom: 1px solid var(--toolbar-border);
+    color: var(--toolbar-text);
+    font-family: var(--font-mono);
+    user-select: none;
+}
+
+/* tags wrap onto as many lines as they need */
+.filters {
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+/* extra rows (album description + tags) */
+.info {
+    flex-wrap: wrap;
+    font-size: var(--fs-xs);
+}
+
+.label {
+    font-size: var(--fs-md);
+    padding: 0 var(--space-4);
+    white-space: nowrap;
+    opacity: 0.7;
+    letter-spacing: 0.02em;
+}
+
+/* ── Title slot ── */
+/* centred, not baseline: an emoji's taller line box would push the text down */
+.title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    margin-right: var(--space-6);
+    font-size: var(--fs-md);
+    white-space: nowrap;
+}
+
+.title a {
+    color: var(--cyan);
+    transition: opacity 0.15s ease;
+}
+
+.title a:hover {
+    opacity: 0.7;
+}
+
+/* ── Search slot ── */
+.search {
+    flex: 1;
+    max-width: var(--search-max-w);
+    min-width: 0;
+    height: var(--control-h);
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cyan);
+    padding: 0 var(--space-2);
+}
+
+.searchIcon {
+    font-size: var(--fs-xs);
+    color: var(--cyan);
+    padding: 0 var(--space-6);
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--toolbar-text);
+    font-family: var(--font-mono);
+    font-size: var(--fs-md);
+}
+
+.searchInput::placeholder {
+    color: var(--toolbar-text);
+    opacity: 0.4;
+    font-style: italic;
+}
+
+.searchClear {
+    background: none;
+    border: none;
+    color: var(--cyan);
+    font-family: var(--font-mono);
+    font-size: var(--fs-md);
+    cursor: pointer;
+    padding: var(--space-2) var(--space-6);
+    opacity: 0.5;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+}
+
+.searchClear:hover {
+    opacity: 1;
+}
+
+/* ── View + count slots (pushed to the right edge) ── */
+.end {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+}
+
+.view {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.button {
+    height: var(--control-h);
+    padding: 0 var(--space-8);
+    border: 1px solid var(--cyan);
+    background: transparent;
+    color: var(--toolbar-text);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s, background 0.15s;
+}
+
+.button:hover {
+    opacity: 0.8;
+}
+
+.buttonActive {
+    opacity: 1;
+    background: var(--cyan-subtle);
+}
+
+.buttonToggle {
+    border-style: dashed;
+    margin-right: var(--space-6);
+}
+
+.count {
+    font-size: var(--fs-md);
+    white-space: nowrap;
+    opacity: 0.5;
+}
+
+/* ── Info row pieces ── */
+.infoText {
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+}
+
+.divider {
+    width: 1px;
+    height: 12px;
+    background: var(--cyan-border);
+    flex-shrink: 0;
+}
+
+/* ── Status bar (bottom of fill tabs) ── */
+.status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+    padding: var(--space-2) var(--space-10);
+    background: var(--toolbar-bg);
+    border-top: 1px solid var(--toolbar-border);
+    color: var(--toolbar-text);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    opacity: 0.6;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.statusLeft {
+    display: flex;
+    gap: var(--space-16);
+}
+
+.statusRight {
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+@media only screen and (max-width: 768px) {
+    .row {
+        flex-wrap: wrap;
+    }
+
+    .search {
+        max-width: none;
+        min-width: 140px;
+    }
+}
