@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styles from "../Works.module.css";
 import { MASONRY } from "../masonry.config";
 import { computeBlockCols } from "./grid-utils";
@@ -45,30 +45,17 @@ function childToBlock(child: WorksGridChild): WorksBlock {
 }
 
 export default function GridBlock({ block, tagDefs, onImageClick }: GridBlockProps) {
-    const [layout, setLayout] = useState<LayoutState | null>(null);
     const m = useMasonryGrid();
 
-    // Cache child micro dimensions so resizes don't re-fetch
-    const dimsRef = useRef<{ w: number; h: number }[] | null>(null);
-    const dimsLoadingRef = useRef(false);
-    const [dimsLoaded, setDimsLoaded] = useState(false);
+    const children = useMemo(() => block.children ?? [], [block.children]);
 
-    const children = block.children ?? [];
+    // Child micro dimensions, tagged with the children they were measured for so a stale set is
+    // never used. Only a change of children re-fetches; resizes reuse them.
+    const [loaded, setLoaded] = useState<{ children: WorksGridChild[]; dims: { w: number; h: number }[] } | null>(null);
 
-    /** Load micro thumbnails once, cache in ref */
-    const loadDimensions = useCallback((): Promise<{ w: number; h: number }[]> => {
-        if (dimsRef.current) return Promise.resolve(dimsRef.current);
-        if (dimsLoadingRef.current) {
-            return new Promise((resolve) => {
-                const check = () => {
-                    if (dimsRef.current) resolve(dimsRef.current);
-                    else setTimeout(check, 16);
-                };
-                check();
-            });
-        }
-        dimsLoadingRef.current = true;
-        return Promise.all(
+    useEffect(() => {
+        let cancelled = false;
+        Promise.all(
             children.map((child) =>
                 new Promise<{ w: number; h: number }>((resolve) => {
                     const img = new window.Image();
@@ -78,22 +65,18 @@ export default function GridBlock({ block, tagDefs, onImageClick }: GridBlockPro
                 })
             )
         ).then((dims) => {
-            dimsRef.current = dims;
-            dimsLoadingRef.current = false;
-            setDimsLoaded(true);
-            return dims;
+            if (!cancelled) setLoaded({ children, dims });
         });
+        return () => {
+            cancelled = true;
+        };
     }, [children]);
 
-    // Kick off dimension loading on mount
-    useEffect(() => {
-        loadDimensions();
-    }, [loadDimensions]);
+    const dimensions = loaded?.children === children ? loaded.dims : null;
 
-    // Compute layout from context measurements + cached dims (pure math, no DOM reads)
-    useEffect(() => {
-        if (!m || !dimsRef.current || children.length === 0) return;
-        const dimensions = dimsRef.current;
+    // Layout from context measurements + dims (pure math, no DOM reads)
+    const layout = useMemo((): LayoutState | null => {
+        if (!m || !dimensions || children.length === 0) return null;
 
         const baseCols = block.cols ?? MASONRY.defaultGridCols;
         const effectiveCols = Math.min(
@@ -132,15 +115,8 @@ export default function GridBlock({ block, tagDefs, onImageClick }: GridBlockPro
         }
 
         const span = Math.ceil(totalHeight / m.rowHeight) + m.gap;
-        setLayout({ span, cols: effectiveCols, mode, colGap: m.colGap, rowGap: m.rowGap, rowTemplate });
-    }, [m, dimsLoaded, children, block.cols, block.maxCols]);
-
-    // Invalidate cached dims when children change
-    useEffect(() => {
-        dimsRef.current = null;
-        dimsLoadingRef.current = false;
-        setDimsLoaded(false);
-    }, [children]);
+        return { span, cols: effectiveCols, mode, colGap: m.colGap, rowGap: m.rowGap, rowTemplate };
+    }, [m, dimensions, children.length, block.cols, block.maxCols]);
 
     const innerColTemplate = layout
         ? layout.mode === "1x4" ? "repeat(4, 1fr)" : "1fr 1fr"
