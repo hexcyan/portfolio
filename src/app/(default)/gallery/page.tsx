@@ -1,11 +1,8 @@
-import { Suspense } from "react";
-import { getFolders, getImagesFromFolder, thumbUrl } from "@/lib/cdn";
+import { getFolders, getImagesFromFolder } from "@/lib/cdn";
+import { getImageInfo } from "@/lib/gallery-manifest";
 import { getAlbumMetadata, getGalleryGlobalMeta } from "@/lib/gallery-metadata";
 import { getWorksGlobalMeta } from "@/lib/works-metadata";
-import StickyHeader from "@/components/Gallery/StickyHeader";
 import GalleryIndex from "@/components/Gallery/GalleryIndex";
-
-import styles from "@/components/Gallery/Gallery.module.css";
 
 // ISR: serve static, revalidate in background every hour as fallback
 export const revalidate = 3600;
@@ -73,29 +70,19 @@ export default async function GalleryPage() {
 
     const globalTags = worksGlobalMeta?.tags ?? [];
 
-    return (
-        <div className="explorer">
-            <StickyHeader
-                className={styles.indexHeader}
-                stuckClass={styles.stuck}
-            >
-                <span className={styles.indexHeaderTitle}>
-                    <span>📁</span>
-                    <span>Gallery</span>
-                </span>
-                <span className={styles.indexHeaderCount}>
-                    {folders.length + linkAlbums.length} folder
-                    {folders.length + linkAlbums.length !== 1 ? "s" : ""}
-                </span>
-            </StickyHeader>
+    // blur placeholders for every cover, so cards render blurred on first paint
+    const blurs: Record<string, string> = {};
+    for (const p of [...folders.map((f) => f.previewPath), ...linkAlbums.map((la) => la.coverPath)]) {
+        const blur = p ? getImageInfo(p)?.blur : undefined;
+        if (p && blur) blurs[p] = blur;
+    }
 
-            <Suspense>
-                <GalleryIndex
-                    folders={folders}
-                    linkAlbums={linkAlbums}
-                    globalTags={globalTags}
-                />
-            </Suspense>
-        </div>
+    return (
+        <GalleryIndex
+            folders={folders}
+            linkAlbums={linkAlbums}
+            globalTags={globalTags}
+            blurs={blurs}
+        />
     );
 }

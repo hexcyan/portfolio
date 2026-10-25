@@ -18,9 +18,12 @@ interface ImageBlockProps {
     imagePath?: string;
     /** When true, render as a simple standalone image (no masonry grid required) */
     standalone?: boolean;
+    /** Blur placeholder known up front (data URI). It sits under the photo, which paints over it as soon as
+     *  it loads: nothing waits for JS. Without it the micro thumb is fetched and swapped out on load. */
+    blurSrc?: string;
 }
 
-export default function ImageBlock({ block, tagDefs, onClick, contained, standalone }: ImageBlockProps) {
+export default function ImageBlock({ block, tagDefs, onClick, contained, standalone, blurSrc }: ImageBlockProps) {
     const [thumbLoaded, setThumbLoaded] = useState(false);
     const m = useMasonryGrid();
 
@@ -111,9 +114,11 @@ export default function ImageBlock({ block, tagDefs, onClick, contained, standal
         ? styles.gridChildCell
         : `${styles.imageCell} ${span ? styles.imageCellReady : styles.imageCellPending}`;
 
+    const shown = thumbLoaded || !!blurSrc;
     const imgClass = contained
-        ? `${styles.gridChildImg} ${thumbLoaded ? styles.gridChildImgLoaded : ""}`
-        : `${styles.imageCellImg} ${thumbLoaded ? styles.imageCellImgLoaded : ""}`;
+        ? `${styles.gridChildImg} ${shown ? styles.gridChildImgLoaded : ""} ${blurSrc ? styles.overBlur : ""}`
+        : `${styles.imageCellImg} ${shown ? styles.imageCellImgLoaded : ""} ${blurSrc ? styles.overBlur : ""}`;
+    const blurClass = blurSrc ? styles.blurUnder : thumbLoaded ? styles.blurHidden : "";
 
     const cellStyle = contained
         ? undefined
@@ -131,10 +136,10 @@ export default function ImageBlock({ block, tagDefs, onClick, contained, standal
             <div className={styles.imageCellInner}>
                 {/* Blur-up micro placeholder */}
                 <img
-                    src={microSrc}
+                    src={blurSrc ?? microSrc}
                     alt=""
                     aria-hidden="true"
-                    className={`${styles.blurPlaceholder} ${thumbLoaded ? styles.blurHidden : ""}`}
+                    className={`${styles.blurPlaceholder} ${blurClass}`}
                 />
                 {/* Thumb image */}
                 <img

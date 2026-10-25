@@ -8,9 +8,11 @@ import TagPill from "@/components/TagPill/TagPill";
 
 interface LinkAlbumCardProps {
     album: LinkAlbum;
+    /** blur placeholder from the deploy-time manifest */
+    blurSrc?: string;
 }
 
-export default function LinkAlbumCard({ album }: LinkAlbumCardProps) {
+export default function LinkAlbumCard({ album, blurSrc }: LinkAlbumCardProps) {
     const isExternal = (() => {
         try {
             const url = new URL(album.url, window.location.origin);
@@ -30,7 +32,7 @@ export default function LinkAlbumCard({ album }: LinkAlbumCardProps) {
                 {album.coverPath ? (
                     <FolderPreviewImage
                         thumbSrc={thumbUrl(album.coverPath, "thumb")}
-                        microSrc={thumbUrl(album.coverPath, "micro")}
+                        blurSrc={blurSrc ?? thumbUrl(album.coverPath, "micro")}
                         alt={album.name}
                     />
                 ) : (

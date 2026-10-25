@@ -415,12 +415,3 @@ hr {
     outline: 1px solid var(--cyan);
     outline-offset: 2px;
 }
-
-.explorer {
-    padding: 24px 48px;
-}
-
-.narrow {
-    max-width: 80ch;
-    margin: auto;
-}

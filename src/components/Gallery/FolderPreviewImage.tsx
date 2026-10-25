@@ -1,34 +1,27 @@
-"use client";
-
-import { useState } from "react";
 import styles from "./Gallery.module.css";
 
 interface FolderPreviewImageProps {
     thumbSrc: string;
-    microSrc: string;
+    /** Blur placeholder: a data URI from the deploy-time manifest, or the micro thumb URL */
+    blurSrc: string;
     alt: string;
 }
 
-export default function FolderPreviewImage({ thumbSrc, microSrc, alt }: FolderPreviewImageProps) {
-    const [loaded, setLoaded] = useState(false);
-
+/** Cover photo over its blur placeholder. The photo paints over the blur as soon as it loads; nothing waits for JS. */
+export default function FolderPreviewImage({ thumbSrc, blurSrc, alt }: FolderPreviewImageProps) {
     return (
         <>
             <img
-                src={microSrc}
+                src={blurSrc}
                 alt=""
                 aria-hidden="true"
-                className={`${styles.folderPreviewPlaceholder} ${loaded ? styles.folderPreviewPlaceholderHidden : ""}`}
+                className={styles.folderPreviewPlaceholder}
             />
             <img
                 src={thumbSrc}
                 alt={alt}
-                className={`${styles.folderPreviewThumb} ${loaded ? styles.folderPreviewLoaded : ""}`}
+                className={styles.folderPreviewThumb}
                 loading="lazy"
-                ref={(el) => {
-                    if (el?.complete && el.naturalWidth > 0 && !loaded) setLoaded(true);
-                }}
-                onLoad={() => { if (!loaded) setLoaded(true); }}
             />
         </>
     );

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import styles from "./Gallery.module.css";
 import FolderPreviewImage from "./FolderPreviewImage";
@@ -10,6 +10,8 @@ import { thumbUrl } from "@/lib/cdn";
 import type { WorksTagDef } from "@/lib/works-metadata";
 import type { LinkAlbum } from "@/lib/gallery-metadata";
 import TagPill, { TagClear } from "@/components/TagPill/TagPill";
+import Toolbar from "@/components/Toolbar/Toolbar";
+import win from "@/styles/window.module.css";
 
 interface FolderWithPreview {
     name: string;
@@ -24,19 +26,25 @@ interface GalleryIndexProps {
     folders: FolderWithPreview[];
     linkAlbums: LinkAlbum[];
     globalTags: WorksTagDef[];
+    /** blur placeholders (data URIs) by CDN path, from the deploy-time manifest */
+    blurs: Record<string, string>;
 }
 
-export default function GalleryIndex({ folders, linkAlbums, globalTags }: GalleryIndexProps) {
-    const searchParams = useSearchParams();
+export default function GalleryIndex({ folders, linkAlbums, globalTags, blurs }: GalleryIndexProps) {
     const pathname = usePathname();
 
-    const [search, setSearchLocal] = useState(searchParams.get("q") ?? "");
-    const [activeTags, setActiveTags] = useState<Set<string>>(() => {
-        const param = searchParams.get("tags");
-        if (!param) return new Set<string>();
-        return new Set(param.split(",").filter(Boolean));
-    });
+    // Filters start empty so the server can render every card; a shared ?tags=&q= link applies after mount
+    const [search, setSearchLocal] = useState("");
+    const [activeTags, setActiveTags] = useState<Set<string>>(() => new Set());
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const tags = params.get("tags");
+        if (tags) setActiveTags(new Set(tags.split(",").filter(Boolean)));
+        const q = params.get("q");
+        if (q) setSearchLocal(q);
+    }, []);
 
     function syncUrl(overrides: { tags?: Set<string>; q?: string }) {
         const tags = overrides.tags ?? activeTags;
@@ -145,115 +153,100 @@ export default function GalleryIndex({ folders, linkAlbums, globalTags }: Galler
 
     return (
         <>
-            {/* Search bar */}
-            <div className={styles.searchBar}>
-                <span className={styles.searchBarLabel}>Search:</span>
-                <div className={styles.searchBarWrap}>
-                    <span className={styles.searchBarIcon}>&#x2315;</span>
-                    <input
-                        type="text"
-                        className={styles.searchBarInput}
-                        placeholder="filter albums..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                    {search && (
-                        <button
-                            className={styles.searchBarClear}
-                            onClick={() => setSearch("")}
-                        >
-                            &#x2715;
-                        </button>
-                    )}
-                </div>
-                <span className={styles.searchBarLabel} style={{ marginLeft: "auto", opacity: 0.4 }}>
-                    {totalFiltered !== totalAll
+            <Toolbar
+                title={<><span>📁</span><span>Gallery</span></>}
+                search={{ value: search, onChange: setSearch, placeholder: "filter albums..." }}
+                count={
+                    totalFiltered !== totalAll
                         ? `${totalFiltered}/${totalAll} albums`
                         : `${totalAll} album${totalAll !== 1 ? "s" : ""}`
-                    }
-                </span>
-            </div>
+                }
+                filters={
+                    allTags.length > 0 && (
+                        <>
+                            {allTags.map((tag) => (
+                                <TagPill
+                                    key={tag}
+                                    color={getTagColor(tag)}
+                                    active={activeTags.has(tag)}
+                                    onClick={() => toggleTag(tag)}
+                                >
+                                    {getTagLabel(tag)}
+                                </TagPill>
+                            ))}
+                            {activeTags.size > 0 && (
+                                <TagClear onClick={clearTags} />
+                            )}
+                        </>
+                    )
+                }
+            />
 
-            {/* Tag bar */}
-            {allTags.length > 0 && (
-                <div className={styles.tagBar}>
-                    <span className={styles.tagBarLabel}>Tags:</span>
-                    {allTags.map((tag) => (
-                        <TagPill
-                            key={tag}
-                            color={getTagColor(tag)}
-                            active={activeTags.has(tag)}
-                            onClick={() => toggleTag(tag)}
+            <div className={win.body}>
+                <div className={styles.folderGrid}>
+                    {filteredFolders.map((folder) => (
+                        <Link
+                            key={folder.name}
+                            href={folder.route}
+                            className={styles.folderCard}
                         >
-                            {getTagLabel(tag)}
-                        </TagPill>
-                    ))}
-                    {activeTags.size > 0 && (
-                        <TagClear onClick={clearTags} />
-                    )}
-                </div>
-            )}
-
-            {/* Folder grid */}
-            <div className={styles.folderGrid}>
-                {filteredFolders.map((folder) => (
-                    <Link
-                        key={folder.name}
-                        href={folder.route}
-                        className={styles.folderCard}
-                    >
-                        <div className={styles.folderPreview}>
-                            {folder.previewPath ? (
-                                <FolderPreviewImage
-                                    thumbSrc={thumbUrl(folder.previewPath, "thumb")}
-                                    microSrc={thumbUrl(folder.previewPath, "micro")}
-                                    alt={folder.name}
-                                />
-                            ) : (
-                                <div className={styles.folderPreviewEmpty}>
-                                    📂
-                                </div>
-                            )}
-                            {folder.imageCount > 0 && (
-                                <span className={styles.folderPreviewCount}>
-                                    {folder.imageCount} image
-                                    {folder.imageCount !== 1 ? "s" : ""}
+                            <div className={styles.folderPreview}>
+                                {folder.previewPath ? (
+                                    <FolderPreviewImage
+                                        thumbSrc={thumbUrl(folder.previewPath, "thumb")}
+                                        blurSrc={blurs[folder.previewPath] ?? thumbUrl(folder.previewPath, "micro")}
+                                        alt={folder.name}
+                                    />
+                                ) : (
+                                    <div className={styles.folderPreviewEmpty}>
+                                        📂
+                                    </div>
+                                )}
+                                {(folder.description || folder.tags.length > 0) && (
+                                    <div className={styles.folderMeta}>
+                                        {folder.description && (
+                                            <span className={styles.folderDescription}>
+                                                {folder.description}
+                                            </span>
+                                        )}
+                                        {folder.tags.length > 0 && (
+                                            <span className={styles.folderTags}>
+                                                {folder.tags.map((tag) => (
+                                                    <TagPill
+                                                        key={tag}
+                                                        size="sm"
+                                                        color={getTagColor(tag)}
+                                                    >
+                                                        {getTagLabel(tag)}
+                                                    </TagPill>
+                                                ))}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            <div className={styles.folderInfo}>
+                                <span className={styles.folderIcon}>📁</span>
+                                <span className={styles.folderName}>
+                                    {folder.name}
                                 </span>
-                            )}
-                            {(folder.description || folder.tags.length > 0) && (
-                                <div className={styles.folderMeta}>
-                                    {folder.description && (
-                                        <span className={styles.folderDescription}>
-                                            {folder.description}
-                                        </span>
-                                    )}
-                                    {folder.tags.length > 0 && (
-                                        <span className={styles.folderTags}>
-                                            {folder.tags.map((tag) => (
-                                                <TagPill
-                                                    key={tag}
-                                                    size="sm"
-                                                    color={getTagColor(tag)}
-                                                >
-                                                    {getTagLabel(tag)}
-                                                </TagPill>
-                                            ))}
-                                        </span>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        <div className={styles.folderInfo}>
-                            <span className={styles.folderIcon}>📁</span>
-                            <span className={styles.folderName}>
-                                {folder.name}
-                            </span>
-                        </div>
-                    </Link>
-                ))}
-                {filteredLinkAlbums.map((album) => (
-                    <LinkAlbumCard key={album.id} album={album} />
-                ))}
+                                {folder.imageCount > 0 && (
+                                    <span className={styles.folderCount}>
+                                        {folder.imageCount} image
+                                        {folder.imageCount !== 1 ? "s" : ""}
+                                    </span>
+                                )}
+                            </div>
+                        </Link>
+                    ))}
+                    {filteredLinkAlbums.map((album) => (
+                        <LinkAlbumCard
+                            key={album.id}
+                            album={album}
+                            blurSrc={album.coverPath ? blurs[album.coverPath] : undefined}
+                        />
+                    ))}
+                </div>
             </div>
         </>
     );

@@ -155,6 +155,16 @@
     pointer-events: none;
 }
 
+/* blur known up front (blurSrc): it stays under the photo, which paints over it when loaded */
+.blurUnder {
+    z-index: 0;
+}
+
+.overBlur {
+    position: relative;
+    z-index: 1;
+}
+
 /* ── External Link Badge ── */
 .linkBadge {
     position: absolute;

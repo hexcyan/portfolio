@@ -1,12 +1,8 @@
-import { Suspense } from "react";
 import { getImagesFromFolder, getFolders } from "@/lib/cdn";
 import { getAlbumMetadata } from "@/lib/gallery-metadata";
 import { getWorksGlobalMeta } from "@/lib/works-metadata";
 import GalleryGrid from "@/components/Gallery/GalleryGrid";
-import StickyHeader from "@/components/Gallery/StickyHeader";
-import styles from "@/components/Gallery/Gallery.module.css";
-import Link from "next/link";
-import TagPill from "@/components/TagPill/TagPill";
+import { getImageInfo } from "@/lib/gallery-manifest";
 
 // ISR: serve static, revalidate in background every hour as fallback
 export const revalidate = 3600;
@@ -37,65 +33,19 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
             getAlbumMetadata(slug),
             getWorksGlobalMeta(),
         ]);
-        const images = allImages.filter(
-            (img) => img.id.replace(/\.[^.]+$/, "").toLowerCase() !== "_cover"
-        );
+        const images = allImages
+            .filter((img) => img.id.replace(/\.[^.]+$/, "").toLowerCase() !== "_cover")
+            .map((img) => ({ ...img, ...getImageInfo(img.path) }));
 
         const globalTags = worksGlobalMeta?.tags ?? [];
 
         return (
-            <div className="explorer">
-                <StickyHeader
-                    className={styles.galleryHeader}
-                    stuckClass={styles.stuck}
-                >
-                    <div className={styles.galleryHeaderLeft}>
-                        <Link href="/gallery" className={styles.backLink}>
-                            ← Back
-                        </Link>
-                        <span className={styles.galleryTitle}>
-                            📁 {folderName}
-                        </span>
-                    </div>
-                    <span className={styles.galleryCount}>
-                        {images.length} image{images.length !== 1 ? "s" : ""}
-                    </span>
-                </StickyHeader>
-                {metadata && (metadata.description || metadata.tags?.length > 0) && (
-                    <div className={styles.albumInfoBar}>
-                        {metadata.description && (
-                            <span className={styles.albumInfoDesc}>
-                                {metadata.description}
-                            </span>
-                        )}
-                        {metadata.tags?.length > 0 && (
-                            <>
-                                <span className={styles.albumInfoDivider} />
-                                <span className={styles.albumInfoLabel}>tags:</span>
-                                {metadata.tags.map((tag) => {
-                                    const tagDef = globalTags.find((t) => t.id === tag);
-                                    return (
-                                        <TagPill
-                                            key={tag}
-                                            color={tagDef?.color}
-                                        >
-                                            {tagDef?.label ?? tag}
-                                        </TagPill>
-                                    );
-                                })}
-                            </>
-                        )}
-                    </div>
-                )}
-                <Suspense>
-                    <GalleryGrid
-                        images={images}
-                        folderName={folderName}
-                        metadata={metadata}
-                        globalTags={globalTags}
-                    />
-                </Suspense>
-            </div>
+            <GalleryGrid
+                images={images}
+                folderName={folderName}
+                metadata={metadata}
+                globalTags={globalTags}
+            />
         );
     } catch {
         return (

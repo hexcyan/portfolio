@@ -1,12 +1,59 @@
-/* ── Masonry Grid ── */
-.galleryGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    grid-auto-rows: 4px;
-    gap: 0 12px;
+/* ── Album masonry ──
+   Placements come from src/lib/album-layout.ts in units of 1/200 of a column (gaps are 10 units), one set
+   per column count, passed as --c{n}/--r{n} on each cell. The album's own width picks the set: 2 columns
+   below 806px, then one more per 273px (a 260px minimum column plus its gap). Keep in sync with ALBUM_COLUMNS. */
+.album {
+    container-type: inline-size;
     margin-top: 12px;
-    width: 100%;
     padding: 0 4px;
+}
+
+.albumGrid {
+    --n: 2;
+    --u: calc(100cqw / (var(--n) * 200 + (var(--n) - 1) * 10));
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    column-gap: calc(var(--u) * 10);
+    grid-auto-rows: var(--u);
+}
+
+.albumCell {
+    grid-column: var(--c2);
+    grid-row: var(--r2);
+    transition: box-shadow 0.2s ease;
+}
+
+.albumCell > * {
+    height: 100%;
+}
+
+.albumCell:hover {
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+}
+
+@container (min-width: 806px) {
+    .albumGrid { --n: 3; }
+    .albumCell { grid-column: var(--c3); grid-row: var(--r3); }
+}
+
+@container (min-width: 1079px) {
+    .albumGrid { --n: 4; }
+    .albumCell { grid-column: var(--c4); grid-row: var(--r4); }
+}
+
+@container (min-width: 1352px) {
+    .albumGrid { --n: 5; }
+    .albumCell { grid-column: var(--c5); grid-row: var(--r5); }
+}
+
+@container (min-width: 1625px) {
+    .albumGrid { --n: 6; }
+    .albumCell { grid-column: var(--c6); grid-row: var(--r6); }
+}
+
+@container (min-width: 1898px) {
+    .albumGrid { --n: 7; }
+    .albumCell { grid-column: var(--c7); grid-row: var(--r7); }
 }
 
 .gridItem {
@@ -297,56 +344,6 @@
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* ── Gallery Header / Toolbar Bar ── */
-.galleryHeader {
-    /* composes: strip from "../../styles/toolbar.module.css"; */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4px 10px;
-    background: var(--statusbar-bg);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.78em;
-    user-select: none;
-    margin-bottom: 4px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    transition: padding 0.2s ease, margin 0.2s ease;
-}
-
-/* applied by StickyHeader when stuck */
-.stuck {
-    padding: 4px 48px;
-    margin-left: -48px;
-    margin-right: -48px;
-}
-
-.galleryHeaderLeft {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.backLink {
-    color: var(--cyan);
-    text-decoration: none;
-    transition: opacity 0.15s ease;
-}
-
-.backLink:hover {
-    opacity: 0.7;
-}
-
-.galleryTitle {
-    color: white;
-}
-
-.galleryCount {
-    color: var(--text-secondary);
-    opacity: 0.5;
-}
-
 .spinnerCenter {
     position: absolute;
     top: 50%;
@@ -368,7 +365,7 @@
 /* ── Folder Cards (Gallery Index) ── */
 .folderGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
     margin-top: 12px;
     padding: 0 4px;
@@ -377,7 +374,7 @@
 .folderCard {
     display: block;
     background: var(--card-bg);
-    border: 1px solid transparent;
+    border: 1px solid var(--cyan-border);
     border-radius: 3px;
     overflow: hidden;
     transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -394,7 +391,7 @@
 .folderPreview {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 3 / 2;
     overflow: hidden;
     background: var(--statusbar-bg);
 }
@@ -411,7 +408,7 @@
     transform: scale(1.04);
 }
 
-/* ── Blur-up: Folder preview placeholder + thumb ── */
+/* ── Folder preview: blur placeholder under the cover photo, which paints over it when loaded ── */
 .folderPreviewPlaceholder {
     position: absolute;
     inset: 0;
@@ -420,26 +417,17 @@
     object-fit: cover;
     filter: blur(12px);
     transform: scale(1.1);
-    z-index: 1;
-    transition: opacity 0.4s ease;
-}
-
-.folderPreviewPlaceholderHidden {
-    opacity: 0;
-    pointer-events: none;
+    z-index: 0;
 }
 
 .folderPreviewThumb {
+    position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.3s ease;
-}
-
-.folderPreviewLoaded {
-    opacity: 1;
+    transition: transform 0.3s ease;
 }
 
 .folderCard:hover .folderPreviewThumb {
@@ -454,20 +442,6 @@
     justify-content: center;
     font-size: 2rem;
     opacity: 0.3;
-}
-
-.folderPreviewCount {
-    position: absolute;
-    bottom: 6px;
-    right: 6px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    padding: 2px 8px;
-    border-radius: 2px;
-    font-family: "RedHatMono", monospace;
-    font-size: 0.68em;
-    color: rgba(255, 255, 255, 0.7);
-    z-index: 10;
 }
 
 .linkAlbumBadge {
@@ -493,7 +467,7 @@
     padding: 8px 10px;
     font-family: "RedHatMono", monospace;
     font-size: 0.82em;
-    border-top: 1px solid rgba(0, 255, 255, 0.1);
+    border-top: 1px solid var(--accent-dim);
 }
 
 .folderIcon {
@@ -507,163 +481,11 @@
     text-overflow: ellipsis;
 }
 
-.indexHeader {
-    /* composes: strip from "../../styles/toolbar.module.css"; */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4px 10px;
-    background: var(--statusbar-bg);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.78em;
-    user-select: none;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    transition: padding 0.2s ease, margin 0.2s ease;
-}
-
-.indexHeaderTitle {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: white;
-}
-
-.indexHeaderCount {
-    color: rgba(255, 255, 255, 0.45);
-}
-
-/* ── Album Info Bar (toolbar strip below header) ── */
-.albumInfoBar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    background: var(--statusbar-bg);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.72em;
-    color: rgba(255, 255, 255, 0.6);
-    user-select: none;
-    border-top: 1px solid rgba(0, 255, 255, 0.1);
-    overflow-x: auto;
-    flex-wrap: wrap;
-}
-
-.albumInfoDesc {
-    color: rgba(255, 255, 255, 0.55);
+.folderCount {
+    margin-left: auto;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 50%;
+    color: var(--text-muted);
 }
-
-.albumInfoDivider {
-    width: 1px;
-    height: 12px;
-    background: rgba(0, 255, 255, 0.25);
-    flex-shrink: 0;
-}
-
-.albumInfoLabel {
-    color: var(--cyan);
-    opacity: 0.6;
-    white-space: nowrap;
-    letter-spacing: 0.02em;
-}
-
-
-/* ── Search Bar (gallery index + album pages) ── */
-.searchBar {
-    composes: strip from "../../styles/toolbar.module.css";
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 10px;
-    font-family: "RedHatMono", monospace;
-}
-
-.searchBarLabel {
-    font-size: 0.75em;
-    color: var(--toolbar-text);
-    padding: 0 4px;
-    white-space: nowrap;
-    opacity: 0.7;
-    letter-spacing: 0.02em;
-}
-
-.searchBarWrap {
-    flex: 1;
-    max-width: 360px;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--cyan);
-    padding: 0 2px;
-}
-
-.searchBarIcon {
-    font-size: 0.7em;
-    color: var(--cyan);
-    padding: 0px 6px;
-    opacity: 0.6;
-    flex-shrink: 0;
-}
-
-.searchBarInput {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--toolbar-text);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.8em;
-    min-width: 0;
-}
-
-.searchBarInput::placeholder {
-    color: var(--toolbar-text);
-    opacity: 0.4;
-    font-style: italic;
-}
-
-.searchBarClear {
-    background: none;
-    border: none;
-    color: var(--cyan);
-    font-family: "RedHatMono", monospace;
-    font-size: 0.85em;
-    cursor: pointer;
-    padding: 2px 6px;
-    opacity: 0.5;
-    transition: opacity 0.15s;
-    flex-shrink: 0;
-}
-
-.searchBarClear:hover {
-    opacity: 1;
-}
-
-/* ── Tag Filter Bar (grid page) ── */
-.tagBar {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    background: var(--statusbar-bg);
-    border-top: 1px solid rgba(0, 255, 255, 0.1);
-    overflow-x: auto;
-    flex-wrap: wrap;
-    font-family: "RedHatMono", monospace;
-}
-
-.tagBarLabel {
-    font-size: 0.7em;
-    color: var(--cyan);
-    padding: 0 4px;
-    opacity: 0.6;
-    white-space: nowrap;
-}
-
 
 /* ── Image Caption Overlay ── */
 .imageCaption {
@@ -688,7 +510,6 @@
 .imageCaptionText {
     display: block;
 }
-
 
 /* ── Viewer Info Bar (between preview and filmstrip) ── */
 .viewerInfoBar {
@@ -720,7 +541,6 @@
     background: rgba(0, 255, 255, 0.25);
     flex-shrink: 0;
 }
-
 
 /* ── Folder Card Metadata (overlay on preview image) ── */
 .folderMeta {
@@ -759,14 +579,8 @@
     gap: 4px;
 }
 
-
 /* ── Responsive ── */
 @media (max-width: 640px) {
-    .galleryGrid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 0 6px;
-    }
-
     .filmstripThumb {
         width: 52px;
         height: 40px;
