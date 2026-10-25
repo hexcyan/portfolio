@@ -66,7 +66,6 @@ export default function ImageBlock({ block, tagDefs, onClick, contained, standal
                     <img
                         src={thumbSrc}
                         alt={block.caption || block.filename || ""}
-                        className={styles.imageStandaloneImg}
                         loading="lazy"
                     />
                     {block.caption && (

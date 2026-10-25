@@ -49,7 +49,7 @@ export default function PaletteGrid({
     const hasBg = !compact && showBackground && !!layout.backgroundImage;
 
     return (
-        <div className={`${styles.gridWrapper} ${compact ? styles.gridWrapperCompact : ""}`}>
+        <div className={styles.gridWrapper}>
             {hasBg && (
                 <img
                     src={layout.backgroundImage}

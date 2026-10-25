@@ -306,7 +306,6 @@ export default function PaintsFilter({
                 ))}
                 {filters.selectedSeries.length > 0 && (
                     <button
-                        className={styles.filter__series}
                         onClick={() =>
                             setFilters((prev) => ({
                                 ...prev,

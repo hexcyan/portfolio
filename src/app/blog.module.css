@@ -59,7 +59,7 @@
 
 .prose {
     color: var(--text-color);
-    max-width: 65ch;
+    max-width: 75ch;
     margin: 0 auto;
     font-family: "RedHatDisplay", sans-serif;
     line-height: 1.8;

@@ -25,7 +25,6 @@ export default function PaintCard({ paint, inStock, stockSizes }: PaintCardProps
                 height={176}
                 width={388}
                 alt={paint.en_name}
-                className={styles.paint__img}
                 draggable={false}
             />
             <p className={styles.paint__codes}>

@@ -49,7 +49,6 @@ interface CarouselProps {
 function captionInner(text: string, href: string | undefined): ReactNode {
     return href ? (
         <a
-            className={worksStyles.imageStandaloneCaptionLink}
             href={href}
             target="_blank"
             rel="noopener noreferrer"

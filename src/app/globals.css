@@ -29,6 +29,42 @@
 
     --titlebar-btn-color: var(--cyan);
     --titlebar-btn-bg: var(--box-bg);
+
+    /* ── Design tokens (same in every theme; themes only override the colour roles above) ── */
+    /* Type */
+    --font-mono: "RedHatMono", monospace;
+    --fs-xs: 0.72rem;   /* 11.52px: tags, small buttons, status bars */
+    --fs-md: 0.8rem;    /* 12.8px: toolbar text (titles, labels, inputs, counts share one baseline) */
+    --fs-h4: 1.15rem;
+    --fs-h3: 1.5rem;
+    --fs-h2: 1.875rem;
+    --fs-h1: 2.25rem;
+
+    /* Spacing */
+    --space-2: 2px;
+    --space-4: 4px;
+    --space-6: 6px;
+    --space-8: 8px;
+    --space-10: 10px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-48: 48px;
+
+    /* Sizes */
+    --toolbar-row-h: 32px;
+    --control-h: 20px;
+    --search-max-w: 360px;
+    --win-pad-y: var(--space-24);
+    --win-pad-x: var(--space-48);
+}
+
+/* Phones: the window content keeps a small inset instead of the desktop 24/48 */
+@media only screen and (max-width: 600px) {
+    :root {
+        --win-pad-y: var(--space-12);
+        --win-pad-x: var(--space-12);
+    }
 }
 
 /* Windows XP Luna */
@@ -186,7 +222,7 @@ a {
 /* Headings */
 h1 {
     font-family: "RedHatMono", monospace;
-    font-size: 2.25rem;
+    font-size: var(--fs-h1);
     margin-top: 2.5rem;
     margin-bottom: 1.5rem;
     font-weight: 700;
@@ -196,7 +232,7 @@ h1 {
 
 h2 {
     font-family: "RedHatMono", monospace;
-    font-size: 1.875rem;
+    font-size: var(--fs-h2);
     margin-top: 2.5rem;
     margin-bottom: 1rem;
     font-weight: 600;
@@ -206,7 +242,7 @@ h2 {
 
 h3 {
     font-family: "RedHatMono", monospace;
-    font-size: 1.5rem;
+    font-size: var(--fs-h3);
     margin-top: 1.75rem;
     margin-bottom: 0.75rem;
     font-weight: 600;
@@ -215,7 +251,7 @@ h3 {
 
 h4 {
     font-family: "RedHatMono", monospace;
-    font-size: 1.15rem;
+    font-size: var(--fs-h4);
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
     font-weight: 600;
