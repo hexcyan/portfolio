@@ -8,7 +8,7 @@
         "prebuild": "node scripts/gallery-manifest.mjs",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
+        "lint": "eslint",
         "seed-local": "npx tsx scripts/seed-local.ts",
         "update-cdn": "npx tsx --env-file=.env scripts/update-cdn.ts",
         "generate-thumbs": "npx tsx --env-file=.env scripts/generate-thumbs.ts"
@@ -24,17 +24,17 @@
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
         "remark-gfm": "^4.0.0",
-        "sharp": "^0.34.5",
+        "sharp": "^0.35.5",
         "tesseract.js": "^7.0.0"
     },
     "devDependencies": {
         "@types/mdx": "^2.0.13",
-        "@types/node": "^20",
+        "@types/node": "^24.19.2",
         "@types/qrcode": "^1.5.5",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
         "eslint": "^10.0.1",
-        "eslint-config-next": "^0.2.4",
+        "eslint-config-next": "^16.4.3",
         "typescript": "^5"
     }
 }
