@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import styles from "./Works.module.css";
 import { MASONRY } from "./masonry.config";
 import { MasonryProvider, useMasonryGrid } from "./MasonryContext";
@@ -35,45 +35,50 @@ interface LooseImageGridProps {
 }
 
 function LooseImageGrid({ filteredImages, tagDefs, onImageClick }: LooseImageGridProps) {
-    const [spans, setSpans] = useState<Record<string, number>>({});
     const [loadedThumbs, setLoadedThumbs] = useState<Set<string>>(new Set());
     const m = useMasonryGrid();
 
     const imageKey = (img: WorksImage) => getWorksImagePath(img);
 
-    // Cache aspect ratios so resizes compute synchronously
-    const ratiosRef = useRef<Record<string, number>>({});
+    // Aspect ratios from the micro thumbs. Loads that finish in the same frame land in one update,
+    // so the grid re-renders once per frame rather than once per image.
+    const [ratios, setRatios] = useState<Record<string, number>>({});
+    const requestedRef = useRef<Set<string>>(new Set());
+    const pendingRef = useRef<Record<string, number>>({});
+    const frameRef = useRef(0);
 
-    const recomputeAllSpans = useCallback(() => {
-        if (!m) return;
-        const next: Record<string, number> = {};
-        for (const [key, ratio] of Object.entries(ratiosRef.current)) {
-            const imageHeight = m.columnWidth * ratio * MASONRY.rowHeight;
-            next[key] = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
-        }
-        setSpans(next);
-    }, [m]);
-
-    // Load micro images to get aspect ratios, then compute spans
     useEffect(() => {
         filteredImages.forEach((image) => {
             const key = imageKey(image);
-            if (ratiosRef.current[key] !== undefined) return;
+            if (requestedRef.current.has(key)) return;
+            requestedRef.current.add(key);
             const img = new window.Image();
             img.src = thumbUrl(key, "micro");
             img.onload = () => {
-                ratiosRef.current[key] = img.naturalHeight / img.naturalWidth;
-                recomputeAllSpans();
+                pendingRef.current[key] = img.naturalHeight / img.naturalWidth;
+                if (frameRef.current) return;
+                frameRef.current = requestAnimationFrame(() => {
+                    frameRef.current = 0;
+                    const batch = pendingRef.current;
+                    pendingRef.current = {};
+                    setRatios((prev) => ({ ...prev, ...batch }));
+                });
             };
         });
-        // Recompute for already-cached ratios (handles image list changes)
-        recomputeAllSpans();
-    }, [filteredImages, recomputeAllSpans]);
+    }, [filteredImages]);
 
-    // Recompute when measurements change
-    useEffect(() => {
-        recomputeAllSpans();
-    }, [m, recomputeAllSpans]);
+    useEffect(() => () => cancelAnimationFrame(frameRef.current), []);
+
+    // Derived during render, so a resize recomputes spans without an extra render
+    const spans = useMemo(() => {
+        const next: Record<string, number> = {};
+        if (!m) return next;
+        for (const [key, ratio] of Object.entries(ratios)) {
+            const imageHeight = m.columnWidth * ratio * MASONRY.rowHeight;
+            next[key] = Math.ceil(imageHeight / MASONRY.rowHeight) + MASONRY.gap;
+        }
+        return next;
+    }, [m, ratios]);
 
     function getTagColor(tagId: string): string | undefined {
         return tagDefs.find((t) => t.id === tagId)?.color;
